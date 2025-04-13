@@ -28,9 +28,10 @@
           class="config-item"
           v-model:value="rangeType"
         >
-          <RadioButton style="width: 33.33%;" value="all">全部</RadioButton>
-          <RadioButton style="width: 33.33%;" value="current">当前页</RadioButton>
-          <RadioButton style="width: 33.33%;" value="custom">自定义</RadioButton>
+          <RadioButton style="width: 25%;" value="all">全部</RadioButton>
+          <RadioButton style="width: 25%;" value="current">当前页</RadioButton>
+          <RadioButton style="width: 25%;" value="custom">自定义</RadioButton>
+          <RadioButton style="width: 25%;" value="separate">逐页</RadioButton>
         </RadioGroup>
       </div>
       <div class="row" v-if="rangeType === 'custom'">
@@ -94,7 +95,7 @@ const emit = defineEmits<{
 const { slides, currentSlide } = storeToRefs(useSlidesStore())
 
 const imageThumbnailsRef = ref<HTMLElement>()
-const rangeType = ref<'all' | 'current' | 'custom'>('all')
+const rangeType = ref<'all' | 'current' | 'custom' | 'separate'>('all')
 const range = ref<[number, number]>([1, slides.value.length])
 const format = ref<'jpeg' | 'png'>('jpeg')
 const quality = ref(1)
@@ -109,11 +110,19 @@ const renderSlides = computed(() => {
   })
 })
 
-const { exportImage, exporting } = useExport()
+const { exportImage, exportSingleImage, exporting } = useExport()
 
 const expImage = () => {
   if (!imageThumbnailsRef.value) return
-  exportImage(imageThumbnailsRef.value, format.value, quality.value, ignoreWebfont.value)
+  
+  if (rangeType.value === 'separate') {
+    // 逐页导出，每页单独生成一个图片文件
+    const slidesToExport = renderSlides.value
+    exportSingleImage(imageThumbnailsRef.value, slidesToExport, format.value, quality.value, ignoreWebfont.value)
+  } else {
+    // 普通导出，所有页面合并为一个图片文件
+    exportImage(imageThumbnailsRef.value, format.value, quality.value, ignoreWebfont.value)
+  }
 }
 </script>
 

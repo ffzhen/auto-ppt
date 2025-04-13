@@ -14,6 +14,15 @@
       </div>
       <Toolbar class="layout-content-right" />
     </div>
+    <!-- 浮动按钮区域 -->
+    <div class="floating-buttons">
+      <div class="json-viewer-btn" @click="showJSONViewer = true" title="查看当前页面JSON">
+        <span>JSON</span>
+      </div>
+      <div class="md-to-ppt-btn" @click="showMarkdownToPPT = true" title="Markdown转PPT">
+        <span>MD→PPT</span>
+      </div>
+    </div>
   </div>
 
   <SelectPanel v-if="showSelectPanel" />
@@ -39,12 +48,34 @@
   >
     <AIPPTDialog />
   </Modal>
+  
+  <!-- JSON viewer modal -->
+  <Modal
+    :visible="showJSONViewer" 
+    :width="900"
+    :height="700"
+    closeButton
+    @closed="showJSONViewer = false"
+  >
+    <JSONViewer :data="currentSlide" @close="showJSONViewer = false" />
+  </Modal>
+  
+  <!-- Markdown to PPT modal -->
+  <Modal
+    :visible="showMarkdownToPPT" 
+    :width="900"
+    :height="700"
+    closeButton
+    @closed="showMarkdownToPPT = false"
+  >
+    <MarkdownToPPT @close="showMarkdownToPPT = false" />
+  </Modal>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '@/store'
+import { useMainStore, useSlidesStore } from '@/store'
 import useGlobalHotkey from '@/hooks/useGlobalHotkey'
 import usePasteEvent from '@/hooks/usePasteEvent'
 
@@ -60,14 +91,20 @@ import SearchPanel from './SearchPanel.vue'
 import NotesPanel from './NotesPanel.vue'
 import MarkupPanel from './MarkupPanel.vue'
 import AIPPTDialog from './AIPPTDialog.vue'
+import JSONViewer from './Toolbar/SlideTemplatePanel/JSONViewer.vue'
+import MarkdownToPPT from './Toolbar/SlideTemplatePanel/MarkdownToPPT.vue'
 import Modal from '@/components/Modal.vue'
 
 const mainStore = useMainStore()
+const slidesStore = useSlidesStore()
 const { dialogForExport, showSelectPanel, showSearchPanel, showNotesPanel, showMarkupPanel, showAIPPTDialog } = storeToRefs(mainStore)
+const { currentSlide } = storeToRefs(slidesStore)
 const closeExportDialog = () => mainStore.setDialogForExport('')
 const closeAIPPTDialog = () => mainStore.setAIPPTDialogState(false)
 
 const remarkHeight = ref(40)
+const showJSONViewer = ref(false)
+const showMarkdownToPPT = ref(false)
 
 useGlobalHotkey()
 usePasteEvent()
@@ -76,6 +113,7 @@ usePasteEvent()
 <style lang="scss" scoped>
 .pptist-editor {
   height: 100%;
+  position: relative;
 }
 .layout-header {
   height: 40px;
@@ -99,5 +137,33 @@ usePasteEvent()
 .layout-content-right {
   width: 260px;
   height: 100%;
+}
+
+.floating-buttons {
+  position: fixed;
+  right: 270px;
+  top: 6px;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+}
+
+.json-viewer-btn, .md-to-ppt-btn {
+  background-color: #606266;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 8px;
+  opacity: 0.6;
+  transition: all 0.2s;
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.md-to-ppt-btn {
+  background-color: #409eff;
 }
 </style>

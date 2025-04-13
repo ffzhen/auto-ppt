@@ -1,0 +1,11 @@
+{
+  "requestId": "1744451476419",
+  "timestamp": "2025-04-12T09:51:16.419Z",
+  "prompt": "5G技术如何改变我们的生活",
+  "model": "zh",
+  "options": {
+    "temperature": 0.7,
+    "max_tokens": 1500
+  },
+  "stream": true
+}

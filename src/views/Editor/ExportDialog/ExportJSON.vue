@@ -6,17 +6,19 @@
 
     <div class="btns">
       <Button class="btn export" type="primary" @click="exportJSON()">导出 JSON</Button>
+      <Button class="btn copy" type="primary" @click="copyToClipboard()">复制 JSON</Button>
       <Button class="btn close" @click="emit('close')">关闭</Button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSlidesStore } from '@/store'
 import useExport from '@/hooks/useExport'
 import Button from '@/components/Button.vue'
+import message from '@/utils/message'
 
 const emit = defineEmits<{
   (event: 'close'): void
@@ -34,6 +36,16 @@ const json = computed(() => {
     slides: slides.value,
   }
 })
+
+// 复制JSON到剪贴板
+const copyToClipboard = () => {
+  const jsonString = JSON.stringify(json.value, null, 2)
+  navigator.clipboard.writeText(jsonString).then(() => {
+    message.success('JSON 已复制到剪贴板')
+  }).catch(() => {
+    message.error('复制失败，请检查浏览器权限设置')
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -65,6 +77,10 @@ pre {
 
   .export {
     flex: 1;
+  }
+  .copy {
+    flex: 1;
+    margin-left: 10px;
   }
   .close {
     width: 100px;

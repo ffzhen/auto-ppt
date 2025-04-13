@@ -26,6 +26,8 @@ export interface AIPPTContent {
   type: 'content'
   data: {
     title: string
+    header?: string
+    footer?: string
     items: {
       title: string
       text: string
@@ -36,6 +38,10 @@ export interface AIPPTContent {
 
 export interface AIPPTEnd {
   type: 'end'
+  data?: {
+    content?: string
+    title?: string
+  }
 }
 
 export type AIPPTSlide = AIPPTCover | AIPPTContents | AIPPTTransition | AIPPTContent | AIPPTEnd

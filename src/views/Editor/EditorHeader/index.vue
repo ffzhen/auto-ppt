@@ -44,7 +44,7 @@
     </div>
 
     <div class="right">
-      <div class="group-menu-item">
+      <!-- <div class="group-menu-item">
         <div class="menu-item" v-tooltip="'幻灯片放映（F5）'" @click="enterScreening()">
           <IconPpt class="icon" />
         </div>
@@ -52,6 +52,17 @@
           <template #content>
             <PopoverMenuItem @click="enterScreeningFromStart()">从头开始</PopoverMenuItem>
             <PopoverMenuItem @click="enterScreening()">从当前页开始</PopoverMenuItem>
+          </template>
+          <div class="arrow-btn"><IconDown class="arrow" /></div>
+        </Popover>
+      </div> -->
+      <div class="group-menu-item">
+        <div class="menu-item" v-tooltip="'导出为图片'" @click="setDialogForExport('image')">
+          <IconImage class="icon" />
+        </div>
+        <Popover trigger="click" center>
+          <template #content>
+            <PopoverMenuItem @click="setDialogForExport('image')">导出所有页</PopoverMenuItem>
           </template>
           <div class="arrow-btn"><IconDown class="arrow" /></div>
         </Popover>

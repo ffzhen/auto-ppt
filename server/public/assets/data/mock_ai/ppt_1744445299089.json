@@ -1,0 +1,352 @@
+{
+  "outline": [
+    {
+      "title": "人工智能在医疗领域的应用",
+      "level": 1
+    },
+    {
+      "title": "背景介绍",
+      "level": 2
+    },
+    {
+      "title": "问题陈述",
+      "level": 2
+    },
+    {
+      "title": "主要内容",
+      "level": 1
+    },
+    {
+      "title": "第一部分",
+      "level": 2
+    },
+    {
+      "title": "关键点1",
+      "level": 3
+    },
+    {
+      "title": "关键点2",
+      "level": 3
+    },
+    {
+      "title": "第二部分",
+      "level": 2
+    },
+    {
+      "title": "关键点1",
+      "level": 3
+    },
+    {
+      "title": "关键点2",
+      "level": 3
+    },
+    {
+      "title": "结论",
+      "level": 1
+    },
+    {
+      "title": "总结",
+      "level": 2
+    },
+    {
+      "title": "未来展望",
+      "level": 2
+    }
+  ],
+  "slides": [
+    {
+      "id": "slide_90186ff2-ab6f-4ae7-8781-eb8842eb3b7a",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_596319f7-ea5b-435a-8b5e-517fbc6a70ac",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 60px; font-weight: bold;'>人工智能在医疗领域的应用</p>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 100,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_411a3e70-3f56-4c62-9d2d-0cda64ef4be6",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>自动生成的演示文稿</p>",
+          "left": 100,
+          "top": 260,
+          "width": 600,
+          "height": 50,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_c25f270f-f509-47ba-aeaa-39fb5c00e462",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_55658dc4-4eca-4bb2-89fe-56cfceec19ff",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 48px; font-weight: bold;'>人工智能在医疗领域的应用</p>",
+          "left": 100,
+          "top": 200,
+          "width": 600,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_7615237a-a179-47ca-8544-cf515e51bff0",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_4eb0bc6b-1a2d-4208-b86e-fef2f272d8e2",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>背景介绍</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_5bfe39a8-e016-4110-b40a-9aeffa7b01bf",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li><li>这是第三个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_4d267d84-bf62-47a0-bdc6-ead8dfdd0ac7",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_f2b04d39-9628-455f-8e19-ce8e00a64bab",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>问题陈述</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_082727d8-c850-4c16-a448-8815ff79ae3c",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li><li>这是第三个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_541c6cbd-87f0-48e6-8278-be8ea8638a05",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_99cb9695-d155-4b6b-8ad1-77684fdc1f98",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 48px; font-weight: bold;'>主要内容</p>",
+          "left": 100,
+          "top": 200,
+          "width": 600,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_926ea8c8-f4ac-41fe-bdb5-a24d5d6da81c",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_272572e0-7a19-43f1-a90b-c501c90fc994",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>第一部分</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_c7c4f6a6-b622-4833-bbbd-5f752663bc6e",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li><li>这是第三个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_7dc3f057-bb04-4746-a0d9-70670bfcf5a0",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_e1836035-e617-46b6-8c6a-01cf09dbb8d3",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>第二部分</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_ad66c6dd-016d-47c4-9f4e-b50007cf5bed",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_2cca0f97-5032-42d0-a0d9-ac2a032a3e45",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_61a68eb8-95da-4a8b-81a2-4231bcf0277f",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 48px; font-weight: bold;'>结论</p>",
+          "left": 100,
+          "top": 200,
+          "width": 600,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_9bd1ba1d-d5a7-413c-9def-14bd914e9d50",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_b7c7cdb0-b1b1-4ebd-81d6-3b4d218148e3",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>总结</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_cdcb1767-edee-4940-ab66-145cc968ad50",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_9de20dbe-36ed-4814-a2a6-badcceb22f99",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_c288afcc-7544-4fa2-a89d-088abb075491",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>未来展望</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_64e47996-4365-4478-aafd-d43a53f22a94",
+          "type": "text",
+          "content": "<ul><li>这是第一个要点</li><li>这是第二个要点</li><li>这是第三个要点</li><li>这是第四个要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    }
+  ]
+}

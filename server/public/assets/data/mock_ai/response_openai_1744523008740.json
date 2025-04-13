@@ -1,0 +1,29 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "```json\n[\n  {\n    \"type\": \"cover\",\n    \"data\": {\n      \"title\": \"一年级就淘汰主次不分的家长，幼小衔接必看\",\n      \"text\": \"科学规划一年级学习，助力孩子顺利过渡\"\n    }\n  },\n  {\n    \"type\": \"contents\",\n    \"data\": {\n      \"items\": [\n        \"数学学习要点\",\n        \"语文学习要点\",\n        \"英语学习要点\",\n        \"一年级学习安排\",\n        \"期末复习重点\"\n      ]\n    }\n  },\n  {\n    \"type\": \"transition\",\n    \"data\": {\n      \"title\": \"数学学习要点\",\n      \"text\": \"夯实基础，培养思维\"\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"数学学习重点\",\n      \"items\": [\n        {\n          \"title\": \"狠抓计算能力\",\n          \"text\": \"每天100道题，20以内不熟需系统提升，目标10分钟100题\"\n        },\n        {\n          \"title\": \"回归课本知识点\",\n          \"text\": \"重点：100以内加减法；难点：人民币和两步应用题\"\n        },\n        {\n          \"title\": \"生活数学应用\",\n          \"text\": \"时间、人民币、长度重量等实际应用\"\n        },\n        {\n          \"title\": \"思维训练\",\n          \"text\": \"使用《一上数学思维训练精选》培养逻辑能力\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"transition\",\n    \"data\": {\n      \"title\": \"语文学习要点\",\n      \"text\": \"全面掌握，注重积累\"\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"语文学习重点\",\n      \"items\": [\n        {\n          \"title\": \"字词基础\",\n          \"text\": \"听写课本三张表，重点掌握蓝色多音字\"\n        },\n        {\n          \"title\": \"背诵默写\",\n          \"text\": \"古诗词、小古文、日积月累等必须默写\"\n        },\n        {\n          \"title\": \"拼音强化\",\n          \"text\": \"掌握韵母、声母、整体认读音节，做到四会\"\n        },\n        {\n          \"title\": \"句式练习\",\n          \"text\": \"每周练习拟人句、比喻句等，使用《二上全册句子专项练习》\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"transition\",\n    \"data\": {\n      \"title\": \"英语学习要点\",\n      \"text\": \"培养兴趣，打好基础\"\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"英语学习重点\",\n      \"items\": [\n        {\n          \"title\": \"字母与音标\",\n          \"text\": \"26个字母会读会写，掌握音素和音标\"\n        },\n        {\n          \"title\": \"情境学习\",\n          \"text\": \"预习三年级知识，背诵let's talk\"\n        },\n        {\n          \"title\": \"兴趣培养\",\n          \"text\": \"观看《WOW English》《Blippi》等优质节目\"\n        },\n        {\n          \"title\": \"阅读习惯\",\n          \"text\": \"每天30分钟RAZ分级阅读\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"transition\",\n    \"data\": {\n      \"title\": \"一年级学习安排\",\n      \"text\": \"科学规划，全面提升\"\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"学习计划\",\n      \"items\": [\n        {\n          \"title\": \"语文重点\",\n          \"text\": \"一类字会写，二类字会认，背诵古诗词和重点片段\"\n        },\n        {\n          \"title\": \"数学重点\",\n          \"text\": \"口算能力，时钟、方位、数字运算、几何图形\"\n        },\n        {\n          \"title\": \"英语重点\",\n          \"text\": \"听力训练，原版动画，分级阅读，自然拼读\"\n        },\n        {\n          \"title\": \"逻辑训练\",\n          \"text\": \"分类、找规律、等量代换等思维训练\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"transition\",\n    \"data\": {\n      \"title\": \"期末复习重点\",\n      \"text\": \"系统梳理，查漏补缺\"\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"语文期末复习\",\n      \"items\": [\n        {\n          \"title\": \"日积月累\",\n          \"text\": \"古诗、名言警句必背\"\n        },\n        {\n          \"title\": \"词语积累\",\n          \"text\": \"数量词、又...又...、比喻句等专项\"\n        },\n        {\n          \"title\": \"句式练习\",\n          \"text\": \"扩词扩句、词语搭配、反义词近义词\"\n        },\n        {\n          \"title\": \"易错题型\",\n          \"text\": \"形近字、同音字组词专项\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"content\",\n    \"data\": {\n      \"title\": \"数学期末复习\",\n      \"items\": [\n        {\n          \"title\": \"基础概念\",\n          \"text\": \"最小/最大数、数位概念、加减法关系\"\n        },\n        {\n          \"title\": \"计算应用\",\n          \"text\": \"和差计算、人民币换算、数字规律\"\n        },\n        {\n          \"title\": \"易错题型\",\n          \"text\": \"排队问题、数数方法、相邻数等\"\n        },\n        {\n          \"title\": \"综合训练\",\n          \"text\": \"31个必背题型系统复习\"\n        }\n      ]\n    }\n  },\n  {\n    \"type\": \"end\"\n  }\n]\n```",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1744523057,
+  "id": "021744523008909dafa71b8609a35cd00e5bbef8bcaf05d774153",
+  "model": "deepseek-v3-250324",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 1252,
+    "prompt_tokens": 3463,
+    "total_tokens": 4715,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  }
+}

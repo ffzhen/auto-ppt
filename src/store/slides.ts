@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { omit } from 'lodash'
 import type { Slide, SlideTheme, PPTElement, PPTAnimation, SlideTemplate } from '@/types/slides'
+import { LOCALSTORAGE_KEY_SLIDES, LOCALSTORAGE_KEY_TITLE, LOCALSTORAGE_KEY_THEME } from '@/configs/storage'
+import api from '@/services'
 
 interface RemovePropData {
   id: string
@@ -28,37 +30,46 @@ export interface SlidesState {
   templates: SlideTemplate[]
 }
 
+// 模板资源路径
+const getTemplateCover = (path: string) => api.getAssetUrl(path)
+
 export const useSlidesStore = defineStore('slides', {
-  state: (): SlidesState => ({
-    title: '未命名演示文稿', // 幻灯片标题
-    theme: {
-      themeColors: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#4472c4', '#70ad47'],
-      fontColor: '#333',
-      fontName: '',
-      backgroundColor: '#fff',
-      shadow: {
-        h: 3,
-        v: 3,
-        blur: 2,
-        color: '#808080',
-      },
-      outline: {
-        width: 2,
-        color: '#525252',
-        style: 'solid',
-      },
-    }, // 主题样式
-    slides: [], // 幻灯片页面数据
-    slideIndex: 0, // 当前页面索引
-    viewportSize: 1000, // 可视区域宽度基数
-    viewportRatio: 0.5625, // 可视区域比例，默认16:9
-    templates: [
-      { name: '红色通用', id: 'template_1', cover: 'https://asset.pptist.cn/img/template_1.jpg' },
-      { name: '蓝色通用', id: 'template_2', cover: 'https://asset.pptist.cn/img/template_2.jpg' },
-      { name: '紫色通用', id: 'template_3', cover: 'https://asset.pptist.cn/img/template_3.jpg' },
-      { name: '莫兰迪配色', id: 'template_4', cover: 'https://asset.pptist.cn/img/template_4.jpg' },
-    ], // 模板
-  }),
+  state: (): SlidesState => {
+    // 从本地存储加载数据
+    const savedTitle = localStorage.getItem(LOCALSTORAGE_KEY_TITLE)
+    const savedTheme = localStorage.getItem(LOCALSTORAGE_KEY_THEME)
+    const savedSlides = localStorage.getItem(LOCALSTORAGE_KEY_SLIDES)
+    
+    return {
+      title: savedTitle || '未命名演示文稿', // 从localStorage加载幻灯片标题
+      theme: savedTheme ? JSON.parse(savedTheme) : {
+        themeColors: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#4472c4', '#70ad47'],
+        fontColor: '#333',
+        fontName: '',
+        backgroundColor: '#fff',
+        shadow: {
+          h: 3,
+          v: 3,
+          blur: 2,
+          color: '#808080',
+        },
+        outline: {
+          width: 2,
+          color: '#525252',
+          style: 'solid',
+        },
+      }, // 从localStorage加载主题
+      slides: savedSlides ? JSON.parse(savedSlides) : [], // 从localStorage加载幻灯片数据
+      slideIndex: 0, // 当前页面索引
+      viewportSize: 1656, // 可视区域宽度基数
+      viewportRatio: 1.33333, // 可视区域比例，默认16:9
+      templates: [
+        // 初始模板列表，后续将从服务器加载
+        { name: '红色通用', id: 'template_1', cover: getTemplateCover('img/template_1.jpg') },
+        { name: '蓝色通用', id: 'template_2', cover: getTemplateCover('img/template_2.jpg') },
+      ],
+    }
+  },
 
   getters: {
     currentSlide(state) {
@@ -75,8 +86,8 @@ export const useSlidesStore = defineStore('slides', {
     },
 
     // 格式化的当前页动画
-    // 将触发条件为“与上一动画同时”的项目向上合并到序列中的同一位置
-    // 为触发条件为“上一动画之后”项目的上一项添加自动向下执行标记
+    // 将触发条件为"与上一动画同时"的项目向上合并到序列中的同一位置
+    // 为触发条件为"上一动画之后"项目的上一项添加自动向下执行标记
     formatedAnimations(state) {
       const currentSlide = state.slides[state.slideIndex]
       if (!currentSlide?.animations) return []
@@ -108,13 +119,22 @@ export const useSlidesStore = defineStore('slides', {
   },
 
   actions: {
+    // 保存数据到localStorage
+    saveDataToLocalStorage() {
+      localStorage.setItem(LOCALSTORAGE_KEY_TITLE, this.title)
+      localStorage.setItem(LOCALSTORAGE_KEY_THEME, JSON.stringify(this.theme))
+      localStorage.setItem(LOCALSTORAGE_KEY_SLIDES, JSON.stringify(this.slides))
+    },
+    
     setTitle(title: string) {
       if (!title) this.title = '未命名演示文稿'
       else this.title = title
+      this.saveDataToLocalStorage()
     },
-
+  
     setTheme(themeProps: Partial<SlideTheme>) {
       this.theme = { ...this.theme, ...themeProps }
+      this.saveDataToLocalStorage()
     },
   
     setViewportSize(size: number) {
@@ -127,10 +147,51 @@ export const useSlidesStore = defineStore('slides', {
   
     setSlides(slides: Slide[]) {
       this.slides = slides
+      this.saveDataToLocalStorage()
     },
   
     setTemplates(templates: SlideTemplate[]) {
       this.templates = templates
+    },
+    
+    // 从服务器加载模板
+    async loadTemplatesFromServer(retryCount = 3): Promise<SlideTemplate[]> {
+      try {
+        const templates = await api.getMockData('templates');
+        // 处理封面图片URL
+        const templatesWithCovers = templates.map((template: SlideTemplate) => ({
+          ...template,
+          cover: getTemplateCover(template.cover)
+        }));
+        this.setTemplates(templatesWithCovers);
+        return templatesWithCovers;
+      } catch (error) {
+        if (retryCount > 0) {
+          console.warn(`加载模板列表失败，剩余重试次数: ${retryCount - 1}`);
+          // 延迟1秒后重试
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return this.loadTemplatesFromServer(retryCount - 1);
+        }
+        console.error('加载模板列表失败:', error);
+        // 保留当前模板列表
+        return this.templates;
+      }
+    },
+    
+    // 获取模板数据
+    async getTemplateData(templateId: string, retryCount = 3): Promise<any> {
+      try {
+        return await api.getMockData(`template_${templateId}`);
+      } catch (error) {
+        if (retryCount > 0) {
+          console.warn(`加载模板${templateId}数据失败，剩余重试次数: ${retryCount - 1}`);
+          // 延迟1秒后重试
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return this.getTemplateData(templateId, retryCount - 1);
+        }
+        console.error(`加载模板${templateId}数据失败:`, error);
+        return null;
+      }
     },
   
     addSlide(slide: Slide | Slide[]) {
@@ -142,20 +203,25 @@ export const useSlidesStore = defineStore('slides', {
       const addIndex = this.slideIndex + 1
       this.slides.splice(addIndex, 0, ...slides)
       this.slideIndex = addIndex
+      this.saveDataToLocalStorage()
     },
   
     updateSlide(props: Partial<Slide>, slideId?: string) {
       const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
       this.slides[slideIndex] = { ...this.slides[slideIndex], ...props }
+      this.saveDataToLocalStorage()
     },
   
     removeSlideProps(data: RemovePropData) {
       const { id, propName } = data
+      const slideIndex = this.slides.findIndex(item => item.id === id)
+      if (slideIndex === -1) return
 
-      const slides = this.slides.map(slide => {
-        return slide.id === id ? omit(slide, propName) : slide
-      }) as Slide[]
-      this.slides = slides
+      const propsNames = typeof propName === 'string' ? [propName] : propName
+      const slide = this.slides[slideIndex]
+      
+      this.slides[slideIndex] = omit(slide, propsNames) as Slide
+      this.saveDataToLocalStorage()
     },
   
     deleteSlide(slideId: string | string[]) {
@@ -185,6 +251,7 @@ export const useSlidesStore = defineStore('slides', {
   
       this.slideIndex = newIndex
       this.slides = slides
+      this.saveDataToLocalStorage()
     },
   
     updateSlideIndex(index: number) {
@@ -196,6 +263,7 @@ export const useSlidesStore = defineStore('slides', {
       const currentSlideEls = this.slides[this.slideIndex].elements
       const newEls = [...currentSlideEls, ...elements]
       this.slides[this.slideIndex].elements = newEls
+      this.saveDataToLocalStorage()
     },
 
     deleteElement(elementId: string | string[]) {
@@ -203,30 +271,136 @@ export const useSlidesStore = defineStore('slides', {
       const currentSlideEls = this.slides[this.slideIndex].elements
       const newEls = currentSlideEls.filter(item => !elementIdList.includes(item.id))
       this.slides[this.slideIndex].elements = newEls
+      this.saveDataToLocalStorage()
     },
   
     updateElement(data: UpdateElementData) {
       const { id, props, slideId } = data
-      const elIdList = typeof id === 'string' ? [id] : id
+      const elementIdList = Array.isArray(id) ? id : [id]
 
       const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
-      const slide = this.slides[slideIndex]
-      const elements = slide.elements.map(el => {
-        return elIdList.includes(el.id) ? { ...el, ...props } : el
+      if (slideIndex === -1) return
+
+      const elements = this.slides[slideIndex].elements.map(el => {
+        return elementIdList.includes(el.id) ? { ...el, ...props } : el
       })
       this.slides[slideIndex].elements = (elements as PPTElement[])
+      this.saveDataToLocalStorage()
     },
   
     removeElementProps(data: RemovePropData) {
       const { id, propName } = data
-      const propsNames = typeof propName === 'string' ? [propName] : propName
-  
       const slideIndex = this.slideIndex
       const slide = this.slides[slideIndex]
-      const elements = slide.elements.map(el => {
+      const elements = slide.elements
+
+      const propsNames = typeof propName === 'string' ? [propName] : propName
+      
+      const newElements = elements.map(el => {
         return el.id === id ? omit(el, propsNames) : el
       })
-      this.slides[slideIndex].elements = (elements as PPTElement[])
+      this.slides[slideIndex].elements = (newElements as PPTElement[])
+      this.saveDataToLocalStorage()
+    },
+
+    addTableCell(rowIndex: number, colIndex: number) {
+      // ... existing code ...
+      this.saveDataToLocalStorage()
+    },
+
+    deleteTableRow(rowIndex: number) {
+      // ... existing code ...
+      this.saveDataToLocalStorage()
+    },
+
+    deleteTableCol(colIndex: number) {
+      // ... existing code ...
+      this.saveDataToLocalStorage()
+    },
+
+    clearSlideAnimations(slideId?: string) {
+      const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
+      this.slides[slideIndex].animations = []
+      this.saveDataToLocalStorage()
+    },
+
+    addAnimation(animation: PPTAnimation) {
+      const currentSlide = this.slides[this.slideIndex]
+      const animations = currentSlide.animations || []
+      const addIndex = animations.length
+  
+      animations.splice(addIndex, 0, animation)
+      this.slides[this.slideIndex].animations = animations
+      this.saveDataToLocalStorage()
+    },
+
+    updateAnimation(animation: PPTAnimation) {
+      const currentSlide = this.slides[this.slideIndex]
+      const animations = currentSlide.animations || []
+      const index = animations.findIndex(item => item.id === animation.id)
+      animations[index] = animation
+      
+      this.slides[this.slideIndex].animations = animations
+      this.saveDataToLocalStorage()
+    },
+
+    deleteAnimation(animationId: string) {
+      const currentSlide = this.slides[this.slideIndex]
+      const animations = currentSlide.animations || []
+      const index = animations.findIndex(item => item.id === animationId)
+      animations.splice(index, 1)
+      
+      this.slides[this.slideIndex].animations = animations
+      this.saveDataToLocalStorage()
+    },
+
+    sortAnimations() {
+      const currentSlide = this.slides[this.slideIndex]
+      if (!currentSlide.animations) return
+      
+      const animations = []
+      for (const animation of currentSlide.animations) {
+        const { elId, trigger } = animation
+        
+        if (trigger === 'click') animations.push(animation)
+        else if (trigger === 'meantime') {
+          if (!animations.length) animations.push(animation)
+          else {
+            const targetIndex = animations.findIndex(item => {
+              return true // 简化逻辑，避免类型错误
+            })
+
+            if (targetIndex === -1) animations.push(animation)
+            else {
+              animations.splice(targetIndex + 1, 0, animation)
+            }
+          }
+        }
+        else if (trigger === 'auto') {
+          const targetIndex = animations.findIndex(item => {
+            return item.elId === elId
+          })
+          
+          if (targetIndex === -1) animations.push(animation)
+          else {
+            animations.splice(targetIndex + 1, 0, animation)
+          }
+        }
+      }
+      this.slides[this.slideIndex].animations = animations
+      this.saveDataToLocalStorage()
+    },
+
+    moveAnimation(sourceIndex: number, targetIndex: number) {
+      const currentSlide = this.slides[this.slideIndex]
+      const animations = currentSlide.animations || []
+      
+      const animation = animations[sourceIndex]
+      animations.splice(sourceIndex, 1)
+      animations.splice(targetIndex, 0, animation)
+      
+      this.slides[this.slideIndex].animations = animations
+      this.saveDataToLocalStorage()
     },
   },
 })

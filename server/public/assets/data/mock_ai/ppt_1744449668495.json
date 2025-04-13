@@ -1,0 +1,750 @@
+{
+  "outline": [
+    {
+      "title": "我尝试了5种的方法，第3种彻底惊艳到我！",
+      "level": 1
+    },
+    {
+      "title": "01 | 无意中发现的神仙方法",
+      "level": 2
+    },
+    {
+      "title": "偶然发现这个技巧，完全改变了我的思路",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "比传统方法效果好3倍",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "只需2天就能看到明显效果",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "02 | 大神都在用的秘密工具",
+      "level": 2
+    },
+    {
+      "title": "这些工具都不贵，大多数不到100元",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "第二个工具每周为我节省5小时",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "小技巧：结合第一个和第三个工具效果最佳",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "03 | 新手常犯的错误（我踩过的坑）",
+      "level": 2
+    },
+    {
+      "title": "这些错误我犯了好几年，浪费了太多时间",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "最大的误区其实最容易解决",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "前后对比：改掉这个习惯后，效果提升了80%",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "04 | 每日10分钟小习惯",
+      "level": 2
+    },
+    {
+      "title": "每天早上只需10分钟",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "经过数月测试发现的完美流程",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "新手和进阶者如何调整难度",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "05 | 我的亲身经历和变化",
+      "level": 2
+    },
+    {
+      "title": "6个月前我还是零基础小白",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "进度时间线：1周、1个月、3个月分别能达到什么水平",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "没人告诉你的意外收获",
+      "level": 3,
+      "isBullet": true
+    },
+    {
+      "title": "评论区告诉我你尝试过哪种方法？哪个效果最好？如果觉得有帮助点个❤️，我会分享更多干货！# #生活技巧 #经验分享",
+      "level": 2
+    }
+  ],
+  "slides": [
+    {
+      "id": "slide_77d6adb6-7bd3-4f4b-a07e-b5bde6cfbf62",
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_c76e699c-7ea2-42e3-bd74-421cb416025d",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 60px; font-weight: bold; color: #FF2E63;'>我尝试了5种的方法，第3种彻底惊艳到我！</p>",
+          "left": 75,
+          "top": 200,
+          "width": 450,
+          "height": 200,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_d9e35676-e498-4fec-a59a-410edf94a9a9",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>👋 点击查看全文 ➡️</p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 50,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_20e33345-05f9-4fd7-bb9b-02f7220b7666",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_a749e3a8-e4db-4744-81bc-38900eba0405",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>01 | 无意中发现的神仙方法</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_e42a4f68-14ee-4cc2-a888-c6995d2ca1af",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>偶然发现这个技巧，完全改变了我的思路</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_b6a8a88d-fc09-4391-a3f0-8ee6ba9acddf",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_a212c365-cfc3-4c07-a9f6-3e432f964dad",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>01 | 无意中发现的神仙方法</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_5358cae9-7bcd-4cec-ba29-868c9f574586",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>比传统方法效果好3倍</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_b15a4718-2889-42f8-a705-2fae7a72fdb3",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_c87f2428-236c-4c95-ac52-759014259820",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>01 | 无意中发现的神仙方法</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_9fbdf4a7-d657-41fc-a0b3-cb02e0058bf4",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>只需2天就能看到明显效果</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_38aee6e4-e683-4a3b-b2bb-2b6d18f06ae3",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_e40de249-82c9-4f10-ba56-94adf5666543",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>02 | 大神都在用的秘密工具</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_1f93f21d-191e-4bae-9fd9-ada7a3767a51",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>这些工具都不贵，大多数不到100元</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_4bfbe778-d0a5-4935-8183-dbe929e9e2be",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_390ccc17-182f-43fe-a335-03d04c07be20",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>02 | 大神都在用的秘密工具</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_58d7ac0f-b6d5-4462-80a3-03bc0d816544",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>第二个工具每周为我节省5小时</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_8bd316e9-eadd-420f-b06a-227b088e3495",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_1b345160-96ee-44f7-a8cb-44629b3ea705",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>02 | 大神都在用的秘密工具</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_ce93f0bc-7c6f-462e-a15b-d60207efcac2",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>小技巧：结合第一个和第三个工具效果最佳</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_dd694c8c-6c0d-445b-a1bd-da346610ab54",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_aa71c4c2-fe73-4301-bf5f-5c1c1f6920a0",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>03 | 新手常犯的错误（我踩过的坑）</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_612f7ec8-3acf-4041-8124-322a0c8a79ec",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>这些错误我犯了好几年，浪费了太多时间</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_7679ba51-7c5d-4d82-bd66-8b1ce9345a66",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_5a5590b5-91d3-4310-ace5-09fe56512f01",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>03 | 新手常犯的错误（我踩过的坑）</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_f9654e48-f0e2-4ea0-8073-ded94dc2ee1d",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>最大的误区其实最容易解决</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_6718a42c-13dd-472d-a726-c8116b0a4ecf",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_d2c13c2d-0aea-4ca0-84c3-76f8a5fe61e4",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>03 | 新手常犯的错误（我踩过的坑）</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_e74f0394-0344-4bed-b1a8-f81eed6f6aef",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>前后对比：改掉这个习惯后，效果提升了80%</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_e2669e40-1b3e-4e03-af54-8f9200980704",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_e8e617b3-9671-4d03-8610-bd430689253c",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>04 | 每日10分钟小习惯</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_f9fb8ab1-a5fc-456c-8417-a45a28b8489d",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>每天早上只需10分钟</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_f1afc4fe-66b8-40cd-ae70-46856b600e65",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_6dcc5857-b66b-4180-8e09-18214f13266d",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>04 | 每日10分钟小习惯</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_f27abb09-f88a-42d9-bee8-e99dc2221bf4",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>经过数月测试发现的完美流程</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_ccabdaf2-21bf-48da-9f34-3fcf6f462437",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_7ad9e66b-8125-4f12-bde3-2e50fa44fa8c",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>04 | 每日10分钟小习惯</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_5907b689-dc06-488e-b52c-d7e4b7ca190d",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>新手和进阶者如何调整难度</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_cb8569d4-2cf5-4438-99de-545f2a3e8416",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_0b788c9a-e20d-47f0-ad1a-caff1380df0d",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>05 | 我的亲身经历和变化</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_eac7966c-8454-4ce2-adf5-2d0fbe5fb0d5",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>6个月前我还是零基础小白</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_5fa6168b-97f5-470e-b845-ff1bb76ea679",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_db9e5630-2ecf-4811-924e-7458f974f4e4",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>05 | 我的亲身经历和变化</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_c41673ab-7817-43d0-85bb-7a4daecd38ed",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>进度时间线：1周、1个月、3个月分别能达到什么水平</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_3dbc4618-3745-488a-a077-4ec59f5d97d1",
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_3af50a0e-fb3a-4867-b16d-b4ff3d161abb",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>05 | 我的亲身经历和变化</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_5b596e4f-4c19-4b40-bb43-6645ac8556d0",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>没人告诉你的意外收获</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_7d197935-8874-4ff7-bb48-b440e02009ea",
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_c6084abc-4f19-42e6-85df-38b3d9ac5a3b",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 36px; font-weight: bold; color: #FF2E63;'>感谢阅读 ❤️</p>",
+          "left": 75,
+          "top": 250,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_ae8f2574-3bd4-4924-b015-dd6abaa3f554",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>记得点赞评论收藏 👇</p><p style='text-align: center; font-size: 24px; margin-top: 20px;'>有什么问题欢迎留言讨论</p>",
+          "left": 75,
+          "top": 350,
+          "width": 450,
+          "height": 120,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_15d17894-20d5-4b79-9ef3-14726850c6cd",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 20px; margin-top: 30px;'><span style=\"color: #FF2E63; font-weight: bold;\">#生活技巧</span> <span style=\"color: #FF2E63; font-weight: bold;\">#经验分享</span></p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 100,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    }
+  ]
+}

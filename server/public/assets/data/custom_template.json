@@ -1,0 +1,150 @@
+{
+  "id": "custom_template",
+  "name": "小红书卡片模板",
+  "background": {
+    "type": "solid",
+    "color": "#FFF1F2"
+  },
+  "theme": {
+    "themeColors": ["#FF2E63", "#FF69B4", "#FFBABA", "#FFC3E7", "#FF85A1", "#FFD0E5"],
+    "fontColor": "#333333",
+    "fontName": "",
+    "backgroundColor": "#FFF1F2",
+    "shadow": {
+      "h": 3,
+      "v": 3,
+      "blur": 2,
+      "color": "#FFCCD5"
+    },
+    "outline": {
+      "width": 2,
+      "color": "#FF85A1",
+      "style": "solid"
+    }
+  },
+  "slides": [
+    {
+      "id": "slide_001",
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "elements": [
+        {
+          "id": "element_001",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 60px; font-weight: bold; color: #FF2E63;'>小红书卡片标题</p>",
+          "left": 75,
+          "top": 200,
+          "width": 450,
+          "height": 200,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_002",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>👋 点击查看全文 ➡️</p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 50,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_002",
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "background": {
+        "type": "solid",
+        "color": "#FFFFFF"
+      },
+      "elements": [
+        {
+          "id": "element_003",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>内容标题</p>",
+          "left": 75,
+          "top": 80,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_004",
+          "type": "text",
+          "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>第一项内容</li><li style='margin-bottom: 15px;'>第二项内容</li><li style='margin-bottom: 15px;'>第三项内容</li></ul>",
+          "left": 75,
+          "top": 180,
+          "width": 450,
+          "height": 520,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_003",
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "elements": [
+        {
+          "id": "element_005",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 36px; font-weight: bold; color: #FF2E63;'>感谢阅读 ❤️</p>",
+          "left": 75,
+          "top": 250,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_006",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>记得点赞评论收藏 👇</p><p style='text-align: center; font-size: 24px; margin-top: 20px;'>有什么问题欢迎留言讨论</p>",
+          "left": 75,
+          "top": 350,
+          "width": 450,
+          "height": 120,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_007",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 20px; margin-top: 30px;'><span style='color: #FF2E63; font-weight: bold;'>#小红书</span> <span style='color: #FF2E63; font-weight: bold;'>#经验分享</span> <span style='color: #FF2E63; font-weight: bold;'>#生活技巧</span></p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 100,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    }
+  ]
+} 

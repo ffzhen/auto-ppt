@@ -1,0 +1,91 @@
+{
+  "outline": [],
+  "slides": [
+    {
+      "id": "slide_55f73a23-0bcc-4fc0-9561-8d430215f6d6",
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_6e610360-eca7-4287-b0cf-ba237f8145c3",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 60px; font-weight: bold; color: #FF2E63;'>小红书分享</p>",
+          "left": 75,
+          "top": 200,
+          "width": 450,
+          "height": 200,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_dd4cf005-987b-41dd-952d-ddf5e3e560fd",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>👋 点击查看全文 ➡️</p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 50,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_482802a9-ff73-49d9-a4bb-85bba4a5b2de",
+      "background": {
+        "type": "solid",
+        "color": "#FFF1F2"
+      },
+      "size": {
+        "width": 600,
+        "height": 800
+      },
+      "elements": [
+        {
+          "id": "element_a0f9705d-3ffe-48c1-865b-285cafaf36cc",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 36px; font-weight: bold; color: #FF2E63;'>感谢阅读 ❤️</p>",
+          "left": 75,
+          "top": 250,
+          "width": 450,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#FF2E63"
+        },
+        {
+          "id": "element_e8ff7f01-e50a-473b-b288-9ad16dc0ff41",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>记得点赞评论收藏 👇</p><p style='text-align: center; font-size: 24px; margin-top: 20px;'>有什么问题欢迎留言讨论</p>",
+          "left": 75,
+          "top": 350,
+          "width": 450,
+          "height": 120,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_7a4767c7-889d-495b-ab05-acc9b8167783",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 20px; margin-top: 30px;'><span style=\"color: #FF2E63; font-weight: bold;\">#小红书</span> <span style=\"color: #FF2E63; font-weight: bold;\">#经验分享</span> <span style=\"color: #FF2E63; font-weight: bold;\">#生活技巧</span></p>",
+          "left": 75,
+          "top": 500,
+          "width": 450,
+          "height": 100,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    }
+  ]
+}

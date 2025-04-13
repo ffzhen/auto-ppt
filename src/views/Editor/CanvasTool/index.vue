@@ -83,6 +83,10 @@
       </Popover>
     </div>
 
+    <div class="delete-all-slides-btn">
+      <IconDelete class="handler-item" v-tooltip="'删除所有幻灯片'" @click="showConfirmModal = true" />
+    </div>
+
     <div class="right-handler">
       <IconMinus class="handler-item viewport-size" v-tooltip="'画布缩小（Ctrl + -）'" @click="scaleCanvas('-')" />
       <Popover trigger="click" v-model:value="canvasScaleVisible">
@@ -110,19 +114,33 @@
         @update="data => { createLatexElement(data); latexEditorVisible = false }"
       />
     </Modal>
+
+    <Modal
+      v-model:visible="showConfirmModal"
+      :width="400"
+      title="确认删除"
+    >
+      <p>确定要删除所有幻灯片？此操作无法恢复。</p>
+      <div style="text-align: right;">
+          <Button @click="showConfirmModal = false">取消</Button>
+          <Button type="primary" @click="deleteAllSlides">删除</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useMainStore, useSnapshotStore } from '@/store'
+import { useMainStore, useSnapshotStore, useSlidesStore } from '@/store'
 import { getImageDataURL } from '@/utils/image'
 import type { ShapePoolItem } from '@/configs/shapes'
 import type { LinePoolItem } from '@/configs/lines'
 import useScaleCanvas from '@/hooks/useScaleCanvas'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
 import useCreateElement from '@/hooks/useCreateElement'
+import useSlideHandler from '@/hooks/useSlideHandler'
+import message from '@/utils/message'
 
 import ShapePool from './ShapePool.vue'
 import LinePool from './LinePool.vue'
@@ -135,12 +153,15 @@ import Modal from '@/components/Modal.vue'
 import Divider from '@/components/Divider.vue'
 import Popover from '@/components/Popover.vue'
 import PopoverMenuItem from '@/components/PopoverMenuItem.vue'
+import Button from '@/components/Button.vue'
 
 const mainStore = useMainStore()
+const slidesStore = useSlidesStore()
 const { creatingElement, creatingCustomShape, showSelectPanel, showSearchPanel, showNotesPanel } = storeToRefs(mainStore)
 const { canUndo, canRedo } = storeToRefs(useSnapshotStore())
 
 const { redo, undo } = useHistorySnapshot()
+const { createSlide, deleteSlide, resetSlides } = useSlideHandler()
 
 const {
   scaleCanvas,
@@ -151,6 +172,8 @@ const {
 
 const canvasScalePresetList = [200, 150, 125, 100, 75, 50]
 const canvasScaleVisible = ref(false)
+
+const showConfirmModal = ref(false)
 
 const applyCanvasPresetScale = (value: number) => {
   setCanvasScalePercentage(value)
@@ -198,13 +221,8 @@ const drawShape = (shape: ShapePoolItem) => {
   })
   shapePoolVisible.value = false
 }
-// 绘制自定义任意多边形
-const drawCustomShape = () => {
-  mainStore.setCreatingCustomShapeState(true)
-  shapePoolVisible.value = false
-}
 
-// 绘制线条路径
+// 绘制线条范围
 const drawLine = (line: LinePoolItem) => {
   mainStore.setCreatingElement({
     type: 'line',
@@ -213,149 +231,145 @@ const drawLine = (line: LinePoolItem) => {
   linePoolVisible.value = false
 }
 
-// 打开选择面板
+// 绘制自定义形状
+const drawCustomShape = () => {
+  mainStore.setCreatingCustomShapeState(true)
+  shapePoolVisible.value = false
+}
+
+// 删除所有幻灯片
+const deleteAllSlides = () => {
+  if (!slidesStore || !slidesStore.slides || slidesStore.slides.length === 0) {
+    message.warning('当前没有幻灯片可删除')
+    return
+  }
+  
+  // 重置幻灯片（会创建一个空白幻灯片）
+  resetSlides()
+  
+  message.success('已删除所有幻灯片')
+  showConfirmModal.value = false
+}
+
+// 切换批注面板显示状态
+const toggleNotesPanel = () => {
+  mainStore.setNotesPanelState(!showNotesPanel.value)
+}
+
+// 切换选择面板显示状态
 const toggleSelectPanel = () => {
   mainStore.setSelectPanelState(!showSelectPanel.value)
 }
 
-// 打开搜索替换面板
+// 切换查找替换面板显示状态
 const toggleSraechPanel = () => {
   mainStore.setSearchPanelState(!showSearchPanel.value)
-}
-
-// 打开批注面板
-const toggleNotesPanel = () => {
-  mainStore.setNotesPanelState(!showNotesPanel.value)
 }
 </script>
 
 <style lang="scss" scoped>
 .canvas-tool {
-  position: relative;
-  border-bottom: 1px solid $borderColor;
-  background-color: #fff;
+  height: 40px;
+  background-color: $lightGray;
+  user-select: none;
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
-  font-size: 13px;
-  user-select: none;
+  position: relative;
 }
-.left-handler, .more {
+.left-handler {
   display: flex;
   align-items: center;
-}
-.more-icon {
-  display: none;
+
+  .more {
+    display: flex;
+    align-items: center;
+
+    @media screen and (min-width: 1440px) {
+      .more-icon {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 1439px) {
+      .handler-item:not(.more-icon) {
+        display: none;
+      }
+    }
+  }
 }
 .add-element-handler {
+  height: 100%;
+  display: flex;
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-
-  .handler-item {
-    width: 32px;
-
-    &:not(.group-btn):hover {
-      background-color: #f1f1f1;
-    }
-
-    &.active {
-      color: $themeColor;
-    }
-
-    &.group-btn {
-      width: auto;
-      margin-right: 5px;
-
-      &:hover {
-        background-color: #f3f3f3;
-      }
-
-      .icon, .arrow {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .icon {
-        width: 26px;
-        padding: 0 2px;
-
-        &:hover {
-          background-color: #e9e9e9;
-        }
-        &.active {
-          color: $themeColor;
-        }
-      }
-      .arrow {
-        font-size: 12px;
-
-        &:hover {
-          background-color: #e9e9e9;
-        }
-      }
-    }
-  }
+  transform: translateX(-50%);
 }
-.handler-item {
-  height: 30px;
-  font-size: 14px;
-  margin: 0 2px;
+.delete-all-slides-btn {
+  position: absolute;
+  top: 0;
+  right: 140px;
+  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  border-radius: $borderRadius;
-  overflow: hidden;
-  cursor: pointer;
 
-  &.disable {
-    opacity: .5;
-  }
-}
-.left-handler, .right-handler {
   .handler-item {
-    padding: 0 8px;
-
-    &.active,
-    &:not(.disable):hover {
-      background-color: #f1f1f1;
-    }
+    font-size: 18px;
+    color: #f56c6c;
   }
 }
 .right-handler {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.handler-item {
+  padding: 0 10px;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+  height: 100%;
   display: flex;
   align-items: center;
 
-  .text {
-    display: inline-block;
-    width: 40px;
-    text-align: center;
+  &:hover {
+    color: $themeColor;
+    background-color: rgba($color: $themeColor, $alpha: .1);
+  }
+  &.active {
+    color: $themeColor;
+  }
+  &.disable {
+    color: #ccc;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+      color: #ccc;
+    }
+  }
+}
+.group-btn {
+  position: relative;
+  padding-right: 0;
+
+  .icon {
+    padding-right: 5px;
+  }
+  .arrow {
+    font-size: 12px;
+    padding: 0 5px;
     cursor: pointer;
   }
-
-  .viewport-size {
-    font-size: 13px;
-  }
 }
-
-@media screen and (width <= 1200px) {
-  .right-handler .text {
-    display: none;
-  }
-  .more > .handler-item {
-    display: none;
-  }
-  .more-icon {
-    display: block;
-  }
+.viewport-size, .viewport-size-adaptation {
+  padding: 0 5px;
 }
-@media screen and (width <= 1000px) {
-  .left-handler, .right-handler {
-    display: none;
-  }
+.text {
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  width: 40px;
+  text-align: center;
 }
 </style>

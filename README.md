@@ -1,3 +1,123 @@
+# Auto-PPT
+
+A comprehensive presentation creation and management application built with Vue 3 and TypeScript. The application features a slide editor, presentation mode, and a backend API for managing presentations.
+
+## Project Structure
+
+The project is divided into two main parts:
+
+- `src/` - The Vue.js frontend application
+- `server/` - The Express.js backend API
+
+## Features
+
+### Frontend Features
+- Slide creation and editing
+- Rich text editing
+- Shape, image, and text elements
+- Animations
+- Multiple themes
+- Presentation mode with speaker notes
+- Responsive design for desktop and mobile
+- Customizable aspect ratios (16:9, 16:10, 4:3)
+
+### Backend Features
+- RESTful API for managing presentations
+- Create, read, update, and delete presentations
+- Clone presentations
+- Export presentations to different formats (PDF, PPTX, images)
+
+## Getting Started
+
+### Prerequisites
+- Node.js 14+ and npm
+
+### Frontend Setup
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm run dev
+```
+
+3. Build for production:
+```bash
+npm run build
+```
+
+### Backend Setup
+
+1. Navigate to the server directory:
+```bash
+cd server
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file with the following content:
+```
+PORT=5000
+NODE_ENV=development
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+5. Build for production:
+```bash
+npm run build
+```
+
+6. Start the production server:
+```bash
+npm start
+```
+
+## API Endpoints
+
+- `GET /api/presentations` - Get all presentations
+- `POST /api/presentations` - Create a new presentation
+- `GET /api/presentations/:id` - Get a presentation by ID
+- `PUT /api/presentations/:id` - Update a presentation
+- `DELETE /api/presentations/:id` - Delete a presentation
+- `POST /api/presentations/:id/clone` - Clone a presentation
+- `GET /api/presentations/:id/export/:format` - Export a presentation (formats: pdf, pptx, image)
+
+## Development
+
+### Frontend 
+
+The frontend is built with:
+- Vue 3 with the Composition API
+- TypeScript
+- Pinia for state management
+- Vue Router for routing
+
+### Backend
+
+The backend is built with:
+- Express.js
+- TypeScript
+- In-memory database (can be replaced with a persistent database)
+
+## Future Improvements
+
+- User authentication and authorization
+- Real-time collaboration
+- Additional export formats
+- More themes and templates
+- AI-powered slide generation
+- Persistent database storage
+
 <p align="center">
     <img src='/public/icons/android-chrome-192x192.png' />
 </p>
@@ -113,7 +233,7 @@ Browser access: http://127.0.0.1:5173/
 - Transparency
 - Flip
 - Shape format painter
-- Edit text (supports rich text, similar to text element’s rich text editing)
+- Edit text (supports rich text, similar to text element's rich text editing)
 #### Lines
 - Straight lines, polylines, curves
 - Color
@@ -203,7 +323,7 @@ If you wish to use this project for commercial gain, I hope you will respect ope
         - 永久5499（7499可开具电子发票）
 - 如需付费获取独立的商业授权，请注意：
     - 独立商业授权的意思是：单独授权您将代码用于商业行为，且不必执行 AGPL-3.0 协议；
-    - 不提供额外的“高级版本”和技术支持，也不提供可直接交付的产品；
+    - 不提供额外的"高级版本"和技术支持，也不提供可直接交付的产品；
     - 如有需要，可提供AIPPT相关后台逻辑和当前模板数据（但都非常简单，建议自己实现）；
     - 务必提前做好调研，判断PPTist是否符合需求（无论功能还是开发）。
 

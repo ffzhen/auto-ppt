@@ -1,0 +1,604 @@
+{
+  "outline": [
+    {
+      "title": "怎么做麻婆豆腐",
+      "level": 1
+    },
+    {
+      "title": "引言",
+      "level": 2
+    },
+    {
+      "title": "背景介绍",
+      "level": 3
+    },
+    {
+      "title": "主题背景",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "历史发展",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "现状概述",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "重要性分析",
+      "level": 3
+    },
+    {
+      "title": "理论意义",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "实践价值",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "创新点",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "主要内容",
+      "level": 2
+    },
+    {
+      "title": "核心概念",
+      "level": 3
+    },
+    {
+      "title": "概念一：定义与特点",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "概念二：定义与特点",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "概念间的关系",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "关键问题",
+      "level": 3
+    },
+    {
+      "title": "问题一：表现与成因",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "问题二：表现与成因",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "解决思路",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "实践应用",
+      "level": 2
+    },
+    {
+      "title": "应用场景",
+      "level": 3
+    },
+    {
+      "title": "场景一：应用方式与效果",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "场景二：应用方式与效果",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "实施要点",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "案例分析",
+      "level": 3
+    },
+    {
+      "title": "案例一：经验与教训",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "案例二：经验与教训",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "最佳实践总结",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "发展趋势",
+      "level": 2
+    },
+    {
+      "title": "未来方向",
+      "level": 3
+    },
+    {
+      "title": "短期趋势",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "中期发展",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "长期展望",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "机遇与挑战",
+      "level": 3
+    },
+    {
+      "title": "潜在机遇",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "可能挑战",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "应对策略",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "结论与建议",
+      "level": 2
+    },
+    {
+      "title": "总体结论",
+      "level": 3
+    },
+    {
+      "title": "主要发现",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "价值与局限",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "综合评价",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "行动建议",
+      "level": 3
+    },
+    {
+      "title": "针对个人的建议",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "针对组织的建议",
+      "level": 4,
+      "isBullet": true
+    },
+    {
+      "title": "实施路径规划",
+      "level": 4,
+      "isBullet": true
+    }
+  ],
+  "slides": [
+    {
+      "id": "slide_46e925af-6e55-44a0-a566-741e6abcbeb7",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_4a72f1f4-fdcc-43d3-9e74-973551d422d1",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 60px; font-weight: bold;'>怎么做麻婆豆腐</p>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 100,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_52429100-affa-4206-b532-a8583144f451",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 24px;'>自动生成的演示文稿</p>",
+          "left": 100,
+          "top": 260,
+          "width": 600,
+          "height": 50,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_e1729ae7-21f0-4c0e-adbc-543589542fd9",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_82fa1990-6ffd-4e27-bcd4-d4368ab86c1c",
+          "type": "text",
+          "content": "<p style='text-align: center; font-size: 48px; font-weight: bold;'>怎么做麻婆豆腐</p>",
+          "left": 100,
+          "top": 200,
+          "width": 600,
+          "height": 80,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        }
+      ]
+    },
+    {
+      "id": "slide_43dac3f1-8f88-4f26-8acd-d04f16286016",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_927be1cc-1983-4987-8fc9-9124806916e3",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>引言</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_32cff0b0-7ef8-4714-8f60-cd0853d290e6",
+          "type": "text",
+          "content": "<ul><li>背景介绍</li><li>主题背景</li><li>历史发展</li><li>现状概述</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_e3d0b90e-1629-4fad-a312-41735aaccc8a",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_aa2d144b-4918-47e8-a527-413620376461",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>引言</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_44096faf-ad1d-450d-9cfe-8f09e3a98c83",
+          "type": "text",
+          "content": "<ul><li>重要性分析</li><li>理论意义</li><li>实践价值</li><li>创新点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_379bd432-b1d4-45d8-8917-0a6ac05366af",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_db878003-0cc4-429a-9bb3-888375e22bf1",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>主要内容</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_f2efe751-6119-408f-9ef0-d8dec6231802",
+          "type": "text",
+          "content": "<ul><li>核心概念</li><li>概念一：定义与特点</li><li>概念二：定义与特点</li><li>概念间的关系</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_9ed448ea-3371-4f06-afe7-b9bc9428f3f0",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_6df72957-4f0a-483d-bff8-4ead5a1017e6",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>主要内容</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_204660e3-58c2-4f7a-ae71-e56a6927bcb3",
+          "type": "text",
+          "content": "<ul><li>关键问题</li><li>问题一：表现与成因</li><li>问题二：表现与成因</li><li>解决思路</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_40899a3c-de50-45f3-9fbe-5f12727eeaef",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_8dcdc167-2ec8-4dd4-b9e3-c5594e46571a",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>实践应用</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_b3de1fd3-6510-48c3-b573-2c926e0b714e",
+          "type": "text",
+          "content": "<ul><li>应用场景</li><li>场景一：应用方式与效果</li><li>场景二：应用方式与效果</li><li>实施要点</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_f9c36a09-e137-446e-94b0-354ce7579dde",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_b1d6aa41-6f73-4cb1-8779-2d027af4a74b",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>实践应用</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_4a505b32-1fa0-47a7-af3b-710d7e5ba26e",
+          "type": "text",
+          "content": "<ul><li>案例分析</li><li>案例一：经验与教训</li><li>案例二：经验与教训</li><li>最佳实践总结</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_ce6221ad-c8fd-41fc-a2ba-81630f6e85a9",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_da842df1-690c-488a-b16e-9a562b067ea1",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>发展趋势</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_c0441c0b-4e4c-4582-a25b-56b1cac77ddb",
+          "type": "text",
+          "content": "<ul><li>未来方向</li><li>短期趋势</li><li>中期发展</li><li>长期展望</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_b577f70f-1c81-443f-90ab-979ebb5a4970",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_1931091e-bcd0-4653-9e3f-18f8ff023c87",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>发展趋势</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_cfaf5557-c899-4b54-84e9-c3a7eedc9b6b",
+          "type": "text",
+          "content": "<ul><li>机遇与挑战</li><li>潜在机遇</li><li>可能挑战</li><li>应对策略</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_b05eb478-9fc6-4796-98ed-3a03097fe4c3",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_e327c648-27d6-4db2-b56c-14285614cf22",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>结论与建议</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_b3624461-0789-4171-af69-c6ea0684de96",
+          "type": "text",
+          "content": "<ul><li>总体结论</li><li>主要发现</li><li>价值与局限</li><li>综合评价</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    },
+    {
+      "id": "slide_49c9755a-0fcf-4dbc-9726-ed716f5d2dd7",
+      "background": {
+        "type": "solid",
+        "color": "#f5f5f5"
+      },
+      "elements": [
+        {
+          "id": "element_af716553-4f55-4268-a246-3b19cd8aebc0",
+          "type": "text",
+          "content": "<p style='font-size: 36px; font-weight: bold;'>结论与建议</p>",
+          "left": 80,
+          "top": 60,
+          "width": 640,
+          "height": 60,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333333"
+        },
+        {
+          "id": "element_e6a68b62-37ef-43ad-bc87-8d54db48b0ce",
+          "type": "text",
+          "content": "<ul><li>行动建议</li><li>针对个人的建议</li><li>针对组织的建议</li><li>实施路径规划</li></ul>",
+          "left": 100,
+          "top": 150,
+          "width": 600,
+          "height": 250,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#666666"
+        }
+      ]
+    }
+  ]
+}

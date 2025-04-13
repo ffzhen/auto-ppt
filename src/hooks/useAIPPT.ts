@@ -19,14 +19,42 @@ export default () => {
   const { isEmptySlide } = useSlideHandler()
 
   const imgPool = ref<ImgPoolItem[]>([])
-  const transitionIndex = ref(0)
-  const transitionTemplate = ref<Slide | null>(null)
 
   const checkTextType = (el: PPTElement, type: TextType) => {
     return (el.type === 'text' && el.textType === type) || (el.type === 'shape' && el.text && el.text.type === type)
   }
   
-  const getUseableTemplates = (templates: Slide[], n: number, type: TextType) => {
+  const getUseableTemplates = (templates: Slide[], n: number, type: TextType, itemData?: any) => {
+    // 如果item.data有header或footer，需要筛选出有对应插槽的模板
+    if (itemData) {
+      if (itemData.header || itemData.footer) {
+        templates = templates.filter(slide => {
+          const hasHeader = itemData.header ? slide.elements.some(el => checkTextType(el, 'header')) : true
+          const hasFooter = itemData.footer ? slide.elements.some(el => checkTextType(el, 'footer')) : true
+          return hasHeader && hasFooter
+        })
+        
+        // 如果没有符合条件的模板，返回原始模板列表
+        if (templates.length === 0) {
+          console.warn('没有找到包含所需header/footer插槽的模板，将使用标准模板')
+          templates = templates.filter(slide => slide.type === 'content')
+        }
+      } else {
+        // 如果item.data没有header或footer，排除有这些插槽的模板
+        templates = templates.filter(slide => {
+          const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
+          const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
+          return !hasHeaderSlot && !hasFooterSlot
+        })
+
+        // 如果筛选后没有合适的模板，使用原始内容模板
+        if (templates.length === 0) {
+          console.warn('没有找到不包含header/footer插槽的模板，将使用标准模板')
+          templates = templates.filter(slide => slide.type === 'content')
+        }
+      }
+    }
+    
     if (n === 1) {
       const list = templates.filter(slide => {
         const items = slide.elements.filter(el => checkTextType(el, type))
@@ -102,7 +130,7 @@ export default () => {
   }
   
   const getFontInfo = (htmlString: string) => {
-    const fontSizeRegex = /font-size:\s*(\d+)\s*px/i
+    const fontSizeRegex = /font-size:\s*(\d+.?\d+)\s*px/i
     const fontFamilyRegex = /font-family:\s*['"]?([^'";]+)['"]?\s*(?=;|>|$)/i
   
     const defaultInfo = {
@@ -233,6 +261,7 @@ export default () => {
     if (imgs) imgPool.value = imgs
 
     const AISlides: AIPPTSlide[] = []
+    console.log(_AISlides)
     for (const template of _AISlides) {
       if (template.type === 'content') {
         const items = template.data.items
@@ -306,15 +335,9 @@ export default () => {
     }
 
     const coverTemplates = templateSlides.filter(slide => slide.type === 'cover')
-    const contentsTemplates = templateSlides.filter(slide => slide.type === 'contents')
-    const transitionTemplates = templateSlides.filter(slide => slide.type === 'transition')
     const contentTemplates = templateSlides.filter(slide => slide.type === 'content')
+    const contentsTemplates = templateSlides.filter(slide => slide.type === 'contents')
     const endTemplates = templateSlides.filter(slide => slide.type === 'end')
-
-    if (!transitionTemplate.value) {
-      const _transitionTemplate = transitionTemplates[Math.floor(Math.random() * transitionTemplates.length)]
-      transitionTemplate.value = _transitionTemplate
-    }
 
     const slides = []
     
@@ -322,12 +345,13 @@ export default () => {
       if (item.type === 'cover') {
         const coverTemplate = coverTemplates[Math.floor(Math.random() * coverTemplates.length)]
         const elements = coverTemplate.elements.map(el => {
+          debugger
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           if (el.type !== 'text' && el.type !== 'shape') return el
           if (checkTextType(el, 'title') && item.data.title) {
             return getNewTextElement({ el, text: item.data.title, maxLine: 1 })
           }
-          if (checkTextType(el, 'content') && item.data.text) {
+          if (checkTextType(el, 'subtitle') && item.data.text) {
             return getNewTextElement({ el, text: item.data.text, maxLine: 3 })
           }
           return el
@@ -338,69 +362,8 @@ export default () => {
           elements,
         })
       }
-      else if (item.type === 'contents') {
-        const _contentsTemplates = getUseableTemplates(contentsTemplates, item.data.items.length, 'item')
-        const contentsTemplate = _contentsTemplates[Math.floor(Math.random() * _contentsTemplates.length)]
-
-        const sortedItemIds = contentsTemplate.elements.filter(el => checkTextType(el, 'item')).sort((a, b) => {
-          const aIndex = a.left + a.top * 2
-          const bIndex = b.left + b.top * 2
-          return aIndex - bIndex
-        }).map(el => el.id)
-
-        const sortedNumberItemIds = contentsTemplate.elements.filter(el => checkTextType(el, 'itemNumber')).sort((a, b) => {
-          const aIndex = a.left + a.top * 2
-          const bIndex = b.left + b.top * 2
-          return aIndex - bIndex
-        }).map(el => el.id)
-
-        const longestText = item.data.items.reduce((longest, current) => current.length > longest.length ? current : longest, '')
-
-        const elements = contentsTemplate.elements.map(el => {
-          if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
-          if (el.type !== 'text' && el.type !== 'shape') return el
-          if (checkTextType(el, 'item')) {
-            const index = sortedItemIds.findIndex(id => id === el.id)
-            const itemTitle = item.data.items[index]
-            if (itemTitle) return getNewTextElement({ el, text: itemTitle, maxLine: 1, longestText })
-          }
-          if (checkTextType(el, 'itemNumber')) {
-            const index = sortedNumberItemIds.findIndex(id => id === el.id)
-            const offset = item.offset || 0
-            return getNewTextElement({ el, text: index + offset + 1 + '', maxLine: 1, digitPadding: true })
-          }
-          return el
-        })
-        slides.push({
-          ...contentsTemplate,
-          id: nanoid(10),
-          elements,
-        })
-      }
-      else if (item.type === 'transition') {
-        transitionIndex.value = transitionIndex.value + 1
-        const elements = transitionTemplate.value.elements.map(el => {
-          if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
-          if (el.type !== 'text' && el.type !== 'shape') return el
-          if (checkTextType(el, 'title') && item.data.title) {
-            return getNewTextElement({ el, text: item.data.title, maxLine: 1 })
-          }
-          if (checkTextType(el, 'content') && item.data.text) {
-            return getNewTextElement({ el, text: item.data.text, maxLine: 3 })
-          }
-          if (checkTextType(el, 'partNumber')) {
-            return getNewTextElement({ el, text: transitionIndex.value + '', maxLine: 1, digitPadding: true })
-          }
-          return el
-        })
-        slides.push({
-          ...transitionTemplate.value,
-          id: nanoid(10),
-          elements,
-        })
-      }
       else if (item.type === 'content') {
-        const _contentTemplates = getUseableTemplates(contentTemplates, item.data.items.length, 'item')
+        const _contentTemplates = getUseableTemplates(contentTemplates, item.data.items.length, 'item', item.data)
         const contentTemplate = _contentTemplates[Math.floor(Math.random() * _contentTemplates.length)]
 
         const sortedTitleItemIds = contentTemplate.elements.filter(el => checkTextType(el, 'itemTitle')).sort((a, b) => {
@@ -464,6 +427,12 @@ export default () => {
           if (checkTextType(el, 'title') && item.data.title) {
             return getNewTextElement({ el, text: item.data.title, maxLine: 1 })
           }
+          if (checkTextType(el, 'header') && item.data.header) {
+            return getNewTextElement({ el, text: item.data.header, maxLine: 4 })
+          }
+          if (checkTextType(el, 'footer') && item.data.footer) {
+            return getNewTextElement({ el, text: item.data.footer, maxLine: 2 })
+          }
           return el
         })
         slides.push({
@@ -476,6 +445,18 @@ export default () => {
         const endTemplate = endTemplates[Math.floor(Math.random() * endTemplates.length)]
         const elements = endTemplate.elements.map(el => {
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
+          if (el.type !== 'text' && el.type !== 'shape') return el
+          
+          // 处理结束页的文本内容
+          if (checkTextType(el, 'content') && item.data && item.data.content) {
+            return getNewTextElement({ el, text: item.data.content, maxLine: 8 })
+          }
+          
+          // 处理结束页的标题
+          if (checkTextType(el, 'title') && item.data && item.data.title) {
+            return getNewTextElement({ el, text: item.data.title, maxLine: 2 })
+          }
+          
           return el
         })
         slides.push({

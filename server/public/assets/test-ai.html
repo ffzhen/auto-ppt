@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PPT 生成测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .setting-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+        label {
+            margin-right: 5px;
+        }
+        select, input {
+            padding: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4472c4;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #365696;
+        }
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .example-btn {
+            padding: 6px 12px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .example-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .output {
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        .status {
+            color: #666;
+            font-style: italic;
+        }
+        .outline {
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI PPT 生成测试</h1>
+    <div class="container">
+        <div>
+            <h2>输入内容</h2>
+            <textarea id="content" placeholder="输入演示文稿主题或大纲...">5G技术如何改变我们的生活</textarea>
+            <div>
+                <p>示例主题：</p>
+                <div class="examples">
+                    <button class="example-btn">5G技术如何改变我们的生活</button>
+                    <button class="example-btn">人工智能在医疗领域的应用</button>
+                    <button class="example-btn">区块链技术的原理与应用</button>
+                    <button class="example-btn">元宇宙的发展与未来</button>
+                    <button class="example-btn">可再生能源的现状与前景</button>
+                    <button class="example-btn">教育科技发展趋势</button>
+                    <button class="example-btn">数字化转型与企业创新</button>
+                    <button class="example-btn">智慧城市建设规划</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings">
+            <div class="setting-item">
+                <label for="language">语言:</label>
+                <select id="language">
+                    <option value="zh">中文</option>
+                    <option value="en">英文</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <label for="model">模型:</label>
+                <select id="model">
+                    <option value="ep-20250411144626-zx55l">ds3</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="use-stream" checked>
+                    使用流式输出
+                </label>
+            </div>
+        </div>
+        
+        <div>
+            <button id="generate-outline">生成大纲</button>
+            <button id="generate-ppt">生成PPT</button>
+        </div>
+        
+        <div>
+            <h2>输出结果 <span class="status" id="status"></span></h2>
+            <div class="output" id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:8080/api';
+        
+        // 设置示例按钮点击事件
+        document.querySelectorAll('.example-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('content').value = btn.textContent;
+            });
+        });
+        
+        // 生成大纲按钮点击事件
+        document.getElementById('generate-outline').addEventListener('click', async () => {
+            const content = document.getElementById('content').value.trim();
+            if (!content) {
+                alert('请输入内容');
+                return;
+            }
+            
+            const outputElement = document.getElementById('output');
+            const statusElement = document.getElementById('status');
+            
+            outputElement.textContent = '';
+            statusElement.textContent = '正在生成大纲...';
+            
+            // 获取设置
+            const language = document.getElementById('language').value;
+            const model = document.getElementById('model').value;
+            const useStream = document.getElementById('use-stream').checked;
+            
+            try {
+                if (useStream) {
+                    // 使用流式响应
+                    outputElement.className = 'output outline';
+                    
+                    const response = await fetch(`${BASE_URL}/tools/aippt_outline`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content,
+                            language,
+                            model,
+                            stream: true
+                        }),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('请求失败');
+                    }
+                    
+                    // 处理流式响应
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        
+                        const chunk = decoder.decode(value);
+                        const lines = chunk.split('\n\n');
+                        
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const data = line.substring(6);
+                                if (data === '[DONE]') {
+                                    statusElement.textContent = '大纲生成完成';
+                                } else {
+                                    try {
+                                        const jsonData = JSON.parse(data);
+                                        if (jsonData.content) {
+                                            outputElement.textContent += jsonData.content + '\n';
+                                            
+                                            // 自动滚动到底部
+                                            outputElement.scrollTop = outputElement.scrollHeight;
+                                        }
+                                    } catch (e) {
+                                        console.error('解析JSON出错:', e);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // 使用非流式响应
+                    outputElement.className = 'output';
+                    
+                    const response = await fetch(`${BASE_URL}/tools/aippt_outline`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content,
+                            language,
+                            model,
+                            stream: false
+                        }),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('请求失败');
+                    }
+                    
+                    const data = await response.json();
+                    outputElement.textContent = JSON.stringify(data, null, 2);
+                    statusElement.textContent = '大纲生成完成';
+                }
+            } catch (error) {
+                console.error('生成大纲出错:', error);
+                statusElement.textContent = '出错了';
+                outputElement.textContent = `错误: ${error.message}`;
+            }
+        });
+        
+        // 生成PPT按钮点击事件
+        document.getElementById('generate-ppt').addEventListener('click', async () => {
+            const content = document.getElementById('content').value.trim();
+            if (!content) {
+                alert('请输入内容');
+                return;
+            }
+            
+            const outputElement = document.getElementById('output');
+            const statusElement = document.getElementById('status');
+            
+            outputElement.textContent = '';
+            outputElement.className = 'output';
+            statusElement.textContent = '正在生成PPT...';
+            
+            // 获取设置
+            const language = document.getElementById('language').value;
+            const model = document.getElementById('model').value;
+            const useStream = document.getElementById('use-stream').checked;
+            
+            try {
+                if (useStream) {
+                    // 使用流式响应
+                    const response = await fetch(`${BASE_URL}/tools/aippt`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content,
+                            language,
+                            model,
+                            stream: true
+                        }),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('请求失败');
+                    }
+                    
+                    // 处理流式响应
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let result = '';
+                    let outlineComplete = false;
+                    
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        
+                        const chunk = decoder.decode(value);
+                        const lines = chunk.split('\n\n');
+                        
+                        for (const line of lines) {
+                            if (line.startsWith('data: ')) {
+                                const data = line.substring(6);
+                                if (data === '[DONE]') {
+                                    statusElement.textContent = 'PPT生成完成';
+                                } else {
+                                    try {
+                                        const jsonData = JSON.parse(data);
+                                        
+                                        // 根据不同类型的数据进行处理
+                                        if (jsonData.type === 'outline') {
+                                            if (!outlineComplete) {
+                                                // 如果是第一条大纲内容，清空输出区域并设置为大纲格式
+                                                if (result === '') {
+                                                    outputElement.className = 'output outline';
+                                                }
+                                                // 添加大纲内容
+                                                result += jsonData.content + '\n';
+                                                outputElement.textContent = result;
+                                            }
+                                        } else {
+                                            // 如果收到非大纲类型内容，标记大纲已完成
+                                            if (!outlineComplete) {
+                                                outlineComplete = true;
+                                                result += '\n----- 开始生成幻灯片 -----\n\n';
+                                                // 切换回JSON显示样式
+                                                outputElement.className = 'output';
+                                            }
+                                            
+                                            // 显示非大纲类型的内容
+                                            result += JSON.stringify(jsonData, null, 2) + '\n\n';
+                                        }
+                                        
+                                        outputElement.textContent = result;
+                                        
+                                        // 自动滚动到底部
+                                        outputElement.scrollTop = outputElement.scrollHeight;
+                                        
+                                        // 更新状态
+                                        if (jsonData.type === 'slide') {
+                                            statusElement.textContent = `生成幻灯片 ${jsonData.index + 1}/${jsonData.total}...`;
+                                        } else if (jsonData.type === 'outline') {
+                                            statusElement.textContent = '生成大纲...';
+                                        } else if (jsonData.type === 'complete') {
+                                            statusElement.textContent = 'PPT生成完成';
+                                        }
+                                    } catch (e) {
+                                        console.error('解析JSON出错:', e);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // 使用非流式响应
+                    const response = await fetch(`${BASE_URL}/tools/aippt`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            content,
+                            language,
+                            model,
+                            stream: false
+                        }),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('请求失败');
+                    }
+                    
+                    const data = await response.json();
+                    outputElement.textContent = JSON.stringify(data, null, 2);
+                    statusElement.textContent = 'PPT生成完成';
+                }
+            } catch (error) {
+                console.error('生成PPT出错:', error);
+                statusElement.textContent = '出错了';
+                outputElement.textContent = `错误: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html> 

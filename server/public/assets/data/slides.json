@@ -1,0 +1,60 @@
+[
+  {
+    "id": "slide_1",
+    "elements": [
+      {
+        "id": "element_1",
+        "type": "text",
+        "content": "<p style='text-align: center; font-size: 60px; font-weight: bold;'>演示文稿标题</p>",
+        "left": 100,
+        "top": 150,
+        "width": 600,
+        "height": 100,
+        "rotate": 0,
+        "defaultFontName": "",
+        "defaultColor": "#333333"
+      },
+      {
+        "id": "element_2",
+        "type": "text",
+        "content": "<p style='text-align: center; font-size: 24px;'>副标题</p>",
+        "left": 100,
+        "top": 260,
+        "width": 600,
+        "height": 50,
+        "rotate": 0,
+        "defaultFontName": "",
+        "defaultColor": "#666666"
+      }
+    ]
+  },
+  {
+    "id": "slide_2",
+    "elements": [
+      {
+        "id": "element_3",
+        "type": "text",
+        "content": "<p style='text-align: center; font-size: 40px; font-weight: bold;'>内容页</p>",
+        "left": 100,
+        "top": 50,
+        "width": 600,
+        "height": 60,
+        "rotate": 0,
+        "defaultFontName": "",
+        "defaultColor": "#333333"
+      },
+      {
+        "id": "element_4",
+        "type": "text",
+        "content": "<ul><li>第一项内容</li><li>第二项内容</li><li>第三项内容</li></ul>",
+        "left": 100,
+        "top": 150,
+        "width": 600,
+        "height": 200,
+        "rotate": 0,
+        "defaultFontName": "",
+        "defaultColor": "#666666"
+      }
+    ]
+  }
+] 

@@ -1,10 +1,10 @@
 <template>
   <div class="aippt-dialog">
     <div class="header">
-      <span class="title">AIPPT</span>
-      <span class="subtite" v-if="step === 'template'">从下方挑选合适的模板，开始生成PPT</span>
+      <span class="title">小红书风格卡片</span>
+      <span class="subtite" v-if="step === 'template'">从下方挑选合适的模板，开始生成小红书风格卡片（竖向3:4比例）</span>
       <span class="subtite" v-else-if="step === 'outline'">确认下方内容大纲（点击编辑内容，右键添加/删除大纲项），开始选择模板</span>
-      <span class="subtite" v-else>在下方输入您的PPT主题，并适当补充信息，如行业、岗位、学科、用途等</span>
+      <span class="subtite" v-else>在下方输入您要分享的主题，例如：美食、旅行、美妆、生活技巧等</span>
     </div>
     
     <template v-if="step === 'setup'">
@@ -12,7 +12,7 @@
         ref="inputRef"
         v-model:value="keyword" 
         :maxlength="50" 
-        placeholder="请输入PPT主题，如：大学生职业生涯规划" 
+        placeholder="请输入分享主题，如：冬季穿搭、烘焙技巧、旅行攻略" 
         @enter="createOutline()"
       >
         <template #suffix>
@@ -30,9 +30,7 @@
           style="width: 160px;"
           v-model:value="model"
           :options="[
-            { label: 'Doubao-1.5-Pro', value: 'doubao-1.5-pro-32k' },
-            { label: 'DeepSeek-v3', value: 'ark-deepseek-v3' },
-            { label: 'GLM-4-Flash', value: 'GLM-4-flash' },
+            { label: 'DeepSeek-v3', value: 'ep-20250411144626-zx55l' },
           ]"
         />
       </div>
@@ -96,18 +94,18 @@ const outlineCreating = ref(false)
 const outlineRef = ref<HTMLElement>()
 const inputRef = ref<InstanceType<typeof Input>>()
 const step = ref<'setup' | 'outline' | 'template'>('setup')
-const model = ref('doubao-1.5-pro-32k')
+const model = ref('ep-20250411144626-zx55l')
 
 const recommends = ref([
-  '大学生职业生涯规划',
-  '公司年会策划方案',
-  '大数据如何改变世界',
-  '餐饮市场调查与研究',
-  'AIGC在教育领域的应用',
-  '5G技术如何改变我们的生活',
-  '社交媒体与品牌营销',
-  '年度工作总结与展望',
-  '区块链技术及其应用',
+  '冬季穿搭技巧分享',
+  '零失败的烘焙食谱',
+  '便宜又好用的国货美妆',
+  '三亚旅行攻略',
+  '一个人生活小技巧',
+  '如何拍出高级感照片',
+  '家居收纳整理方法',
+  '健身减肥一周食谱',
+  '手机摄影构图技巧',
 ]) 
 
 onMounted(() => {
@@ -141,7 +139,7 @@ const createOutline = async () => {
         outlineCreating.value = false
         return
       }
-  
+      console.log('outline value',value)
       const chunk = decoder.decode(value, { stream: true })
       outline.value += chunk
 
@@ -158,9 +156,8 @@ const createOutline = async () => {
 const createPPT = async () => {
   loading.value = true
 
-  const stream = await api.AIPPT(outline.value, language.value, 'doubao-1.5-pro-32k')
+  const stream = await api.AIPPT(outline.value, language.value, 'ep-20250411144626-zx55l')
   const templateSlides: Slide[] = await api.getFileData(selectedTemplate.value).then(ret => ret.slides)
-
   const reader: ReadableStreamDefaultReader = stream.body.getReader()
   const decoder = new TextDecoder('utf-8')
   
@@ -201,7 +198,7 @@ const createPPT = async () => {
     font-weight: 700;
     font-size: 20px;
     margin-right: 8px;
-    background: linear-gradient(270deg, #d897fd, #33bcfc);
+    background: linear-gradient(270deg, #FF2E63, #FF69B4);
     background-clip: text;
     color: transparent;
     vertical-align: text-bottom;

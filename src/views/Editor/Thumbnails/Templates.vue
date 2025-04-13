@@ -16,6 +16,10 @@
           :key="item.value"
           @click="activeType = item.value"
         >{{ item.label }}</div>
+        
+        <div class="insert-all-btn">
+          <Button type="primary" size="small" @click="insertAllSlides">插入所有</Button>
+        </div>
       </div>
       <div class="list" ref="listRef">
         <template v-for="slide in slides" :key="slide.id">
@@ -59,8 +63,8 @@ const types = ref<{
 }[]>([
   { label: '全部', value: 'all' },
   { label: '封面', value: 'cover' },
-  { label: '目录', value: 'contents' },
-  { label: '过渡', value: 'transition' },
+  // { label: '目录', value: 'contents' },
+  // { label: '过渡', value: 'transition' },
   { label: '内容', value: 'content' },
   { label: '结束', value: 'end' },
 ])
@@ -70,6 +74,18 @@ const activeCatalog = ref('')
 
 const insertTemplate = (slide: Slide) => {
   emit('select', slide)
+}
+
+const insertAllSlides = () => {
+  // 筛选当前类型的幻灯片
+  const filteredSlides = activeType.value === 'all' 
+    ? slides.value 
+    : slides.value.filter(slide => slide.type === activeType.value)
+  
+  // 逐个插入筛选后的幻灯片
+  filteredSlides.forEach(slide => {
+    emit('select', slide)
+  })
 }
 
 const changeCatalog = (id: string) => {
@@ -129,6 +145,8 @@ onMounted(() => {
   display: flex;
   padding: 2px 0;
   margin-bottom: 8px;
+  align-items: center;
+  justify-content: space-between;
 
   .type {
     border-radius: $borderRadius;
@@ -149,6 +167,10 @@ onMounted(() => {
     &:hover {
       background-color: #f5f5f5;
     }
+  }
+  
+  .insert-all-btn {
+    margin-left: auto;
   }
 }
 .list {

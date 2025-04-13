@@ -61,6 +61,67 @@ export default () => {
     }, 200)
   }
   
+  // 逐页导出图片
+  const exportSingleImage = (domRef: HTMLElement, slidesToExport: Slide[], format: string, quality: number, ignoreWebfont = true) => {
+    if (!slidesToExport.length) return
+    
+    exporting.value = true
+    const toImage = format === 'png' ? toPng : toJpeg
+    const config: ExportImageConfig = {
+      quality,
+      width: 1600,
+    }
+    
+    if (ignoreWebfont) config.fontEmbedCSS = ''
+    
+    // 获取所有幻灯片的缩略图元素
+    const thumbnails = domRef.querySelectorAll('.thumbnail')
+    const exportPromises: Promise<void>[] = []
+    
+    // 记录成功和失败的数量
+    let successCount = 0
+    let failCount = 0
+    
+    slidesToExport.forEach((slide, index) => {
+      if (index >= thumbnails.length) return
+      
+      const thumbnailElement = thumbnails[index] as HTMLElement
+      
+      const promise = new Promise<void>((resolve) => {
+        // 移除xmlns属性，避免导出问题
+        const foreignObjectSpans = thumbnailElement.querySelectorAll('foreignObject [xmlns]')
+        foreignObjectSpans.forEach(spanRef => spanRef.removeAttribute('xmlns'))
+        
+        // 延迟执行，确保DOM已更新
+        setTimeout(() => {
+          toImage(thumbnailElement, config).then(dataUrl => {
+            // 使用幻灯片ID或索引作为文件名
+            const fileName = `${title.value}_${(index + 1).toString().padStart(2, '0')}.${format}`
+            saveAs(dataUrl, fileName)
+            successCount++
+            resolve()
+          }).catch((error) => {
+            console.error('导出单页图片失败:', error)
+            failCount++
+            resolve() // 即使失败也resolve，以便继续处理其他幻灯片
+          })
+        }, 100)
+      })
+      
+      exportPromises.push(promise)
+    })
+    
+    // 所有导出任务完成后
+    Promise.all(exportPromises).then(() => {
+      exporting.value = false
+      if (failCount > 0) {
+        message.warning(`导出完成，成功${successCount}张，失败${failCount}张`)
+      } else {
+        message.success(`已导出${successCount}张图片`)
+      }
+    })
+  }
+  
   // 导出pptist文件（特有 .pptist 后缀文件）
   const exportSpecificFile = (_slides: Slide[]) => {
     const blob = new Blob([encrypt(JSON.stringify(_slides))], { type: '' })
@@ -868,5 +929,6 @@ export default () => {
     exportJSON,
     exportSpecificFile,
     exportPPTX,
+    exportSingleImage,
   }
 }
