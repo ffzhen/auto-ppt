@@ -60,12 +60,6 @@
         <div class="menu-item" v-tooltip="'导出为图片'" @click="setDialogForExport('image')">
           <IconImage class="icon" />
         </div>
-        <Popover trigger="click" center>
-          <template #content>
-            <PopoverMenuItem @click="setDialogForExport('image')">导出所有页</PopoverMenuItem>
-          </template>
-          <div class="arrow-btn"><IconDown class="arrow" /></div>
-        </Popover>
       </div>
       <div class="menu-item" v-tooltip="'AI生成PPT'" @click="openAIPPTDialog(); mainMenuVisible = false">
         <span class="text ai">AI</span>

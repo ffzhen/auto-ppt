@@ -27,31 +27,47 @@ export default () => {
   const getUseableTemplates = (templates: Slide[], n: number, type: TextType, itemData?: any) => {
     // 如果item.data有header或footer，需要筛选出有对应插槽的模板
     if (itemData) {
-      if (itemData.header || itemData.footer) {
+      // 只有header
+      if (itemData.header && !itemData.footer) {
         templates = templates.filter(slide => {
-          const hasHeader = itemData.header ? slide.elements.some(el => checkTextType(el, 'header')) : true
-          const hasFooter = itemData.footer ? slide.elements.some(el => checkTextType(el, 'footer')) : true
-          return hasHeader && hasFooter
+          // 需要有header插槽，且不要有footer插槽
+          const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
+          const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
+          return hasHeaderSlot && !hasFooterSlot
         })
-        
-        // 如果没有符合条件的模板，返回原始模板列表
-        if (templates.length === 0) {
-          console.warn('没有找到包含所需header/footer插槽的模板，将使用标准模板')
-          templates = templates.filter(slide => slide.type === 'content')
-        }
-      } else {
-        // 如果item.data没有header或footer，排除有这些插槽的模板
+      } 
+      // 只有footer
+      else if (!itemData.header && itemData.footer) {
         templates = templates.filter(slide => {
+          // 需要有footer插槽，且不要有header插槽
+          const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
+          const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
+          return !hasHeaderSlot && hasFooterSlot
+        })
+      }
+      // 同时有header和footer
+      else if (itemData.header && itemData.footer) {
+        templates = templates.filter(slide => {
+          // 同时有header和footer插槽
+          const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
+          const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
+          return hasHeaderSlot && hasFooterSlot
+        })
+      }
+      // 既没有header也没有footer
+      else {
+        templates = templates.filter(slide => {
+          // 既没有header也没有footer插槽
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return !hasHeaderSlot && !hasFooterSlot
         })
-
-        // 如果筛选后没有合适的模板，使用原始内容模板
-        if (templates.length === 0) {
-          console.warn('没有找到不包含header/footer插槽的模板，将使用标准模板')
-          templates = templates.filter(slide => slide.type === 'content')
-        }
+      }
+      
+      // 如果筛选后没有合适的模板，使用原始内容模板
+      if (templates.length === 0) {
+        console.warn('没有找到合适的header/footer插槽模板，将使用标准模板')
+        templates = templates.filter(slide => slide.type === 'content')
       }
     }
     
@@ -162,9 +178,12 @@ export default () => {
   }): PPTTextElement | PPTShapeElement => {
     const padding = 10
     const width = el.width - padding * 2 - 10
-  
+    
     let content = el.type === 'text' ? el.content : el.text!.content
-  
+    
+    // 检查text是否包含HTML标签
+    const containsHtmlTags = /<[^>]*>/g.test(text);
+    
     const fontInfo = getFontInfo(content)
     const size = getAdaptedFontsize({
       text: longestText || text,
@@ -173,27 +192,103 @@ export default () => {
       width,
       maxLine,
     })
-  
+    
     const parser = new DOMParser()
     const doc = parser.parseFromString(content, 'text/html')
-  
-    const treeWalker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT)
-  
-    const firstTextNode = treeWalker.nextNode()
-    if (firstTextNode) {
-      if (digitPadding && firstTextNode.textContent && firstTextNode.textContent.length === 2 && text.length === 1) {
-        firstTextNode.textContent = '0' + text
+    
+    if (containsHtmlTags) {
+      // 如果text包含HTML标签，解析text并与模板样式合并
+      const textDoc = parser.parseFromString(text, 'text/html')
+      
+      // 获取模板中的样式信息
+      const templateStyles: {
+        fontSize: number;
+        fontFamily: string;
+        color: string;
+        textAlign: string;
+        fontWeight: string;
+        fontStyle: string;
+      } = {
+        fontSize: fontInfo.fontSize,
+        fontFamily: fontInfo.fontFamily,
+        color: '',
+        textAlign: '',
+        fontWeight: '',
+        fontStyle: '',
       }
-      else firstTextNode.textContent = text
+      
+      // 从模板中提取样式
+      const styleRegex: Record<string, RegExp> = {
+        color: /color:\s*([^;]+)/,
+        textAlign: /text-align:\s*([^;]+)/,
+        fontWeight: /font-weight:\s*([^;]+)/,
+        fontStyle: /font-style:\s*([^;]+)/,
+      }
+      
+      // 查找模板中的样式
+      const templateBodyElement = doc.body.firstElementChild
+      if (templateBodyElement) {
+        const styleAttr = templateBodyElement.getAttribute('style')
+        if (styleAttr) {
+          for (const [key, regex] of Object.entries(styleRegex)) {
+            const match = styleAttr.match(regex)
+            if (match && match[1]) {
+              (templateStyles as any)[key] = match[1]
+            }
+          }
+        }
+      }
+      
+      // 将富文本内容与模板样式结合
+      if (templateBodyElement && textDoc.body.innerHTML) {
+        // 复制原始样式
+        const originalStyle = templateBodyElement.getAttribute('style') || ''
+        
+        // 将富文本内容插入到模板元素中
+        templateBodyElement.innerHTML = textDoc.body.innerHTML
+        
+        // 为富文本中的所有段落元素应用原始样式中的字体大小
+        const allParagraphs = templateBodyElement.querySelectorAll('p, div, span')
+        allParagraphs.forEach(p => {
+          let existingStyle = p.getAttribute('style') || ''
+          if (!existingStyle.includes('font-size')) {
+            existingStyle += `; font-size: ${templateStyles.fontSize}px`
+          }
+          if (templateStyles.color && !existingStyle.includes('color')) {
+            existingStyle += `; color: ${templateStyles.color}`
+          }
+          if (templateStyles.textAlign && !existingStyle.includes('text-align')) {
+            existingStyle += `; text-align: ${templateStyles.textAlign}`
+          }
+          p.setAttribute('style', existingStyle.replace(/^;\s*/, ''))
+        })
+      } else {
+        // 如果无法解析，退回到简单替换
+        const firstTextNode = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT).nextNode()
+        if (firstTextNode) {
+          firstTextNode.textContent = text
+        }
+      }
+    } else {
+      // 如果text是纯文本，使用原来的逻辑
+      const treeWalker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT)
+      
+      const firstTextNode = treeWalker.nextNode()
+      if (firstTextNode) {
+        if (digitPadding && firstTextNode.textContent && firstTextNode.textContent.length === 2 && text.length === 1) {
+          firstTextNode.textContent = '0' + text
+        }
+        else firstTextNode.textContent = text
+      }
     }
-  
+    
     if (doc.body.innerHTML.indexOf('font-size') === -1) {
       const p = doc.querySelector('p')
       if (p) p.style.fontSize = '16px'
     }
-  
+    
     content = doc.body.innerHTML.replace(/font-size:(.+?)px/g, `font-size: ${size}px`)
-  
+    
     return el.type === 'text' ? { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } : { ...el, text: { ...el.text!, content } }
   }
 
@@ -345,7 +440,6 @@ export default () => {
       if (item.type === 'cover') {
         const coverTemplate = coverTemplates[Math.floor(Math.random() * coverTemplates.length)]
         const elements = coverTemplate.elements.map(el => {
-          debugger
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           if (el.type !== 'text' && el.type !== 'shape') return el
           if (checkTextType(el, 'title') && item.data.title) {
@@ -371,7 +465,6 @@ export default () => {
           const bIndex = b.left + b.top * 2
           return aIndex - bIndex
         }).map(el => el.id)
-
         const sortedTextItemIds = contentTemplate.elements.filter(el => checkTextType(el, 'item')).sort((a, b) => {
           const aIndex = a.left + a.top * 2
           const bIndex = b.left + b.top * 2

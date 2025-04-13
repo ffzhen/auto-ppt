@@ -5,6 +5,7 @@ import { saveAs } from 'file-saver'
 import pptxgen from 'pptxgenjs'
 import tinycolor from 'tinycolor2'
 import { toPng, toJpeg } from 'html-to-image'
+import JSZip from 'jszip'
 import { useSlidesStore } from '@/store'
 import type { PPTElementOutline, PPTElementShadow, PPTElementLink, Slide } from '@/types/slides'
 import { getElementRange, getLineElementPath, getTableSubThemeColor } from '@/utils/element'
@@ -17,6 +18,8 @@ import message from '@/utils/message'
 interface ExportImageConfig {
   quality: number
   width: number
+  height?: number
+  pixelRatio?: number
   fontEmbedCSS?: string
 }
 
@@ -75,7 +78,7 @@ export default () => {
     if (ignoreWebfont) config.fontEmbedCSS = ''
     
     // 获取所有幻灯片的缩略图元素
-    const thumbnails = domRef.querySelectorAll('.thumbnail')
+    const thumbnails = domRef.querySelectorAll('.thumbnail-slide')
     const exportPromises: Promise<void>[] = []
     
     // 记录成功和失败的数量
@@ -923,12 +926,104 @@ export default () => {
     }, 200)
   }
 
+  // 导出所有幻灯片为图片并打包成zip文件
+  const exportZippedImages = (domRef: HTMLElement, slidesToExport: Slide[], format: string, quality: number, ignoreWebfont = true, slideElements?: HTMLElement[]) => {
+    if (!slidesToExport.length) return
+    
+    exporting.value = true
+    const toImage = format === 'png' ? toPng : toJpeg
+    const config: ExportImageConfig = {
+      quality,
+      width: 1600,  // 增大宽度分辨率到1920
+    }
+    
+    if (ignoreWebfont) config.fontEmbedCSS = ''
+    
+    // 获取所有幻灯片的元素（使用传入的slideElements或缩略图）
+    let elements: HTMLElement[] = []
+    
+    if (slideElements && slideElements.length > 0) {
+      // 如果传入了幻灯片元素数组，优先使用它
+      elements = slideElements
+    } else {
+      // 否则使用缩略图
+      const thumbnails = domRef.querySelectorAll('.thumbnail-slide')
+      elements = Array.from(thumbnails).map(item => item as HTMLElement)
+    }
+    
+    // 创建一个Promise，收集所有图片数据
+    const promise = new Promise<{name: string, data: string}[]>((resolve) => {
+      const imageDataList: {name: string, data: string}[] = []
+      let processedCount = 0
+      let totalSlidesToProcess = 0
+      
+      slidesToExport.forEach((slide, index) => {
+        if (index >= elements.length) return
+        totalSlidesToProcess++
+        
+        const element = elements[index]
+        
+        // 移除xmlns属性，避免导出问题
+        const foreignObjectSpans = element.querySelectorAll('foreignObject [xmlns]')
+        foreignObjectSpans.forEach(spanRef => spanRef.removeAttribute('xmlns'))
+        
+        // 延迟执行，确保DOM已更新
+        setTimeout(() => {
+          toImage(element, config).then(dataUrl => {
+            // 使用幻灯片ID或索引作为文件名
+            const fileName = `${title.value}_${(index + 1).toString().padStart(2, '0')}.${format}`
+            imageDataList.push({
+              name: fileName,
+              data: dataUrl
+            })
+          }).catch((error) => {
+            console.error('导出单页图片失败:', error)
+          }).finally(() => {
+            processedCount++
+            if (processedCount === totalSlidesToProcess) {
+              resolve(imageDataList)
+            }
+          })
+        }, 100)
+      })
+      
+      // 如果没有幻灯片需要处理，立即解析为空数组
+      if (totalSlidesToProcess === 0) {
+        resolve([])
+      }
+    })
+    
+    // 所有图片处理完成后，创建ZIP文件
+    promise.then((imageDataList) => {
+      const zip = new JSZip()
+      
+      // 添加所有图片到zip
+      imageDataList.forEach(imageData => {
+        // 移除Data URL的前缀，只保留base64数据
+        const base64Data = imageData.data.split(',')[1]
+        zip.file(imageData.name, base64Data, {base64: true})
+      })
+      
+      // 生成并下载zip文件
+      zip.generateAsync({type: 'blob'}).then(content => {
+        saveAs(content, `${title.value}_slides.zip`)
+        exporting.value = false
+        message.success(`已将${imageDataList.length}张图片打包为ZIP文件`)
+      }).catch(error => {
+        console.error('创建ZIP文件失败:', error)
+        exporting.value = false
+        message.error('创建ZIP文件失败')
+      })
+    })
+  }
+
   return {
     exporting,
     exportImage,
-    exportJSON,
-    exportSpecificFile,
-    exportPPTX,
     exportSingleImage,
+    exportZippedImages,
+    exportSpecificFile,
+    exportJSON,
+    exportPPTX,
   }
 }

@@ -1,5 +1,5 @@
 {
-  "title": "未命名演示文稿",
+  "title": "888",
   "width": 1656,
   "height": 2207.99448,
   "theme": {
@@ -28,11 +28,11 @@
   },
   "slides": [
     {
-      "id": "i99fAgh9D1",
+      "id": "mCWc1ra295",
       "elements": [
         {
           "type": "text",
-          "id": "0z6nxDe5_c",
+          "id": "0UBdgwBgdi",
           "width": 1580.533333333333,
           "height": 228.5,
           "left": 33.66666666666668,
@@ -50,11 +50,11 @@
           "fill": "",
           "vertical": false,
           "textType": "subtitle",
-          "groupId": "XrJrJGRQPV"
+          "groupId": "ktXiV4w-Mq"
         },
         {
           "type": "text",
-          "id": "AXAv2ohLlT",
+          "id": "yVri8wFf7W",
           "width": 1471.6666666666665,
           "height": 207.5,
           "left": 103.00000000000001,
@@ -72,7 +72,7 @@
           "fill": "",
           "vertical": false,
           "textType": "title",
-          "groupId": "XrJrJGRQPV"
+          "groupId": "ktXiV4w-Mq"
         }
       ],
       "background": {
@@ -83,418 +83,11 @@
       "type": "cover"
     },
     {
-      "id": "wxCtuMKHK1",
+      "id": "AewQ24cV36",
       "elements": [
         {
           "type": "shape",
-          "id": "jwYiviwcpZ",
-          "width": 1480.3999999999999,
-          "height": 2020.0666666666666,
-          "left": 87.79999999999998,
-          "top": 96.6,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
-          "fill": "#FFFFFF",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">1</span><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">、努力成卷</span></p>",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "shape",
-          "id": "Px57Vh5d0A",
-          "width": 984.5999999999999,
-          "height": 129.39999999999998,
-          "left": 158.86666666666665,
-          "top": 173.0666666666666,
-          "viewBox": [
-            984.5999999999999,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 968.425 0 Q 984.5999999999999 0 984.5999999999999 16.174999999999997 L 984.5999999999999 113.22499999999998 Q 984.5999999999999 129.39999999999998 968.425 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "shape",
-          "id": "APk9f5C5W2",
-          "width": 1345.4666666666665,
-          "height": 218.9333333333333,
-          "left": 158.86666666666665,
-          "top": 1708,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
-          "fill": "#4b735b5e",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "text",
-          "id": "auVWfdxCoZ",
-          "width": 984.5333333333333,
-          "height": 109.5,
-          "left": 158.86666666666665,
-          "top": 1966.5166666666667,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "shape",
-          "id": "zJEvDj9cfA",
-          "width": 200.46666666666664,
-          "height": 165.86666666666665,
-          "left": 1303.8666666666666,
-          "top": 1938.3333333333333,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "text",
-          "id": "j1iwbfVbXF",
-          "width": 112.53333333333335,
-          "height": 64.203125,
-          "left": 1340.6,
-          "top": 1990.5999999999997,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "line",
-          "id": "svnqyQhqHp",
-          "width": 5.33,
-          "left": 174.33333333333331,
-          "top": 373.26666666666665,
-          "start": [
-            0,
-            0
-          ],
-          "end": [
-            0,
-            1286.3333333333333
-          ],
-          "style": "solid",
-          "color": "#4B735B",
-          "points": [
-            "",
-            ""
-          ]
-        },
-        {
-          "type": "text",
-          "id": "YZm8begBRA",
-          "width": 1228.9333333333332,
-          "height": 298.03125,
-          "left": 224.2,
-          "top": 387.19999999999993,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "header"
-        },
-        {
-          "type": "text",
-          "id": "wexXHktJJq",
-          "width": 984.5999999999999,
-          "height": 93,
-          "left": 158.86666666666665,
-          "top": 191.2666666666666,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">2-标题2</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "title"
-        },
-        {
-          "type": "text",
-          "id": "145Gt-YWK_",
-          "width": 1330,
-          "height": 141.40625,
-          "left": 166.59999999999997,
-          "top": 1746.7635416666667,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">既然不能明着努力，那就偷偷内卷，为了考到更好的学校，拥有积极的学习环境，和上进的同学！</span></span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "footer"
-        },
-        {
-          "type": "text",
-          "id": "yoCn86pBEa",
-          "width": 50.13333333333333,
-          "height": 52,
-          "left": 1081.1333333333332,
-          "top": 166.79999999999998,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"color: #4f6228;font-size: 5.3px;font-family: Arial;\">yunyunxuejie</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "text",
-          "id": "EIHAMopmch",
-          "width": 828,
-          "height": 80.703125,
-          "left": 237.19999999999996,
-          "top": 694.8,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(75, 115, 91);\">努力成卷</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle",
-          "groupId": "aDq97MCSfo"
-        },
-        {
-          "type": "text",
-          "id": "fKtJkTtZc9",
-          "width": 1238.1333333333332,
-          "height": 141.40625,
-          "left": 237.19999999999996,
-          "top": 806.5999999999999,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">明明啥都不会，看个书学习一下，别人就说你内卷制造焦虑，让你不好意思继续学习。</span></span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item",
-          "groupId": "aDq97MCSfo"
-        },
-        {
-          "type": "text",
-          "id": "5p8BkAiNeo",
-          "width": 828,
-          "height": 80.203125,
-          "left": 237.19999999999996,
-          "top": 1016.7272161213843,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial Bold;\"><span style=\"color: rgb(75, 115, 91);\">害怕被讽</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle",
-          "groupId": "8s_tbLykk3"
-        },
-        {
-          "type": "text",
-          "id": "qSydhm0a31",
-          "width": 1222,
-          "height": 141.40625,
-          "left": 237.19999999999996,
-          "top": 1122.9272161213844,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"font-size: 58.7px;font-family: Arial;\">努力被同学看在眼里，却没有拿到优秀成绩，害怕被阴阳怪气，成为被嘲笑的对象。</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item",
-          "groupId": "8s_tbLykk3"
-        },
-        {
-          "type": "text",
-          "id": "3w415KcpDf",
-          "width": 1200,
-          "height": 80.703125,
-          "left": 237.19999999999996,
-          "top": 1444.9210989094354,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"font-size: 58.7px;font-family: Arial;\">害怕努力学习结果被人疏离，导致没有朋友。</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item",
-          "groupId": "wpKCKfzjtn"
-        },
-        {
-          "type": "text",
-          "id": "PBO-04geme",
-          "width": 828,
-          "height": 80.203125,
-          "left": 237.19999999999996,
-          "top": 1333.0544322427688,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial Bold;\"><span style=\"color: rgb(75, 115, 91);\">害怕孤立</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle",
-          "groupId": "wpKCKfzjtn"
-        }
-      ],
-      "background": {
-        "type": "solid",
-        "color": "#4B735B"
-      },
-      "remark": "",
-      "type": "content"
-    },
-    {
-      "id": "1RMgmiZYwq",
-      "elements": [
-        {
-          "type": "shape",
-          "id": "jkrjYMK-Ns",
+          "id": "ipUqXpXtd6",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -523,609 +116,16 @@
         },
         {
           "type": "shape",
-          "id": "y1uo_9S72g",
-          "width": 435.06666666666666,
+          "id": "X98eKXpVq2",
+          "width": 949.5565101944048,
           "height": 129.39999999999998,
-          "left": 158.86666666666665,
-          "top": 264.66666666666663,
-          "viewBox": [
-            435.06666666666666,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "text",
-          "id": "gQiyD12L7w",
-          "width": 984.5333333333333,
-          "height": 109.5,
-          "left": 158.86666666666665,
-          "top": 1928.3999999999999,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "shape",
-          "id": "47_puzeF_Y",
-          "width": 200.46666666666664,
-          "height": 165.86666666666665,
-          "left": 1303.8666666666666,
-          "top": 1938.3333333333333,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "text",
-          "id": "EtGKMMjRYe",
-          "width": 132.45170829777143,
-          "height": 64.203125,
-          "left": 1340.6,
-          "top": 1990.5999999999997,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "text",
-          "id": "Ez5wANw-Jy",
-          "width": 351.73333333333335,
-          "height": 93,
-          "left": 200.53333333333333,
-          "top": 282.8666666666666,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle"
-        },
-        {
-          "type": "shape",
-          "id": "waFTNOfI4K",
-          "width": 435.06666666666666,
-          "height": 129.39999999999998,
-          "left": 158.86666666666665,
-          "top": 830.0006693219536,
-          "viewBox": [
-            435.06666666666666,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "text",
-          "id": "Cp41xsrCYb",
-          "width": 351.73333333333335,
-          "height": 93,
-          "left": 186.57414585111425,
-          "top": 848.2006693219537,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF;font-size: 72.0px;font-family: 黑体;font-weight: bold;\">学习法</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle"
-        },
-        {
-          "type": "shape",
-          "id": "1v1yOve_xe",
-          "width": 435.06666666666666,
-          "height": 129.39999999999998,
-          "left": 158.86666666666665,
-          "top": 1395.3346719772408,
-          "viewBox": [
-            435.06666666666666,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "text",
-          "id": "vjJWXRNKms",
-          "width": 1335.7999999999997,
-          "height": 298.03125,
-          "left": 168.53333333333342,
-          "top": 421.05849483167367,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能</span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item"
-        },
-        {
-          "type": "text",
-          "id": "Brh8dyrTBw",
-          "width": 1346.6666666666665,
-          "height": 298.03125,
-          "left": 154.6666666666666,
-          "top": 995.7020312944522,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不</span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item"
-        },
-        {
-          "type": "text",
-          "id": "lpBgcOc_yW",
-          "width": 351.73333333333335,
-          "height": 93,
-          "left": 179.59455211000474,
-          "top": 1413.5346719772404,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle"
-        },
-        {
-          "type": "text",
-          "id": "lYVJqPjwqX",
-          "width": 1338.3999999999999,
-          "height": 298.03125,
-          "left": 158.79999999999993,
-          "top": 1580.6217449027974,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！别理解这种心</span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item"
-        }
-      ],
-      "background": {
-        "type": "solid",
-        "color": "#4B735B"
-      },
-      "remark": "",
-      "type": "content"
-    },
-    {
-      "id": "Ix44CHBFp_",
-      "elements": [
-        {
-          "type": "shape",
-          "id": "bI8di2ctMy",
-          "width": 1480.3999999999999,
-          "height": 2020.0666666666666,
-          "left": 87.79999999999998,
-          "top": 96.6,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
-          "fill": "#FFFFFF",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "shape",
-          "id": "nZ05hFJE4G",
-          "width": 435.06666666666666,
-          "height": 129.39999999999998,
-          "left": 158.86666666666665,
-          "top": 442.64630706495956,
-          "viewBox": [
-            435.06666666666666,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "text",
-          "id": "aW1XxJwDiF",
-          "width": 984.5333333333333,
-          "height": 109.5,
-          "left": 158.86666666666665,
-          "top": 1928.3999999999999,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "shape",
-          "id": "iwOXbjrewL",
-          "width": 200.46666666666664,
-          "height": 165.86666666666665,
-          "left": 1303.8666666666666,
-          "top": 1938.3333333333333,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "text",
-          "id": "YjS_flkJJz",
-          "width": 132.45170829777143,
-          "height": 64.203125,
-          "left": 1340.6,
-          "top": 1990.5999999999997,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false
-        },
-        {
-          "type": "text",
-          "id": "HGEu00ILHo",
-          "width": 351.73333333333335,
-          "height": 93,
-          "left": 200.53333333333333,
-          "top": 460.84630706495955,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle"
-        },
-        {
-          "type": "shape",
-          "id": "OAtIkEKT44",
-          "width": 435.06666666666666,
-          "height": 129.39999999999998,
-          "left": 154.6666666666666,
-          "top": 1007.9803097202466,
-          "viewBox": [
-            435.06666666666666,
-            129.39999999999998
-          ],
-          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
-          "fill": "#4B735B",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#F79646",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false,
-          "pathFormula": "roundRect",
-          "keypoints": [
-            0.125
-          ]
-        },
-        {
-          "type": "text",
-          "id": "k42sYfrwIr",
-          "width": 351.73333333333335,
-          "height": 93,
-          "left": 182.3741458511142,
-          "top": 1026.1803097202467,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
-          "lineHeight": 1,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "itemTitle"
-        },
-        {
-          "type": "text",
-          "id": "7MWjHEzg3x",
-          "width": 1335.7999999999997,
-          "height": 298.03125,
-          "left": 160.10000000000002,
-          "top": 626.9565101944047,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能</span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item"
-        },
-        {
-          "type": "text",
-          "id": "1hgs3WaP5F",
-          "width": 1346.6666666666665,
-          "height": 298.03125,
-          "left": 154.6666666666666,
-          "top": 1198.1102497866286,
-          "rotate": 0,
-          "defaultFontName": "",
-          "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不</span></span></p>",
-          "lineHeight": 1.15,
-          "outline": {
-            "color": "#000000",
-            "width": 0,
-            "style": "solid"
-          },
-          "fill": "",
-          "vertical": false,
-          "textType": "item"
-        }
-      ],
-      "background": {
-        "type": "solid",
-        "color": "#4B735B"
-      },
-      "remark": "",
-      "type": "content"
-    },
-    {
-      "id": "UouzyRQDgl",
-      "elements": [
-        {
-          "type": "shape",
-          "id": "j8dkyk-DG7",
-          "width": 1480.3999999999999,
-          "height": 2020.0666666666666,
-          "left": 87.79999999999998,
-          "top": 96.6,
-          "viewBox": [
-            200,
-            200
-          ],
-          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
-          "fill": "#FFFFFF",
-          "fixedRatio": false,
-          "rotate": 0,
-          "outline": {
-            "color": "#254061",
-            "width": 0,
-            "style": "solid"
-          },
-          "text": {
-            "content": "",
-            "defaultFontName": "",
-            "defaultColor": "#333",
-            "align": "middle"
-          },
-          "flipH": false,
-          "flipV": false
-        },
-        {
-          "type": "shape",
-          "id": "1j70GHiYeW",
-          "width": 598.3333333333333,
-          "height": 129.39999999999998,
-          "left": 528.8,
+          "left": 354.3101564722617,
           "top": 161.46666666666664,
           "viewBox": [
-            598.3333333333333,
+            949.5565101944048,
             129.39999999999998
           ],
-          "path": "M 16.174999999999997 0 L 582.1583333333333 0 Q 598.3333333333333 0 598.3333333333333 16.174999999999997 L 598.3333333333333 113.22499999999998 Q 598.3333333333333 129.39999999999998 582.1583333333333 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "path": "M 16.174999999999997 0 L 933.3815101944049 0 Q 949.5565101944048 0 949.5565101944048 16.174999999999997 L 949.5565101944048 113.22499999999998 Q 949.5565101944048 129.39999999999998 933.3815101944049 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
           "fill": "#4B735B",
           "fixedRatio": false,
           "rotate": 0,
@@ -1149,11 +149,11 @@
         },
         {
           "type": "text",
-          "id": "xua_k-2ObS",
-          "width": 984.5333333333333,
+          "id": "Jl59Bcu7eU",
+          "width": 1066.5952680891419,
           "height": 109.5,
-          "left": 158.86666666666665,
-          "top": 1928.3999999999999,
+          "left": 171.02924741583672,
+          "top": 1959.8081718349927,
           "rotate": 0,
           "defaultFontName": "",
           "defaultColor": "#333",
@@ -1169,7 +169,7 @@
         },
         {
           "type": "shape",
-          "id": "XRNCHT2_EZ",
+          "id": "CsUhz8dVXK",
           "width": 200.46666666666664,
           "height": 165.86666666666665,
           "left": 1303.8666666666666,
@@ -1198,7 +198,7 @@
         },
         {
           "type": "text",
-          "id": "yEs8VcnCSw",
+          "id": "EwMWEfEqcT",
           "width": 128.96191142721668,
           "height": 64.203125,
           "left": 1340.6,
@@ -1218,10 +218,10 @@
         },
         {
           "type": "text",
-          "id": "t5zcL4Y7b4",
-          "width": 483.66666666666663,
+          "id": "iySiOhC4yl",
+          "width": 846.6055412043621,
           "height": 93,
-          "left": 577.4999999999999,
+          "left": 403.01015647226166,
           "top": 179.66666666666663,
           "rotate": 0,
           "defaultFontName": "",
@@ -1239,7 +239,7 @@
         },
         {
           "type": "shape",
-          "id": "6rqYCbDpa4",
+          "id": "pxo91ThgsW",
           "width": 1321.5333333333333,
           "height": 242.5333333333333,
           "left": 162.2,
@@ -1272,7 +272,7 @@
         },
         {
           "type": "shape",
-          "id": "VnkKya4gJ4",
+          "id": "q81OXHR7o1",
           "width": 1324.8666666666666,
           "height": 242.5333333333333,
           "left": 158.86666666666665,
@@ -1305,7 +305,7 @@
         },
         {
           "type": "text",
-          "id": "xCXc1XXEyt",
+          "id": "5nW9sJqmGq",
           "width": 1313.941505168326,
           "height": 298.03125,
           "left": 171.0292474158368,
@@ -1326,7 +326,7 @@
         },
         {
           "type": "shape",
-          "id": "acACbL87D2",
+          "id": "ojjtYeEZB1",
           "width": 1318.1333333333332,
           "height": 223.53333333333333,
           "left": 165.5333333333333,
@@ -1348,8 +348,7 @@
             "content": "",
             "defaultFontName": "",
             "defaultColor": "#333",
-            "align": "middle",
-            "type": "item"
+            "align": "middle"
           },
           "flipH": false,
           "flipV": false,
@@ -1360,7 +359,7 @@
         },
         {
           "type": "text",
-          "id": "n773XQBfvi",
+          "id": "0obRbnbX3F",
           "width": 1280.1333333333332,
           "height": 141.40625,
           "left": 201.2,
@@ -1381,15 +380,15 @@
         },
         {
           "type": "text",
-          "id": "vLFvqoR3-O",
+          "id": "KvJEHJRQbK",
           "width": 1280.1333333333332,
-          "height": 80.703125,
+          "height": 141.40625,
           "left": 201.2,
-          "top": 1494.0171354611186,
+          "top": 1463.6655729611189,
           "rotate": 0,
           "defaultFontName": "",
           "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">害怕努力学习结果被人疏离，导致没有朋友。</span></span></p>",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">害怕努力学习结果被人疏离，导致没有朋友。导致没有朋友。</span></span></p>",
           "lineHeight": 1,
           "outline": {
             "color": "#000000",
@@ -1402,7 +401,7 @@
         },
         {
           "type": "text",
-          "id": "WYhWl0Bgx9",
+          "id": "N31HQt1i9u",
           "width": 1236.2666666666664,
           "height": 141.40625,
           "left": 201.2,
@@ -1430,11 +429,2018 @@
       "type": "content"
     },
     {
-      "id": "PwZF0k4LPd",
+      "id": "qdRzMEP2YD",
       "elements": [
         {
           "type": "shape",
-          "id": "jVCRp9zY-v",
+          "id": "B873xwIBb6",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">1</span><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">、努力成卷</span></p>",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "shape",
+          "id": "GuEaOfOxLf",
+          "width": 984.5999999999999,
+          "height": 129.39999999999998,
+          "left": 158.86666666666665,
+          "top": 173.0666666666666,
+          "viewBox": [
+            984.5999999999999,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 968.425 0 Q 984.5999999999999 0 984.5999999999999 16.174999999999997 L 984.5999999999999 113.22499999999998 Q 984.5999999999999 129.39999999999998 968.425 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ]
+        },
+        {
+          "type": "shape",
+          "id": "sj_35VNJUL",
+          "width": 1345.4666666666665,
+          "height": 218.9333333333333,
+          "left": 158.86666666666665,
+          "top": 1708,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#4b735b5e",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "RZo4viKouF",
+          "width": 1061.3088644855382,
+          "height": 109.5,
+          "left": 158.86666666666665,
+          "top": 1966.5166666666667,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "HQvmFwaqYo",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "NFcTcnFZ9J",
+          "width": 112.53333333333335,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "line",
+          "id": "tRwXxepIxw",
+          "width": 5.33,
+          "left": 174.33333333333331,
+          "top": 373.26666666666665,
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            1286.3333333333333
+          ],
+          "style": "solid",
+          "color": "#4B735B",
+          "points": [
+            "",
+            ""
+          ]
+        },
+        {
+          "type": "text",
+          "id": "g1bQRcfPUN",
+          "width": 1228.9333333333332,
+          "height": 298.03125,
+          "left": 237.19999999999996,
+          "top": 376.73060938833567,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "header"
+        },
+        {
+          "type": "text",
+          "id": "YsRWypclWE",
+          "width": 984.5999999999999,
+          "height": 93,
+          "left": 158.86666666666665,
+          "top": 191.2666666666666,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">2-标题2</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "title"
+        },
+        {
+          "type": "text",
+          "id": "yGFDcQgQ-N",
+          "width": 1330,
+          "height": 141.40625,
+          "left": 166.59999999999997,
+          "top": 1746.7635416666667,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">既然不能明着努力，那就偷偷内卷，为了考到更好的学校，拥有积极的学习环境，和上进的同学！</span></span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "footer"
+        },
+        {
+          "type": "text",
+          "id": "kbY384wMWy",
+          "width": 50.13333333333333,
+          "height": 52,
+          "left": 1081.1333333333332,
+          "top": 166.79999999999998,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #4f6228;font-size: 5.3px;font-family: Arial;\">yunyunxuejie</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "text",
+          "id": "-hNvbY7z46",
+          "width": 828,
+          "height": 80.703125,
+          "left": 237.19999999999996,
+          "top": 694.8,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(75, 115, 91);\">努力成卷</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "HkE7jJJCFf"
+        },
+        {
+          "type": "text",
+          "id": "Y5hYs58_pC",
+          "width": 1238.1333333333332,
+          "height": 141.40625,
+          "left": 237.19999999999996,
+          "top": 806.5999999999999,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">明明啥都不会，看个书学习一下，别人就说你内卷制造焦虑，让你不好意思继续学习。</span></span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "HkE7jJJCFf"
+        },
+        {
+          "type": "text",
+          "id": "nSr5tNXldL",
+          "width": 828,
+          "height": 80.203125,
+          "left": 237.19999999999996,
+          "top": 1016.7272161213843,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial Bold;\"><span style=\"color: rgb(75, 115, 91);\">害怕被讽</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "tF3DQvzHqO"
+        },
+        {
+          "type": "text",
+          "id": "P71i6SkVNd",
+          "width": 1222,
+          "height": 141.40625,
+          "left": 237.19999999999996,
+          "top": 1122.9272161213844,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"font-size: 58.7px;font-family: Arial;\">努力被同学看在眼里，却没有拿到优秀成绩，害怕被阴阳怪气，成为被嘲笑的对象。</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "tF3DQvzHqO"
+        },
+        {
+          "type": "text",
+          "id": "lR-29OKZ1T",
+          "width": 1200,
+          "height": 80.703125,
+          "left": 237.19999999999996,
+          "top": 1444.9210989094354,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"font-size: 58.7px;font-family: Arial;\">害怕努力学习结果被人疏离，导致没有朋友。</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "cJ7O3rLchy"
+        },
+        {
+          "type": "text",
+          "id": "7ulVskWo7e",
+          "width": 828,
+          "height": 80.203125,
+          "left": 237.19999999999996,
+          "top": 1333.0544322427688,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><strong><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial Bold;\"><span style=\"color: rgb(75, 115, 91);\">害怕孤立</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "cJ7O3rLchy"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "HbnOmB8QGX",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "9V7wCiLoMM",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "<p style=\"text-align: center;\"><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">1</span><span style=\"color: #FFFFFF;font-size: 24.0px;font-family: Arial;\">、努力成卷</span></p>",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "shape",
+          "id": "EymoyDLbdl",
+          "width": 1277.7429371266003,
+          "height": 129.39999999999998,
+          "left": 158.86666666666665,
+          "top": 173.0666666666666,
+          "viewBox": [
+            1277.7429371266003,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 1261.5679371266003 0 Q 1277.7429371266003 0 1277.7429371266003 16.174999999999997 L 1277.7429371266003 113.22499999999998 Q 1277.7429371266003 129.39999999999998 1261.5679371266003 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ]
+        },
+        {
+          "type": "text",
+          "id": "Gmz0bPcsfl",
+          "width": 1061.3088644855382,
+          "height": 109.5,
+          "left": 158.86666666666665,
+          "top": 1966.5166666666667,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "oikbnNw24A",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "vXtLdw8oar",
+          "width": 112.53333333333335,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "line",
+          "id": "JebMtxHSTZ",
+          "width": 5.33,
+          "left": 174.33333333333331,
+          "top": 373.26666666666665,
+          "start": [
+            0,
+            0
+          ],
+          "end": [
+            0,
+            1286.3333333333333
+          ],
+          "style": "solid",
+          "color": "#4B735B",
+          "points": [
+            "",
+            ""
+          ]
+        },
+        {
+          "type": "text",
+          "id": "D5gxvNIX2w",
+          "width": 1228.9333333333332,
+          "height": 1217.3125,
+          "left": 224.19999999999993,
+          "top": 376.73060938833567,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "content"
+        },
+        {
+          "type": "text",
+          "id": "mek0umXXxy",
+          "width": 1260.2939527738263,
+          "height": 93,
+          "left": 158.86666666666665,
+          "top": 191.2666666666666,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">2-标题2</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "title"
+        },
+        {
+          "type": "text",
+          "id": "Ug9BeY3EA5",
+          "width": 50.13333333333333,
+          "height": 52,
+          "left": 1081.1333333333332,
+          "top": 166.79999999999998,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #4f6228;font-size: 5.3px;font-family: Arial;\">yunyunxuejie</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "Bw4QNHCTDC",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "0VkEIa2MDM",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "oXOEYC-zlP",
+          "width": 1037.6830103366524,
+          "height": 109.5,
+          "left": 168.53333333333333,
+          "top": 1956.318374964438,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "95hv_ewbFb",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "EuzhwjNV5L",
+          "width": 132.45170829777143,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "C9RMDeXzhj",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 144.79727605500233,
+          "top": 194.87072925557135,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "G8f9I59h_K"
+        },
+        {
+          "type": "text",
+          "id": "dMqnrWFmo6",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 186.463942721669,
+          "top": 213.07072925557134,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "G8f9I59h_K"
+        },
+        {
+          "type": "text",
+          "id": "els7-wt3iG",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 154.4639427216691,
+          "top": 351.2625574205784,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学了有同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "G8f9I59h_K"
+        },
+        {
+          "type": "shape",
+          "id": "KN9lZ1j-f0",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 145.39727605500232,
+          "top": 1096.92970140667,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "pprvXD9KmT"
+        },
+        {
+          "type": "text",
+          "id": "VlKEGOkjpP",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 173.10475523944993,
+          "top": 1115.1297014066702,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "pprvXD9KmT"
+        },
+        {
+          "type": "text",
+          "id": "5apFv0jaK1",
+          "width": 1346.6666666666665,
+          "height": 228.515625,
+          "left": 144.79727605500233,
+          "top": 1257.7378732416628,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "pprvXD9KmT"
+        },
+        {
+          "type": "shape",
+          "id": "a390ja0mq-",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 144.79727605500233,
+          "top": 1552.375531152205,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ]
+        },
+        {
+          "type": "text",
+          "id": "c2TJd9nNpc",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 165.52516149834042,
+          "top": 1570.5755311522046,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle"
+        },
+        {
+          "type": "text",
+          "id": "gCx_pZ9aT2",
+          "width": 1338.3999999999999,
+          "height": 228.515625,
+          "left": 158.79999999999993,
+          "top": 1709.8177083333333,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法，</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item"
+        },
+        {
+          "type": "shape",
+          "id": "PoCF1vmEas",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 144.79727605500233,
+          "top": 645.9002153311206,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "kec-7ahNGq"
+        },
+        {
+          "type": "text",
+          "id": "FyVXiGyu10",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 186.463942721669,
+          "top": 664.1002153311207,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "kec-7ahNGq"
+        },
+        {
+          "type": "text",
+          "id": "NImEe7Ccng",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 154.4639427216691,
+          "top": 802.2920434961277,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "kec-7ahNGq"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "pGkWVi-HFd",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "YmVCuxqdBK",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "qQHf2nHfJa",
+          "width": 1037.6830103366524,
+          "height": 109.5,
+          "left": 168.53333333333333,
+          "top": 1956.318374964438,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "fMmU1IUjti",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "DvhtOJFSO0",
+          "width": 132.45170829777143,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "R7dxnWOsga",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 154.6666666666666,
+          "top": 418.2177289710763,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "qtk_w_51RU"
+        },
+        {
+          "type": "text",
+          "id": "mUktN5c0vO",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.3333333333333,
+          "top": 436.4177289710763,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "qtk_w_51RU"
+        },
+        {
+          "type": "text",
+          "id": "cUCsMQLAlM",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.33333333333337,
+          "top": 574.6095571360834,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学了有同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "qtk_w_51RU"
+        },
+        {
+          "type": "shape",
+          "id": "4A-FDctShT",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 155.2666666666666,
+          "top": 1320.2767011221745,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "1Buc5ROhAT"
+        },
+        {
+          "type": "text",
+          "id": "ZOyEOpqQG4",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 182.9741458511142,
+          "top": 1338.4767011221747,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "1Buc5ROhAT"
+        },
+        {
+          "type": "text",
+          "id": "g4HfhUzOEF",
+          "width": 1346.6666666666665,
+          "height": 228.515625,
+          "left": 154.6666666666666,
+          "top": 1481.0848729571671,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "1Buc5ROhAT"
+        },
+        {
+          "type": "shape",
+          "id": "v70B2Msgrd",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 154.6666666666666,
+          "top": 869.2472150466253,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "scdUj85lXV"
+        },
+        {
+          "type": "text",
+          "id": "2a0zRsaxBE",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.3333333333333,
+          "top": 887.4472150466254,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "scdUj85lXV"
+        },
+        {
+          "type": "text",
+          "id": "GT4zAsFbET",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.33333333333337,
+          "top": 1025.6390432116323,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "scdUj85lXV"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "8CtfzibaAZ",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "hW0AVuu6ur",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "4f74kvRxKp",
+          "width": 1037.6830103366524,
+          "height": 109.5,
+          "left": 168.53333333333333,
+          "top": 1956.318374964438,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "8lZm07ex-a",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "xCtMW3B47u",
+          "width": 132.45170829777143,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "9Qyl9TMTRy",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 155.26666666666662,
+          "top": 536.8708225699384,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "gWQshbSlwf"
+        },
+        {
+          "type": "text",
+          "id": "jV8NYeEiyh",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.9333333333333,
+          "top": 555.0708225699383,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "gWQshbSlwf"
+        },
+        {
+          "type": "text",
+          "id": "yZw8MM6CeL",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.9333333333334,
+          "top": 693.2626507349452,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学了有同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "gWQshbSlwf"
+        },
+        {
+          "type": "shape",
+          "id": "xZveLRCcYg",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 155.2666666666665,
+          "top": 1057.6962460565826,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "nOmwganSBy"
+        },
+        {
+          "type": "text",
+          "id": "Q2RUHDloC3",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.9333333333332,
+          "top": 1075.8962460565826,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "nOmwganSBy"
+        },
+        {
+          "type": "text",
+          "id": "GPB_2YYmuv",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.93333333333328,
+          "top": 1214.0880742215895,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "nOmwganSBy"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "-F_W-ljeGj",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "VcdKNqoCdC",
+          "width": 1480.4,
+          "height": 2020.1,
+          "left": 87.79999999999998,
+          "top": 106.35507823613088,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "shape",
+          "id": "V_Wz2XLy3_",
+          "width": 399.76292707444287,
+          "height": 97.99182816500709,
+          "left": 159.48333333333332,
+          "top": 863.7484316737789,
+          "viewBox": [
+            399.76292707444287,
+            97.99182816500709
+          ],
+          "path": "M 12.248978520625887 0 L 387.513948553817 0 Q 399.76292707444287 0 399.76292707444287 12.248978520625887 L 399.76292707444287 85.74284964438121 Q 399.76292707444287 97.99182816500709 387.513948553817 97.99182816500709 L 12.248978520625887 97.99182816500709 Q 0 97.99182816500709 0 85.74284964438121 L 0 12.248978520625887 Q 0 0 12.248978520625887 0 Z",
+          "fill": "rgba(75,115,91,0.2)",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "opacity": 0.8
+        },
+        {
+          "type": "text",
+          "id": "uBstjzX7Df",
+          "width": 1054.3292707444286,
+          "height": 109.5,
+          "left": 176.31565101944042,
+          "top": 1966.5166666666669,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"color: #4B735B;font-size: 88.0px;font-family: 黑体;font-weight: bold;\">开始</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "fmYKdEuJvU",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "_TugIp6jb4",
+          "width": 132.45170829777143,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "text",
+          "id": "O1D6hYZgAy",
+          "width": 398.52959374110947,
+          "height": 75,
+          "left": 160.71666666666673,
+          "top": 876.9892441915599,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 54px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(0, 0, 0);\">学习法</span></span></span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle"
+        },
+        {
+          "type": "text",
+          "id": "iOZ-7xQwQD",
+          "width": 1335.7999999999997,
+          "height": 298.03125,
+          "left": 160.10000000000014,
+          "top": 999.2014786154572,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item"
+        },
+        {
+          "type": "text",
+          "id": "Q9NM6r4HUK",
+          "width": 1346.6666666666665,
+          "height": 298.03125,
+          "left": 154.6666666666666,
+          "top": 1514.2327806543383,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了！有同学说能不</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item"
+        },
+        {
+          "type": "text",
+          "id": "eY1_uauC_V",
+          "left": 159.48333333333332,
+          "top": 425.7552182076813,
+          "width": 1252.5920147937409,
+          "height": 356,
+          "content": "<p style=\"\"><span style=\"font-size: 56px;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></p>",
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "vertical": false,
+          "textType": "header"
+        },
+        {
+          "type": "shape",
+          "id": "O45B9mHRU1",
+          "width": 1308.5065101944049,
+          "height": 129.4,
+          "left": 159.48333333333332,
+          "top": 218.45304694167854,
+          "viewBox": [
+            1308.5065101944049,
+            129.4
+          ],
+          "path": "M 16.175 0 L 1292.331510194405 0 Q 1308.5065101944049 0 1308.5065101944049 16.175 L 1308.5065101944049 113.22500000000001 Q 1308.5065101944049 129.4 1292.331510194405 129.4 L 16.175 129.4 Q 0 129.4 0 113.22500000000001 L 0 16.175 Q 0 0 16.175 0 Z",
+          "fill": "#4B735B",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ]
+        },
+        {
+          "type": "text",
+          "id": "p3AAwXeMJi",
+          "width": 1187.0082184921764,
+          "height": 93,
+          "left": 209.44284381223318,
+          "top": 236.65304694167853,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">2-标题2</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "title"
+        },
+        {
+          "type": "text",
+          "id": "scWaURQB6W",
+          "width": 50.1,
+          "height": 52,
+          "left": 1224.2,
+          "top": 264.5,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #4f6228;font-size: 5.3px;font-family: Arial;\">yunyunxuejie</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "8vT0THOkC-",
+          "width": 399.76292707444287,
+          "height": 97.99182816500709,
+          "left": 154.6666666666666,
+          "top": 1379.7689779042198,
+          "viewBox": [
+            399.76292707444287,
+            97.99182816500709
+          ],
+          "path": "M 12.248978520625887 0 L 387.513948553817 0 Q 399.76292707444287 0 399.76292707444287 12.248978520625887 L 399.76292707444287 85.74284964438121 Q 399.76292707444287 97.99182816500709 387.513948553817 97.99182816500709 L 12.248978520625887 97.99182816500709 Q 0 97.99182816500709 0 85.74284964438121 L 0 12.248978520625887 Q 0 0 12.248978520625887 0 Z",
+          "fill": "rgba(75,115,91,0.2)",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "opacity": 0.8
+        },
+        {
+          "type": "text",
+          "id": "DDmRnxNskT",
+          "width": 398.52959374110947,
+          "height": 75,
+          "left": 155.9,
+          "top": 1393.0097904220008,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><span style=\"font-size: 54px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(0, 0, 0);\">学习法</span></span></span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#4B735B"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "tEPfjJR0DH",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "JnBlThNveC",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -1463,7 +2469,7 @@
         },
         {
           "type": "text",
-          "id": "NNQIaoXZ0Q",
+          "id": "x_eRVcwcQ_",
           "width": 146.41089577999048,
           "height": 64.203125,
           "left": 1340.6,
@@ -1483,7 +2489,7 @@
         },
         {
           "type": "text",
-          "id": "mDY2KegjLP",
+          "id": "IDx7hPv_RY",
           "width": 1280.1333333333332,
           "height": 492.5,
           "left": 187.9333333333333,
@@ -1504,7 +2510,7 @@
         },
         {
           "type": "text",
-          "id": "kRbMZpLrFS",
+          "id": "vtw7gVvLoh",
           "width": 50.13333333333333,
           "height": 52,
           "left": 1081.1333333333332,

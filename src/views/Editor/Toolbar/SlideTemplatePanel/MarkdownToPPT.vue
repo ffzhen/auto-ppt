@@ -37,7 +37,7 @@
             <Button 
               class="generate-btn" 
               type="primary" 
-              @click="generateOutline"
+              @click="step = 'template'"
               :disabled="!markdownContent || loading"
             >
               生成大纲
@@ -47,19 +47,8 @@
       </div>
     </template>
     
-    <!-- 步骤 2: 编辑大纲 -->
-    <div class="preview" v-if="step === 'outline'">
-      <pre ref="outlineRef" v-if="outlineCreating">{{ outlineContent }}</pre>
-      <div class="outline-view" v-else>
-        <OutlineEditor v-model:value="outlineContent" />
-      </div>
-      <div class="btns" v-if="!outlineCreating">
-        <Button class="btn" type="primary" @click="step = 'template'">选择模板</Button>
-        <Button class="btn" @click="outlineContent = ''; step = 'input'">返回重新生成</Button>
-      </div>
-    </div>
     
-    <!-- 步骤 3: 选择模板 -->
+    <!-- 步骤 2: 选择模板 -->
     <div class="select-template" v-if="step === 'template'">
       <div class="templates">
         <div 
@@ -74,7 +63,7 @@
       </div>
       <div class="btns">
         <Button class="btn" type="primary" @click="generatePPT()">生成PPT</Button>
-        <Button class="btn" @click="step = 'outline'">返回大纲</Button>
+        <Button class="btn" @click="step = 'input'">返回大纲</Button>
       </div>
     </div>
     
@@ -109,7 +98,7 @@ const { AIPPT } = useAIPPT()
 const mainStore = useMainStore()
 
 // 三步流程状态管理
-const step = ref<'input' | 'outline' | 'template'>('input')
+const step = ref<'input' | 'template'>('input')
 const markdownContent = ref('')
 const outlineContent = ref('')
 const outlineCreating = ref(false)
@@ -118,7 +107,7 @@ const inputRef = ref<InstanceType<typeof TextArea>>()
 const loading = ref(false)
 const language = ref<'zh' | 'en'>('zh')
 const model = ref('ep-20250411144626-zx55l')
-const selectedTemplateId = ref('template_1')
+const selectedTemplateId = ref(templates.value[0].id)
 
 onMounted(() => {
   setTimeout(() => {
@@ -128,27 +117,11 @@ onMounted(() => {
   }, 500)
 })
 
-// 从 Markdown 生成大纲
-const generateOutline = async () => {
-  if (!markdownContent.value) {
-    message.error('请输入 Markdown 内容')
-    return
-  }
-  
-  // 直接使用 Markdown 内容作为大纲内容，不调用 API
-  outlineContent.value = markdownContent.value
-  
-  // 直接跳转到模板选择步骤
-  step.value = 'template'
-}
+
 
 // 生成 PPT
 const generatePPT = async () => {
-  if (!outlineContent.value) {
-    message.error('请先生成大纲')
-    return
-  }
-
+  
   // 检查模板是否可用
   if (!templates.value || templates.value.length === 0) {
     message.error('无可用模板，请先添加模板')
@@ -175,7 +148,7 @@ const generatePPT = async () => {
     }
     
     // 调用 AI 服务生成 PPT
-    const stream = await api.AIPPT(outlineContent.value, language.value, model.value)
+    const stream = await api.AIPPT(markdownContent.value, language.value, model.value)
     
     const reader = stream.body.getReader()
     const decoder = new TextDecoder('utf-8')
@@ -185,16 +158,14 @@ const generatePPT = async () => {
     // for (let i = slideCount - 1; i >= 0; i--) {
     //   slidesStore.deleteSlide(slidesStore.slides[i].id)
     // }
-    
+   
     const readStream = () => {
       reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
-        debugger
         if (done) {
+          emit('close') // 关闭对话框
           loading.value = false
           markdownContent.value = ''
-          outlineContent.value = ''
           step.value = 'input'
-          emit('close') // 关闭对话框
           addHistorySnapshot()
           return
         }
@@ -354,7 +325,7 @@ const generatePPT = async () => {
       border: 2px solid $borderColor;
       border-radius: $borderRadius;
       width: 304px;
-      height: 172.75px;
+      height: 267px;
       margin-bottom: 12px;
 
       &:not(:nth-child(2n)) {
@@ -367,6 +338,7 @@ const generatePPT = async () => {
   
       img {
         width: 100%;
+        height: 100%;
       }
     }
   }

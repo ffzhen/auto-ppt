@@ -64,9 +64,6 @@ export const useSlidesStore = defineStore('slides', {
       viewportSize: 1656, // 可视区域宽度基数
       viewportRatio: 1.33333, // 可视区域比例，默认16:9
       templates: [
-        // 初始模板列表，后续将从服务器加载
-        { name: '红色通用', id: 'template_1', cover: getTemplateCover('img/template_1.jpg') },
-        { name: '蓝色通用', id: 'template_2', cover: getTemplateCover('img/template_2.jpg') },
       ],
     }
   },

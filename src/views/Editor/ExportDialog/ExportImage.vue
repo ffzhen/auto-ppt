@@ -28,10 +28,11 @@
           class="config-item"
           v-model:value="rangeType"
         >
+         <RadioButton style="width: 25%;" value="separate">逐页</RadioButton>
           <RadioButton style="width: 25%;" value="all">全部</RadioButton>
           <RadioButton style="width: 25%;" value="current">当前页</RadioButton>
           <RadioButton style="width: 25%;" value="custom">自定义</RadioButton>
-          <RadioButton style="width: 25%;" value="separate">逐页</RadioButton>
+          
         </RadioGroup>
       </div>
       <div class="row" v-if="rangeType === 'custom'">
@@ -66,7 +67,10 @@
     </div>
 
     <div class="btns">
-      <Button class="btn export" type="primary" @click="expImage()">导出图片</Button>
+      <div class="btn-group">
+        <Button class="btn export" type="primary" @click="expImage()">导出图片</Button>
+        <Button class="btn export-zip" type="primary" @click="expZipImage()">导出压缩包</Button>
+      </div>
       <Button class="btn close" @click="emit('close')">关闭</Button>
     </div>
 
@@ -95,7 +99,7 @@ const emit = defineEmits<{
 const { slides, currentSlide } = storeToRefs(useSlidesStore())
 
 const imageThumbnailsRef = ref<HTMLElement>()
-const rangeType = ref<'all' | 'current' | 'custom' | 'separate'>('all')
+const rangeType = ref<'all' | 'current' | 'custom' | 'separate'>('separate')
 const range = ref<[number, number]>([1, slides.value.length])
 const format = ref<'jpeg' | 'png'>('jpeg')
 const quality = ref(1)
@@ -110,7 +114,7 @@ const renderSlides = computed(() => {
   })
 })
 
-const { exportImage, exportSingleImage, exporting } = useExport()
+const { exportImage, exportSingleImage, exportZippedImages, exporting } = useExport()
 
 const expImage = () => {
   if (!imageThumbnailsRef.value) return
@@ -123,6 +127,20 @@ const expImage = () => {
     // 普通导出，所有页面合并为一个图片文件
     exportImage(imageThumbnailsRef.value, format.value, quality.value, ignoreWebfont.value)
   }
+}
+
+// 导出图片压缩包
+const expZipImage = () => {
+  if (!imageThumbnailsRef.value) return
+  
+  // 导出所有幻灯片为PNG格式，并打包为ZIP
+  exportZippedImages(
+    imageThumbnailsRef.value,
+    renderSlides.value,
+    'png',
+    quality.value,
+    ignoreWebfont.value
+  )
 }
 </script>
 
@@ -146,7 +164,7 @@ const expImage = () => {
   }
 }
 .configs {
-  width: 350px;
+  width: 450px;
   height: calc(100% - 100px);
   display: flex;
   flex-direction: column;
@@ -172,7 +190,7 @@ const expImage = () => {
     }
   }
   .config-item {
-    flex: 1;
+    flex: 2;
   }
 }
 .btns {
@@ -183,8 +201,17 @@ const expImage = () => {
   align-items: center;
   z-index: 1;
 
-  .export {
+  .btn-group {
     flex: 1;
+    display: flex;
+    
+    .export, .export-zip {
+      flex: 1;
+    }
+    
+    .export-zip {
+      margin-left: 10px;
+    }
   }
   .close {
     width: 100px;

@@ -679,7 +679,7 @@ Requirements:
     const prompt = `请根据以下主题生成一个完整卡片的JSON数据。主题: ${content}`;
     
     // 系统提示词 - 统一使用中文提示词
-    const systemPrompt = `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片：
+    const systemPrompt = `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的文案可以是html片段，自动添加eomji和html高亮元素：
 
 1. 首先输出封面页：标题符合小红书爆款标题特性，主副标题由完整标题拆分得到，例如：“一年级家长必看！幼小衔接全攻略”拆分得到“一年级家长必看”和“幼小衔接全攻略”
 {
@@ -690,7 +690,7 @@ Requirements:
   }
 }
 
-2. 内容页有2种格式随机生成，items中至少3个要点
+2. 内容页有2种格式随机生成，items中至少3个要点,很重要！
 内容1:{
   "type": "content",
   "data": {
@@ -713,7 +713,7 @@ Requirements:
     ]
   }
 }
-  内容2:
+  内容2:没有header或footer时
   {
   "type": "content",
   "data": {

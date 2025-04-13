@@ -245,7 +245,7 @@ const createPPT = async () => {
       border: 2px solid $borderColor;
       border-radius: $borderRadius;
       width: 304px;
-      height: 172.75px;
+      height: 267px;
       margin-bottom: 12px;
 
       &:not(:nth-child(2n)) {
@@ -258,6 +258,7 @@ const createPPT = async () => {
   
       img {
         width: 100%;
+        height: 100%;
       }
     }
   }
