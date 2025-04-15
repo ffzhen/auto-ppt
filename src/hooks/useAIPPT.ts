@@ -241,27 +241,34 @@ export default () => {
       
       // 将富文本内容与模板样式结合
       if (templateBodyElement && textDoc.body.innerHTML) {
-        // 复制原始样式
-        const originalStyle = templateBodyElement.getAttribute('style') || ''
-        
         // 将富文本内容插入到模板元素中
         templateBodyElement.innerHTML = textDoc.body.innerHTML
         
-        // 为富文本中的所有段落元素应用原始样式中的字体大小
-        const allParagraphs = templateBodyElement.querySelectorAll('p, div, span')
-        allParagraphs.forEach(p => {
-          let existingStyle = p.getAttribute('style') || ''
-          if (!existingStyle.includes('font-size')) {
-            existingStyle += `; font-size: ${templateStyles.fontSize}px`
+        // 查找内部元素的字体大小，优先使用它
+        let fontSize = size
+        const elementsWithFontSize = templateBodyElement.querySelectorAll('[style*="font-size"]')
+        if (elementsWithFontSize.length > 0) {
+          // 从第一个带有font-size的元素中提取字体大小
+          const style = elementsWithFontSize[0].getAttribute('style') || ''
+          const fontSizeMatch = style.match(/font-size:\s*([^;]+)/)
+          if (fontSizeMatch && fontSizeMatch[1]) {
+            // 提取字体大小数值
+            const extractedSize = fontSizeMatch[1].trim()
+            // 确保外层p元素也应用相同的字体大小
+            let pStyle = templateBodyElement.getAttribute('style') || ''
+            if (!pStyle.includes('font-size')) {
+              pStyle += `; font-size: ${extractedSize}`
+              templateBodyElement.setAttribute('style', pStyle.replace(/^;\s*/, ''))
+            }
           }
-          if (templateStyles.color && !existingStyle.includes('color')) {
-            existingStyle += `; color: ${templateStyles.color}`
+        } else {
+          // 如果内部元素没有设置字体大小，使用计算出的size
+          let pStyle = templateBodyElement.getAttribute('style') || ''
+          if (!pStyle.includes('font-size')) {
+            pStyle += `; font-size: ${size}px`
+            templateBodyElement.setAttribute('style', pStyle.replace(/^;\s*/, ''))
           }
-          if (templateStyles.textAlign && !existingStyle.includes('text-align')) {
-            existingStyle += `; text-align: ${templateStyles.textAlign}`
-          }
-          p.setAttribute('style', existingStyle.replace(/^;\s*/, ''))
-        })
+        }
       } else {
         // 如果无法解析，退回到简单替换
         const firstTextNode = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT).nextNode()
