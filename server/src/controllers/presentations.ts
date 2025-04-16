@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { PresentationModel } from '../models/presentation';
 import { CreatePresentationDto, UpdatePresentationDto } from '../types';
 import { ExportService } from '../services/export';
+import { RenderService } from '../services/render';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -144,6 +145,53 @@ export const PresentationController = {
     } catch (error) {
       console.error('Error exporting presentation:', error);
       return res.status(500).json({ message: 'Failed to export presentation' });
+    }
+  },
+
+  // Render a presentation without saving (server-side rendering)
+  renderPresentation: async (req: Request, res: Response) => {
+    try {
+      const { format } = req.params; // pdf, pptx, or image
+      const presentation = req.body;
+      
+      if (!presentation || !presentation.slides || !Array.isArray(presentation.slides)) {
+        return res.status(400).json({ message: 'Invalid presentation data' });
+      }
+
+      let fileBuffer: Buffer;
+      let contentType: string;
+      let filename: string;
+      
+      // Add a title if not provided
+      const title = presentation.title || 'Presentation';
+      
+      switch (format) {
+        case 'pdf':
+          fileBuffer = await RenderService.renderAsPDF(presentation);
+          contentType = 'application/pdf';
+          filename = `${title}.pdf`;
+          break;
+        case 'pptx':
+          fileBuffer = await RenderService.renderAsPPTX(presentation);
+          contentType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+          filename = `${title}.pptx`;
+          break;
+        case 'image':
+          const images = await RenderService.renderAsImages(presentation);
+          fileBuffer = await RenderService.packImagesIntoZip(images);
+          contentType = 'application/zip';
+          filename = `${title}_slides.zip`;
+          break;
+        default:
+          return res.status(400).json({ message: 'Invalid render format' });
+      }
+      
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(filename)}"`);
+      return res.send(fileBuffer);
+    } catch (error) {
+      console.error('Error rendering presentation:', error);
+      return res.status(500).json({ message: 'Failed to render presentation' });
     }
   },
 

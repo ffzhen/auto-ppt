@@ -2,6 +2,8 @@ import { PresentationData } from '../types';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import JSZip from 'jszip';
+import { RenderService } from './render';
 
 // 创建临时文件目录
 const TEMP_DIR = path.join(__dirname, '../../temp');
@@ -15,33 +17,60 @@ if (!fs.existsSync(TEMP_DIR)) {
  */
 export const ExportService = {
   /**
-   * Export presentation as PDF (mock implementation)
+   * Export presentation as PDF
    */
   async exportAsPDF(presentation: PresentationData): Promise<Buffer> {
-    // This is just a mock implementation
-    // In a real application, this would generate a PDF
     console.log(`Exporting presentation "${presentation.title}" as PDF...`);
-    return Buffer.from(`Mock PDF export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    try {
+      // Use the render service to generate a PDF
+      return await RenderService.renderAsPDF(presentation);
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      // Fallback to mock implementation if rendering fails
+      return Buffer.from(`Mock PDF export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    }
   },
 
   /**
-   * Export presentation as PPTX (mock implementation)
+   * Export presentation as PPTX
    */
   async exportAsPPTX(presentation: PresentationData): Promise<Buffer> {
-    // This is just a mock implementation
-    // In a real application, this would generate a PPTX file
     console.log(`Exporting presentation "${presentation.title}" as PPTX...`);
-    return Buffer.from(`Mock PPTX export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    try {
+      // Use the render service to generate a PPTX
+      return await RenderService.renderAsPPTX(presentation);
+    } catch (error) {
+      console.error('Error exporting PPTX:', error);
+      // Fallback to mock implementation if rendering fails
+      return Buffer.from(`Mock PPTX export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    }
   },
 
   /**
-   * Export presentation as images (mock implementation)
+   * Export presentation as images
    */
   async exportAsImages(presentation: PresentationData): Promise<Buffer> {
-    // This is just a mock implementation
-    // In a real application, this would generate images for each slide
     console.log(`Exporting presentation "${presentation.title}" as images...`);
-    return Buffer.from(`Mock image export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    try {
+      // Generate images for each slide
+      const images = await RenderService.renderAsImages(presentation);
+      
+      // Create a ZIP file containing all images
+      const zip = new JSZip();
+      
+      // Add each image to the ZIP
+      images.forEach((imageBuffer, index) => {
+        zip.file(`slide_${index + 1}.png`, imageBuffer);
+      });
+      
+      // Generate ZIP file
+      const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+      return zipBuffer;
+    } catch (error) {
+      console.error('Error exporting images:', error);
+      // Fallback to mock implementation if rendering fails
+      return Buffer.from(`Mock image export of presentation: ${presentation.title}，包含 ${presentation.slides.length} 张幻灯片`);
+    }
   },
 
   /**

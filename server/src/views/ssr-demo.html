@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server-Side Rendering Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .format-buttons {
+      margin-bottom: 20px;
+    }
+    .sample-data {
+      margin-top: 30px;
+    }
+    .code {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Server-Side Rendering Demo</h1>
+  
+  <p>This demo allows you to input a presentation JSON and render it as PDF, PPTX or images.</p>
+  
+  <div>
+    <h2>Enter Presentation JSON</h2>
+    <textarea id="presentationJson" placeholder="Paste your presentation JSON here..."></textarea>
+  </div>
+  
+  <div class="format-buttons">
+    <h2>Select Export Format</h2>
+    <button onclick="renderPresentation('pdf')">Render as PDF</button>
+    <button onclick="renderPresentation('pptx')">Render as PPTX</button>
+    <button onclick="renderPresentation('image')">Render as Images (ZIP)</button>
+  </div>
+  
+  <div class="sample-data">
+    <h2>Sample Data</h2>
+    <p>You can use the following sample data to test the rendering:</p>
+    <button onclick="loadSample()">Load Sample Data</button>
+    <div class="code" id="sample-json"></div>
+  </div>
+  
+  <script>
+    // Function to render the presentation
+    function renderPresentation(format) {
+      const jsonText = document.getElementById('presentationJson').value;
+      if (!jsonText) {
+        alert('Please enter presentation JSON');
+        return;
+      }
+      
+      let presentationData;
+      try {
+        presentationData = JSON.parse(jsonText);
+      } catch (error) {
+        alert('Invalid JSON. Please check your input.');
+        return;
+      }
+      
+      // Create a form for POST submission
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = `/api/presentations/render/${format}`;
+      form.target = '_blank'; // Open in new tab
+      
+      // Add the JSON data as a hidden input
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'presentation';
+      input.value = jsonText;
+      
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    }
+    
+    // Sample data
+    const sampleData = {
+      "title": "Sample Presentation",
+      "slides": [
+        {
+          "id": "slide1",
+          "background": {
+            "type": "solid",
+            "color": "#FFF1F2"
+          },
+          "size": {
+            "width": 600,
+            "height": 800
+          },
+          "elements": [
+            {
+              "id": "element1",
+              "type": "text",
+              "content": "<p style='text-align: center; font-size: 60px; font-weight: bold; color: #FF2E63;'>Sample Title</p>",
+              "left": 75,
+              "top": 200,
+              "width": 450,
+              "height": 200,
+              "rotate": 0
+            },
+            {
+              "id": "element2",
+              "type": "text",
+              "content": "<p style='text-align: center; font-size: 24px;'>Click to view the full content</p>",
+              "left": 75,
+              "top": 500,
+              "width": 450,
+              "height": 50,
+              "rotate": 0
+            }
+          ]
+        },
+        {
+          "id": "slide2",
+          "background": {
+            "type": "solid",
+            "color": "#FFFFFF"
+          },
+          "size": {
+            "width": 600,
+            "height": 800
+          },
+          "elements": [
+            {
+              "id": "element3",
+              "type": "text",
+              "content": "<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>Content Section</p>",
+              "left": 75,
+              "top": 80,
+              "width": 450,
+              "height": 80,
+              "rotate": 0
+            },
+            {
+              "id": "element4",
+              "type": "text",
+              "content": "<ul style='font-size: 28px; color: #333333;'><li style='margin-bottom: 15px;'>Point 1</li><li style='margin-bottom: 15px;'>Point 2</li><li style='margin-bottom: 15px;'>Point 3</li></ul>",
+              "left": 75,
+              "top": 180,
+              "width": 450,
+              "height": 520,
+              "rotate": 0
+            }
+          ]
+        },
+        {
+          "id": "slide3",
+          "background": {
+            "type": "solid",
+            "color": "#FFF1F2"
+          },
+          "size": {
+            "width": 600,
+            "height": 800
+          },
+          "elements": [
+            {
+              "id": "element5",
+              "type": "text",
+              "content": "<p style='text-align: center; font-size: 36px; font-weight: bold; color: #FF2E63;'>Thank You ❤️</p>",
+              "left": 75,
+              "top": 250,
+              "width": 450,
+              "height": 80,
+              "rotate": 0
+            },
+            {
+              "id": "element6",
+              "type": "text",
+              "content": "<p style='text-align: center; font-size: 24px;'>Remember to like, comment and save</p><p style='text-align: center; font-size: 24px; margin-top: 20px;'>Feel free to leave questions in the comments</p>",
+              "left": 75,
+              "top": 350,
+              "width": 450,
+              "height": 120,
+              "rotate": 0
+            }
+          ]
+        }
+      ]
+    };
+    
+    // Function to load sample data
+    function loadSample() {
+      document.getElementById('presentationJson').value = JSON.stringify(sampleData, null, 2);
+    }
+    
+    // Display sample data
+    document.getElementById('sample-json').textContent = JSON.stringify(sampleData, null, 2);
+    
+    // Load sample data on page load
+    window.onload = loadSample;
+  </script>
+</body>
+</html> 

@@ -30,4 +30,7 @@ router.get('/:id/export-link/:format', PresentationController.createExportFileAn
 // Download exported file
 router.get('/download/:filename', PresentationController.downloadExportedFile);
 
+// Render presentation without saving (server-side rendering)
+router.post('/render/:format', PresentationController.renderPresentation);
+
 export default router; 
