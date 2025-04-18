@@ -3,6 +3,26 @@ import message from '@/utils/message'
 
 const instance = axios.create({ timeout: 1000 * 300 })
 
+// 添加请求拦截器，从 localStorage 获取凭证并添加到 headers
+instance.interceptors.request.use(
+  config => {
+    const arkApiKey = localStorage.getItem('ARK_API_KEY')
+    const endpointId = localStorage.getItem('ENDPOINT_ID')
+    
+    if (arkApiKey) {
+      config.headers['arkApiKey'] = arkApiKey
+    }
+    if (endpointId) {
+      config.headers['endpointId'] = endpointId
+    }
+    
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
 instance.interceptors.response.use(
   response => {
     if (response.status >= 200 && response.status < 400) {
