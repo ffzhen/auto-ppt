@@ -4,9 +4,9 @@ import presentationService from './presentation'
 // API服务器URL - 修改为总是使用本地服务器
 export const SERVER_URL = (import.meta.env.MODE === 'development') 
   ? 'http://localhost:8080/api' 
-  : 'https://server.pptist.cn'
+  : 'http://121.40.247.26:3002'
 
-  // export const SERVER_URL = 'https://server.pptist.cn'
+// export const SERVER_URL = 'https://server.pptist.cn'
 
 // 添加开发环境下的直接API地址
 export const DEV_API_URL = 'http://localhost:8080/api'
@@ -14,7 +14,7 @@ export const DEV_API_URL = 'http://localhost:8080/api'
 // 资源URL - 使用本地服务器
 export const ASSET_URL = (import.meta.env.MODE === 'development') 
   ? 'http://localhost:8080/assets' 
-  : 'https://asset.pptist.cn'
+  : 'http://121.40.247.26:3002'
 
 // 允许通过环境变量覆盖资源URL
 export const LOCAL_ASSET_URL = import.meta.env.VITE_LOCAL_ASSET_URL || ASSET_URL

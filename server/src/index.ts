@@ -36,12 +36,6 @@ app.use('/assets', (req, res, next) => {
     config.setEndpointId(endpointId)
   }
   
-  console.log('加载33', {
-    arkApiKey,
-    endpointId,
-    path: req.path
-  })
-  
   // 继续处理静态文件请求
   express.static(path.join(publicDir, 'assets'))(req, res, next)
 })

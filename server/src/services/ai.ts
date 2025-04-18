@@ -24,10 +24,6 @@ if (!fs.existsSync(MOCK_DATA_DIR)) {
   fs.mkdirSync(MOCK_DATA_DIR, { recursive: true })
 }
 
-setTimeout(() => {
-  console.log('加载22', process.env.ARK_API_KEY, process.env.VOLC_API_KEY)  
-}, 5000)
-
 // 创建OpenAI客户端（使用ARK API兼容接口）
 const openai = new OpenAI({
   apiKey: config.getArkApiKey() || process.env.ARK_API_KEY,
