@@ -41,7 +41,7 @@ npm install
 
 2. Create a `.env` file in the root directory with the following content:
 ```
-PORT=8080
+PORT=3002
 ```
 
 3. Build the TypeScript code:

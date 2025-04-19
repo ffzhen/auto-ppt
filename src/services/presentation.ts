@@ -5,7 +5,7 @@ import type { Slide, SlideTheme } from '@/types/slides'
 // 直接在这里定义API基础URL
 const API_BASE = (import.meta.env.MODE === 'development') 
   ? 'http://localhost:8080/api'
-  : '/api'
+  : 'http://121.40.247.26:8080/api'
 
 export interface PresentationData {
   id: string
@@ -19,7 +19,7 @@ export interface PresentationData {
 
 export interface CreatePresentationOptions {
   title?: string
-  viewportRatio?: number  // Default aspect ratio (16:9 = 0.5625, 16:10 = 0.625)
+  viewportRatio?: number // Default aspect ratio (16:9 = 0.5625, 16:10 = 0.625)
   theme?: Partial<SlideTheme>
 }
 
@@ -139,7 +139,8 @@ export default {
         }
         
         this.downloadBlob(blob, filename)
-      } else {
+      }
+      else {
         // 方法2：获取链接然后下载（两步请求）
         const linkResponse = await this.getExportLink(id, format)
         
@@ -156,7 +157,8 @@ export default {
         
         this.downloadBlob(response, originalFilename)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('导出失败:', error)
       throw error
     }

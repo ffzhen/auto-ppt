@@ -9,6 +9,7 @@ import '@/assets/styles/prosemirror.scss'
 import '@/assets/styles/global.scss'
 import '@/assets/styles/font.scss'
 
+
 import Icon from '@/plugins/icon'
 import Directive from '@/plugins/directive'
 
