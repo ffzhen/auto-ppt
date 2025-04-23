@@ -77,6 +77,10 @@ export default () => {
 
   // 创建一页空白页并添加到下一页
   const createSlide = () => {
+    // 确保画布尺寸为 1656 x 2208
+    slidesStore.setViewportSize(1656)
+    slidesStore.setViewportRatio(1.33333)
+    
     const emptySlide: Slide = {
       id: nanoid(10),
       elements: [],
@@ -92,6 +96,10 @@ export default () => {
 
   // 根据模板创建新页面
   const createSlideByTemplate = (slide: Slide) => {
+    // 确保画布尺寸为 1656 x 2208
+    slidesStore.setViewportSize(1656)
+    slidesStore.setViewportRatio(1.33333)
+    
     const { groupIdMap, elIdMap } = createElementIdMap(slide.elements)
 
     for (const element of slide.elements) {

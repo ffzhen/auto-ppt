@@ -62,7 +62,7 @@ export const useSlidesStore = defineStore('slides', {
       slides: savedSlides ? JSON.parse(savedSlides) : [], // 从localStorage加载幻灯片数据
       slideIndex: 0, // 当前页面索引
       viewportSize: 1656, // 可视区域宽度基数
-      viewportRatio: 1.33333, // 可视区域比例，默认16:9
+      viewportRatio: 1.33333, // 可视区域比例，高宽比 2208:1656 = 1.33333
       templates: [
       ],
     }

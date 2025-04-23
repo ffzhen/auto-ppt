@@ -92,6 +92,28 @@ export default {
     })
   },
 
+  /**
+   * Markdown转HTML片段
+   */
+  markdown2html(
+    content: string,
+    language: string,
+    model: string,
+  ): Promise<any> {
+    return fetch(`${SERVER_URL}/tools/markdown2html`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content,
+        language,
+        model,
+        stream: true,
+      }),
+    })
+  },
+
   // 导出演示文稿服务方法
   ...presentationService,
 }

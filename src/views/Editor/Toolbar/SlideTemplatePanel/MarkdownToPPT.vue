@@ -5,7 +5,6 @@
       <span class="subtitle" v-if="step === 'template'">从下方挑选合适的模板，开始生成精美PPT</span>
       <span class="subtitle" v-else-if="step === 'outline'">确认下方内容大纲（点击编辑内容），开始选择模板</span>
       <span class="subtitle" v-else>在下方输入Markdown内容，系统将自动生成大纲</span>
-      <div class="close-btn" @click="emit('close')">×</div>
     </div>
     
     <!-- 步骤 1: 输入 Markdown -->
@@ -202,7 +201,7 @@ const generatePPT = async () => {
 <style lang="scss" scoped>
 .markdown-to-ppt {
   position: relative;
-  padding: 20px;
+  margin: 20px;
 }
 
 .header {

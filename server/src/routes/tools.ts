@@ -13,6 +13,9 @@ router.post('/aippt_outline', ToolsController.generateAIPPTOutline);
 // AI PPT生成
 router.post('/aippt', ToolsController.generateAIPPT);
 
+// Markdown 转 HTML
+router.post('/markdown2html', ToolsController.generateMarkdownToHTML);
+
 router.post('/aippt_stream', async (req: Request, res: Response) => {
   try {
     const { content, language = 'zh', model = 'gpt-3.5-turbo' } = req.body

@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { parse, type Shape, type Element, type ChartItem } from 'pptxtojson'
 import { nanoid } from 'nanoid'
@@ -39,6 +39,9 @@ export default () => {
   const { isEmptySlide } = useSlideHandler()
 
   const exporting = ref(false)
+
+  const viewportRatio = computed(() => slidesStore.$state.viewportRatio || 1.33333)
+  const viewportSize = computed(() => slidesStore.$state.viewportSize || 1656)
 
   // 导入pptist文件
   const importSpecificFile = (files: FileList, cover = false) => {
@@ -136,12 +139,12 @@ export default () => {
   }
 
   // 导入PPTX文件
-  const importPPTXFile = (files: FileList, options?: { cover?: boolean; fixedViewport?: boolean }) => {
+  const importPPTXFile = (files: FileList, options?: { cover?: boolean }) => {
+    debugger
     const defaultOptions = {
       cover: false,
-      fixedViewport: false, 
     }
-    const { cover, fixedViewport } = { ...defaultOptions, ...options }
+    const { cover } = { ...defaultOptions, ...options }
 
     const file = files[0]
     if (!file) return
@@ -165,11 +168,24 @@ export default () => {
         return
       }
 
-      let ratio = 96 / 72
-      const width = json.size.width
+      // 固定画布尺寸为 1656 x 2208
+      const targetWidth = 1656
+      const targetHeight = 2208
       
-      if (fixedViewport) ratio = 1000 / width
-      else slidesStore.setViewportSize(width * ratio)
+      // 获取原始尺寸
+      const originalWidth = json.size.width
+      const originalHeight = json.size.height
+      
+      // 计算宽高缩放比例
+      const widthRatio = targetWidth / originalWidth
+      const heightRatio = targetHeight / originalHeight
+      
+      // 统一使用宽度缩放比例来保持宽高比，并按照1656 x 2208的尺寸进行缩放
+      const ratio = widthRatio 
+      
+      // 设置画布尺寸
+      slidesStore.setViewportSize(targetWidth)
+      slidesStore.setViewportRatio(1.33333) // 2208 / 1656 = 1.33333
 
       slidesStore.setTheme({ themeColors: json.themeColors })
 

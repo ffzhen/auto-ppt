@@ -22,6 +22,9 @@
       <div class="md-to-ppt-btn" @click="showMarkdownToPPT = true" title="Markdown转PPT">
         <span>MD→PPT</span>
       </div>
+      <div class="md-to-html-btn" @click="showMarkdownToHTML = true" title="Markdown转HTML幻灯片">
+        <span>MD→HTML</span>
+      </div>
     </div>
   </div>
 
@@ -68,7 +71,18 @@
     closeButton
     @closed="showMarkdownToPPT = false"
   >
-    <MarkdownToPPT @close="showMarkdownToPPT = false" />
+    <MarkdownToPPT  />
+  </Modal>
+  
+  <!-- Markdown to HTML modal -->
+  <Modal
+    :visible="showMarkdownToHTML" 
+    :width="800"
+    :mask-closable="false"
+    closeButton
+    @closed="showMarkdownToHTML = false"
+  >
+    <MarkdownToHTML @close="showMarkdownToHTML = false" />
   </Modal>
 </template>
 
@@ -94,6 +108,8 @@ import AIPPTDialog from './AIPPTDialog.vue'
 import JSONViewer from './Toolbar/SlideTemplatePanel/JSONViewer.vue'
 import MarkdownToPPT from './Toolbar/SlideTemplatePanel/MarkdownToPPT.vue'
 import Modal from '@/components/Modal.vue'
+import SlideTemplatePanel from '@/views/Editor/Toolbar/SlideTemplatePanel/index.vue'
+import MarkdownToHTML from '@/views/Editor/Toolbar/SlideTemplatePanel/MarkdownToHTML.vue'
 
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
@@ -105,6 +121,7 @@ const closeAIPPTDialog = () => mainStore.setAIPPTDialogState(false)
 const remarkHeight = ref(40)
 const showJSONViewer = ref(false)
 const showMarkdownToPPT = ref(false)
+const showMarkdownToHTML = ref(false)
 
 useGlobalHotkey()
 usePasteEvent()
@@ -148,7 +165,7 @@ usePasteEvent()
   gap: 10px;
 }
 
-.json-viewer-btn, .md-to-ppt-btn {
+.json-viewer-btn, .md-to-ppt-btn, .md-to-html-btn {
   background-color: #606266;
   color: #fff;
   border-radius: 4px;

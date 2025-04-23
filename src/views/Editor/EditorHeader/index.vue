@@ -64,7 +64,7 @@
       <div class="menu-item" v-tooltip="'AI生成PPT'" @click="openAIPPTDialog(); mainMenuVisible = false">
         <span class="text ai">AI</span>
       </div>
-      <div class="menu-item" v-tooltip="'导出'" @click="setDialogForExport('pptx')">
+      <div class="menu-item" v-tooltip="'导出'" @click="setDialogForExport('image')">
         <IconDownload class="icon" />
       </div>
       <!-- <a class="github-link" v-tooltip="'Copyright © 2020-PRESENT pipipi-pikachu'" href="https://github.com/pipipi-pikachu/PPTist" target="_blank">

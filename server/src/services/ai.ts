@@ -681,7 +681,7 @@ Requirements:
     // 系统提示词 - 统一使用中文提示词
     const systemPrompt = `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的文案可以是html片段，自动添加eomji和html高亮元素：
 
-1. 首先输出封面页：标题符合小红书爆款标题特性，主副标题由完整标题拆分得到，例如：“一年级家长必看！幼小衔接全攻略”拆分得到“一年级家长必看”和“幼小衔接全攻略”
+1. 首先输出封面页：标题符合小红书爆款标题特性，主副标题由完整标题拆分得到，例如："一年级家长必看！幼小衔接全攻略"拆分得到"一年级家长必看"和"幼小衔接全攻略"
 {
   "type": "cover",
   "data": {
@@ -1377,5 +1377,93 @@ Requirements:
         }
       ]
     };
-  }
+  },
+
+  /**
+   * 获取Markdown转HTML的系统提示词
+   */
+  getMarkdownToHTMLSystemPrompt(language: string): string {
+    return language === 'zh' 
+      ? '你是一位HTML专家，专门将Markdown转换成格式良好的HTML片段。请确保生成的HTML片段具有适当的样式和格式，适合在幻灯片中展示。遵循以下要求：1. 使用干净语义化的HTML，2. 使用内联CSS样式美化内容，3. 确保排版美观易读，4. 为标题、列表、强调等元素添加适当的样式。'
+      : 'You are an HTML expert specializing in converting Markdown to well-formatted HTML fragments. Ensure the generated HTML fragments have appropriate styling and formatting suitable for slide presentations. Follow these requirements: 1. Use clean semantic HTML, 2. Apply inline CSS styles to beautify content, 3. Ensure pleasant and readable typography, 4. Add appropriate styling for headings, lists, emphasis, and other elements.';
+  },
+
+  /**
+   * 获取Markdown转HTML的提示词
+   */
+  getMarkdownToHTMLPrompt(content: string, language: string): string {
+    return language === 'zh'
+      ? `将以下Markdown内容转换为格式良好的HTML片段，适合在幻灯片中展示。确保HTML代码具有适当的样式和结构，便于阅读和理解。
+      
+请确保：
+1. 使用语义化HTML标签
+2. 添加适当的内联CSS样式
+3. 保持良好的排版和间距
+4. 保留原始内容的结构和逻辑
+5. 生成的HTML片段应该是自包含的、可直接使用的
+
+Markdown内容:
+${content}
+
+仅返回HTML代码，不要包含任何解释或其他文本。`
+      : `Convert the following Markdown content to a well-formatted HTML fragment suitable for display in slides. Ensure the HTML code has appropriate styling and structure for readability and comprehension.
+
+Please ensure:
+1. Use semantic HTML tags
+2. Add appropriate inline CSS styling
+3. Maintain good typography and spacing
+4. Preserve the structure and logic of the original content
+5. The generated HTML fragment should be self-contained and ready to use
+
+Markdown content:
+${content}
+
+Return only the HTML code, without any explanation or other text.`;
+  },
+
+  /**
+   * 将Markdown转换为HTML（非流式）
+   */
+  async generateMarkdownToHTML(content: string, language: string, model: string): Promise<string> {
+    // 构建提示词
+    const systemPrompt = this.getMarkdownToHTMLSystemPrompt(language);
+    const userPrompt = this.getMarkdownToHTMLPrompt(content, language);
+
+    // 调用LLM API
+    try {
+      const htmlContent = await callOpenAI(systemPrompt, userPrompt, model);
+      return htmlContent.trim();
+    } catch (error) {
+      console.error('Markdown转HTML出错:', error);
+      throw new Error('Markdown转HTML失败');
+    }
+  },
+
+  /**
+   * 将Markdown转换为HTML（流式）
+   */
+  async generateMarkdownToHTMLStream(
+    content: string, 
+    language: string, 
+    model: string, 
+    handler: StreamHandler
+  ): Promise<void> {
+    // 构建提示词
+    const systemPrompt = this.getMarkdownToHTMLSystemPrompt(language);
+    const userPrompt = this.getMarkdownToHTMLPrompt(content, language);
+
+    // 调用LLM API
+    try {
+      await callOpenAIStream(systemPrompt, userPrompt, model, handler, {
+        temperature: 0.5,
+        max_tokens: 4000,
+      });
+    } catch (error) {
+      console.error('流式Markdown转HTML出错:', error);
+      handler.write(JSON.stringify({ 
+        error: '流式Markdown转HTML失败'
+      }));
+      handler.end();
+    }
+  },
 }; 
