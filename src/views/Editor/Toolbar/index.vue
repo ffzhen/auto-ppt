@@ -54,7 +54,7 @@ const elementTabs = computed<ElementTabs[]>(() => {
 })
 const slideTabs = [
   { label: '设计', key: ToolbarStates.SLIDE_DESIGN },
-  { label: '模板', key: ToolbarStates.SLIDE_TEMPLATE },
+  // { label: '模板', key: ToolbarStates.SLIDE_TEMPLATE },
 ]
 const multiSelectTabs = [
   { label: '样式（多选）', key: ToolbarStates.MULTI_STYLE },

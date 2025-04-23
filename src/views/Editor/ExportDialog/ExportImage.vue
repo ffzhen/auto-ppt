@@ -22,7 +22,7 @@
           <RadioButton style="width: 50%;" value="png">PNG</RadioButton>
         </RadioGroup>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="title">导出范围：</div>
         <RadioGroup
           class="config-item"
@@ -34,7 +34,7 @@
           <RadioButton style="width: 25%;" value="custom">自定义</RadioButton>
           
         </RadioGroup>
-      </div>
+      </div> -->
       <div class="row" v-if="rangeType === 'custom'">
         <div class="title" :data-range="`（${range[0]} ~ ${range[1]}）`">自定义范围：</div>
         <Slider
@@ -68,8 +68,8 @@
 
     <div class="btns">
       <div class="btn-group">
-        <Button class="btn export" type="primary" @click="expImage()">导出图片</Button>
-        <Button class="btn export-zip" type="primary" @click="expZipImage()">导出压缩包</Button>
+        <!-- <Button class="btn export" type="primary" @click="expImage()">导出图片</Button> -->
+        <Button class="btn export-zip" type="primary" @click="expZipImage()">导出图片压缩包</Button>
       </div>
       <Button class="btn close" @click="emit('close')">关闭</Button>
     </div>

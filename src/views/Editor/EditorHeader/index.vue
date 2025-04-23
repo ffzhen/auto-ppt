@@ -56,20 +56,20 @@
           <div class="arrow-btn"><IconDown class="arrow" /></div>
         </Popover>
       </div> -->
-      <div class="group-menu-item">
+      <!-- <div class="group-menu-item">
         <div class="menu-item" v-tooltip="'导出为图片'" @click="setDialogForExport('image')">
           <IconImage class="icon" />
         </div>
-      </div>
+      </div> -->
       <div class="menu-item" v-tooltip="'AI生成PPT'" @click="openAIPPTDialog(); mainMenuVisible = false">
         <span class="text ai">AI</span>
       </div>
       <div class="menu-item" v-tooltip="'导出'" @click="setDialogForExport('pptx')">
         <IconDownload class="icon" />
       </div>
-      <a class="github-link" v-tooltip="'Copyright © 2020-PRESENT pipipi-pikachu'" href="https://github.com/pipipi-pikachu/PPTist" target="_blank">
+      <!-- <a class="github-link" v-tooltip="'Copyright © 2020-PRESENT pipipi-pikachu'" href="https://github.com/pipipi-pikachu/PPTist" target="_blank">
         <div class="menu-item"><IconGithub class="icon" /></div>
-      </a>
+      </a> -->
     </div>
 
     <Drawer

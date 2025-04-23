@@ -60,8 +60,71 @@
           @update:index="index => currentGradientIndex = index"
         />
       </div>
+      
+      <!-- 渐变样式 -->
       <div class="row">
-        <div style="width: 40%;">当前色块：</div>
+        <div style="width: 40%;">渐变样式(R)：</div>
+        <div class="gradient-style-options" style="width: 60%;">
+          <div 
+            v-for="(type, index) in ['linear', 'radial', 'conic', 'reflected']" 
+            :key="index"
+            class="gradient-style-item"
+            :class="{ 'active': gradient.type === type }"
+            @click="updateGradient({ type: type as GradientType })"
+          >
+            <div class="gradient-preview" :class="`gradient-${type}`"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 角度控制 -->
+      <div class="row" v-if="gradient.type === 'linear' || gradient.type === 'conic' || gradient.type === 'reflected'">
+        <div style="width: 40%;">角度(E)：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <button class="angle-btn" @click="updateGradient({ rotate: (gradient.rotate - 15) % 360 })">−</button>
+          <div class="angle-input-container">
+            <input
+              type="number"
+              class="angle-input"
+              :value="gradient.rotate"
+              @input="e => updateGradient({ rotate: parseFloat((e.target as HTMLInputElement).value) })"
+            />
+            <span class="angle-symbol">°</span>
+          </div>
+          <button class="angle-btn" @click="updateGradient({ rotate: (gradient.rotate + 15) % 360 })">+</button>
+        </div>
+      </div>
+      
+      <!-- 渐变色条 -->
+      <div class="row">
+        <div 
+          class="gradient-preview-bar" 
+          :style="{ background: getGradientBackground() }"
+          ref="gradientBarRef"
+        >
+          <div 
+            v-for="(color, index) in gradient.colors" 
+            :key="index"
+            class="gradient-thumb"
+            :class="{ 'active': currentGradientIndex === index }"
+            :style="{ 
+              left: `${color.pos}%`,
+              backgroundColor: color.color,
+              borderColor: currentGradientIndex === index ? '#2468f2' : '#333'
+            }"
+            @click="currentGradientIndex = index"
+            @mousedown="startDragging($event, index)"
+          ></div>
+        </div>
+        <div class="gradient-controls">
+          <button class="gradient-btn" style="color: green" @click="addGradientColor">+</button>
+          <button class="gradient-btn" style="color: red" @click="removeGradientColor" :disabled="gradient.colors.length <= 2">×</button>
+        </div>
+      </div>
+      
+      <!-- 色标颜色 -->
+      <div class="row">
+        <div style="width: 40%;">色标颜色(C)：</div>
         <Popover trigger="click" style="width: 60%;">
           <template #content>
             <ColorPicker
@@ -72,16 +135,89 @@
           <ColorButton :color="gradient.colors[currentGradientIndex].color" />
         </Popover>
       </div>
-      <div class="row" v-if="gradient.type === 'linear'">
-        <div style="width: 40%;">渐变角度：</div>
-        <Slider
-          style="width: 60%;"
-          :min="0"
-          :max="360"
-          :step="15"
-          :value="gradient.rotate"
-          @update:value="value => updateGradient({ rotate: value as number })" 
-        />
+      
+      <!-- 位置控制 -->
+      <div class="row">
+        <div style="width: 40%;">位置(O)：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <Slider
+            style="flex: 1;"
+            :min="0"
+            :max="100"
+            :step="1"
+            :value="gradient.colors[currentGradientIndex].pos"
+            @update:value="value => updateGradientColorPosition(value as number)" 
+          />
+          <div class="percent-input-container">
+            <input
+              type="number"
+              class="percent-input"
+              :value="gradient.colors[currentGradientIndex].pos"
+              @input="e => updateGradientColorPosition(parseFloat((e.target as HTMLInputElement).value))"
+            />
+            <span class="percent-symbol">%</span>
+          </div>
+          <div class="position-buttons">
+            <button class="position-btn up" v-tooltip="'增加'">▲</button>
+            <button class="position-btn down" v-tooltip="'减少'">▼</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 透明度控制 -->
+      <div class="row">
+        <div style="width: 40%;">透明度(T)：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <Slider
+            style="flex: 1;"
+            :min="0"
+            :max="100"
+            :step="1"
+            :value="100 - (gradient.colors[currentGradientIndex].opacity || 0) * 100"
+            @update:value="value => updateGradientColorOpacity(value as number)" 
+          />
+          <div class="percent-input-container">
+            <input
+              type="number"
+              class="percent-input"
+              :value="100 - (gradient.colors[currentGradientIndex].opacity || 0) * 100"
+              @input="e => updateGradientColorOpacity(parseFloat((e.target as HTMLInputElement).value))"
+            />
+            <span class="percent-symbol">%</span>
+          </div>
+          <div class="position-buttons">
+            <button class="position-btn up" v-tooltip="'增加'">▲</button>
+            <button class="position-btn down" v-tooltip="'减少'">▼</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 亮度控制 -->
+      <div class="row">
+        <div style="width: 40%;">亮度(B)：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <Slider
+            style="flex: 1;"
+            :min="-100"
+            :max="100"
+            :step="1"
+            :value="gradient.colors[currentGradientIndex].brightness || 0"
+            @update:value="value => updateGradientColorBrightness(value as number)" 
+          />
+          <div class="percent-input-container">
+            <input
+              type="number"
+              class="percent-input"
+              :value="gradient.colors[currentGradientIndex].brightness || 0"
+              @input="e => updateGradientColorBrightness(parseFloat((e.target as HTMLInputElement).value))"
+            />
+            <span class="percent-symbol">%</span>
+          </div>
+          <div class="position-buttons">
+            <button class="position-btn up" v-tooltip="'增加'">▲</button>
+            <button class="position-btn down" v-tooltip="'减少'">▼</button>
+          </div>
+        </div>
       </div>
     </template>
     
@@ -166,6 +302,8 @@ import Popover from '@/components/Popover.vue'
 import GradientBar from '@/components/GradientBar.vue'
 import FileInput from '@/components/FileInput.vue'
 
+import { IconPlus, IconClose } from '@/utils/icons'
+
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
 const { handleElement, handleElementId, shapeFormatPainter } = storeToRefs(mainStore)
@@ -185,6 +323,7 @@ const gradient = ref<Gradient>({
 const fillType = ref('fill')
 const textAlign = ref('middle')
 const currentGradientIndex = ref(0)
+const gradientBarRef = ref<HTMLElement | null>(null)
 
 watch(handleElement, () => {
   if (!handleElement.value || handleElement.value.type !== 'shape') return
@@ -243,6 +382,34 @@ const updateGradientColors = (color: string) => {
   updateGradient({ colors })
 }
 
+// 设置渐变色块位置
+const updateGradientColorPosition = (pos: number) => {
+  const colors = gradient.value.colors.map((item, index) => {
+    if (index === currentGradientIndex.value) return { ...item, pos }
+    return item
+  })
+  updateGradient({ colors })
+}
+
+// 设置渐变色块透明度
+const updateGradientColorOpacity = (value: number) => {
+  const opacity = (100 - value) / 100
+  const colors = gradient.value.colors.map((item, index) => {
+    if (index === currentGradientIndex.value) return { ...item, opacity }
+    return item
+  })
+  updateGradient({ colors })
+}
+
+// 设置渐变色块亮度
+const updateGradientColorBrightness = (brightness: number) => {
+  const colors = gradient.value.colors.map((item, index) => {
+    if (index === currentGradientIndex.value) return { ...item, brightness }
+    return item
+  })
+  updateGradient({ colors })
+}
+
 // 上传填充图片
 const uploadPattern = (files: FileList) => {
   const imageFile = files[0]
@@ -295,6 +462,146 @@ const updateTextAlign = (align: 'top' | 'middle' | 'bottom') => {
   }
   const _text = _handleElement.text || defaultText
   updateElement({ text: { ..._text, align } })
+}
+
+const getGradientBackground = () => {
+  if (!gradient.value || gradient.value.colors.length === 0) return 'linear-gradient(90deg, #003ec3 0%, #2c79ff 50%, #ffffff 100%)'
+  
+  // Sort colors by position
+  const sortedColors = [...gradient.value.colors].sort((a, b) => a.pos - b.pos)
+  
+  // Create color stops with positions
+  const colorStops = sortedColors.map(color => {
+    // Apply opacity if available
+    let colorValue = color.color
+    if (color.opacity !== undefined) {
+      const rgba = hexToRgba(colorValue, 1 - color.opacity)
+      colorValue = rgba
+    }
+    
+    // Apply brightness if available
+    if (color.brightness !== undefined && color.brightness !== 0) {
+      // Brightness affects the color intensity
+      // Positive brightness adds white, negative adds black
+      colorValue = adjustBrightness(colorValue, color.brightness)
+    }
+    
+    return `${colorValue} ${color.pos}%`
+  })
+  
+  return `linear-gradient(90deg, ${colorStops.join(', ')})`
+}
+
+// Helper function to convert hex to rgba
+const hexToRgba = (hex: string, opacity: number) => {
+  // Remove the hash
+  hex = hex.replace('#', '')
+  
+  // Parse the hex values
+  let r = parseInt(hex.substring(0, 2), 16)
+  let g = parseInt(hex.substring(2, 4), 16)
+  let b = parseInt(hex.substring(4, 6), 16)
+  
+  // Return rgba
+  return `rgba(${r}, ${g}, ${b}, ${1 - opacity})`
+}
+
+// Helper function to adjust brightness
+const adjustBrightness = (color: string, brightness: number) => {
+  // Convert color to rgba first if it's a hex
+  let rgba = color
+  if (color.startsWith('#')) {
+    rgba = hexToRgba(color, 0)
+  }
+  
+  // Extract RGBA values
+  const rgbaMatch = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/)
+  if (!rgbaMatch) return color
+  
+  const r = parseInt(rgbaMatch[1])
+  const g = parseInt(rgbaMatch[2])
+  const b = parseInt(rgbaMatch[3])
+  const a = rgbaMatch[4] ? parseFloat(rgbaMatch[4]) : 1
+  
+  // Apply brightness
+  // Positive brightness: add white (increase values)
+  // Negative brightness: add black (decrease values)
+  const factor = brightness / 100
+  let newR, newG, newB
+  
+  if (factor > 0) {
+    // Add white (increase values toward 255)
+    newR = Math.min(255, r + (255 - r) * factor)
+    newG = Math.min(255, g + (255 - g) * factor)
+    newB = Math.min(255, b + (255 - b) * factor)
+  } else {
+    // Add black (decrease values toward 0)
+    const absFactor = Math.abs(factor)
+    newR = Math.max(0, r - r * absFactor)
+    newG = Math.max(0, g - g * absFactor)
+    newB = Math.max(0, b - b * absFactor)
+  }
+  
+  // Round the values
+  newR = Math.round(newR)
+  newG = Math.round(newG)
+  newB = Math.round(newB)
+  
+  // Return the adjusted color
+  return `rgba(${newR}, ${newG}, ${newB}, ${a})`
+}
+
+const addGradientColor = () => {
+  const newColor = { pos: 50, color: '#fff' }
+  const colors = [...gradient.value.colors, newColor]
+  updateGradient({ colors })
+}
+
+const removeGradientColor = () => {
+  const colors = gradient.value.colors.filter((_, index) => index !== currentGradientIndex.value)
+  updateGradient({ colors })
+}
+
+const startDragging = (event: MouseEvent, index: number) => {
+  // Set current color stop index
+  currentGradientIndex.value = index
+  
+  event.preventDefault()
+  
+  // Get the gradient bar element
+  const gradientBar = gradientBarRef.value
+  if (!gradientBar) return
+  
+  const barRect = gradientBar.getBoundingClientRect()
+  const barWidth = barRect.width
+  
+  // Calculate initial position
+  const initialX = event.clientX
+  const initialPos = gradient.value.colors[index].pos
+  
+  // Create handlers for mouse move and mouse up
+  const handleMouseMove = (moveEvent: MouseEvent) => {
+    // Calculate new position based on mouse movement
+    const deltaX = moveEvent.clientX - initialX
+    const deltaPercent = (deltaX / barWidth) * 100
+    let newPos = Math.max(0, Math.min(100, initialPos + deltaPercent))
+    
+    // Round to nearest integer
+    newPos = Math.round(newPos)
+    
+    // Update color stop position
+    updateGradientColorPosition(newPos)
+  }
+  
+  const handleMouseUp = () => {
+    // Remove event listeners when done dragging
+    document.removeEventListener('mousemove', handleMouseMove)
+    document.removeEventListener('mouseup', handleMouseUp)
+  }
+  
+  // Add event listeners for dragging
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mouseup', handleMouseUp)
 }
 </script>
 
@@ -363,6 +670,189 @@ const updateTextAlign = (align: 'top' | 'middle' | 'bottom') => {
     background-size: contain;
     background-repeat: no-repeat;
     cursor: pointer;
+  }
+}
+
+// 渐变样式相关样式
+.gradient-style-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.gradient-style-item {
+  width: 35px;
+  height: 35px;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.active {
+    border-color: $themeColor;
+    border-width: 2px;
+  }
+}
+
+.gradient-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+
+  &.gradient-linear {
+    background: linear-gradient(90deg, #2c79ff 0%, #ffffff 100%);
+  }
+  &.gradient-radial {
+    background: radial-gradient(circle, #2c79ff 0%, #ffffff 100%);
+  }
+  &.gradient-conic {
+    background: conic-gradient(from 90deg, #2c79ff, #ffffff);
+  }
+  &.gradient-reflected {
+    background: linear-gradient(to right, #ffffff 0%, #2c79ff 50%, #ffffff 100%);
+  }
+}
+
+.angle-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $borderColor;
+  background-color: #fff;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  &:active {
+    background-color: #eee;
+  }
+}
+
+.angle-input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  margin: 0 5px;
+  flex: 1;
+  position: relative;
+}
+
+.angle-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 25px 0 10px;
+  border: none;
+  outline: none;
+  text-align: right;
+}
+
+.angle-symbol {
+  position: absolute;
+  right: 10px;
+}
+
+.gradient-preview-bar {
+  height: 20px;
+  flex: 1;
+  background: linear-gradient(90deg, #003ec3 0%, #2c79ff 50%, #ffffff 100%);
+  border-radius: 4px;
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.gradient-thumb {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border: 1px solid #333;
+  box-sizing: border-box;
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition: all 0.2s;
+  bottom: -16px;
+  clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 100% 100%, 0% 100%);
+  
+  &.active {
+    border-width: 2px;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.gradient-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.gradient-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.percent-input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid $borderColor;
+  border-radius: 4px;
+  margin: 0 5px;
+  width: 80px;
+  position: relative;
+}
+
+.percent-input {
+  width: 100%;
+  height: 30px;
+  padding: 0 25px 0 10px;
+  border: none;
+  outline: none;
+  text-align: right;
+}
+
+.percent-symbol {
+  position: absolute;
+  right: 10px;
+}
+
+.position-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.position-btn {
+  width: 16px;
+  height: 16px;
+  border: 1px solid $borderColor;
+  background-color: #fff;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+  &:active {
+    background-color: #eee;
   }
 }
 </style>

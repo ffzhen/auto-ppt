@@ -23,7 +23,7 @@
       <div class="handler-item group-btn" v-tooltip="'插入文字'">
         <IconFontSize class="icon" :class="{ 'active': creatingElement?.type === 'text' }" @click="drawText()" />
         
-        <Popover trigger="click" v-model:value="textTypeSelectVisible" style="height: 100%;" :offset="10">
+        <Popover trigger="click" v-model:value="textTypeSelectVisible" style="height: 100%;display: flex;align-items: center;" :offset="10">
           <template #content>
             <PopoverMenuItem center @click="() => { drawText(); textTypeSelectVisible = false }"><IconTextRotationNone /> 横向文本框</PopoverMenuItem>
             <PopoverMenuItem center @click="() => { drawText(true); textTypeSelectVisible = false }"><IconTextRotationDown /> 竖向文本框</PopoverMenuItem>
@@ -32,14 +32,14 @@
         </Popover>
       </div>
       <div class="handler-item group-btn" v-tooltip="'插入形状'" :offset="10">
-        <Popover trigger="click" style="height: 100%;" v-model:value="shapePoolVisible" :offset="10">
+        <Popover trigger="click" style="height: 100%;display: flex;align-items: center;" v-model:value="shapePoolVisible" :offset="10">
           <template #content>
             <ShapePool @select="shape => drawShape(shape)" />
           </template>
           <IconGraphicDesign class="icon" :class="{ 'active': creatingCustomShape || creatingElement?.type === 'shape' }" />
         </Popover>
         
-        <Popover trigger="click" v-model:value="shapeMenuVisible" style="height: 100%;" :offset="10">
+        <Popover trigger="click" v-model:value="shapeMenuVisible" style="height: 100%; display: flex;align-items: center;" :offset="10">
           <template #content>
             <PopoverMenuItem center @click="() => { drawCustomShape(); shapeMenuVisible = false }">自由绘制</PopoverMenuItem>
           </template>

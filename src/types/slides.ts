@@ -41,10 +41,12 @@ export const enum ElementTypes {
  * 
  * rotate: 渐变角度（线性渐变）
  */
-export type GradientType = 'linear' | 'radial'
+export type GradientType = 'linear' | 'radial' | 'conic' | 'reflected'
 export type GradientColor = {
   pos: number
   color: string
+  opacity?: number
+  brightness?: number
 }
 export interface Gradient {
   type: GradientType
