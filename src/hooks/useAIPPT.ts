@@ -169,12 +169,14 @@ export default () => {
     maxLine,
     longestText,
     digitPadding,
+    type,
   }: {
     el: PPTTextElement | PPTShapeElement
     text: string
     maxLine: number
     longestText?: string
     digitPadding?: boolean
+    type?: TextType
   }): PPTTextElement | PPTShapeElement => {
     const padding = 10
     const width = el.width - padding * 2 - 10
@@ -182,7 +184,7 @@ export default () => {
     let content = el.type === 'text' ? el.content : el.text!.content
     
     // 检查text是否包含HTML标签
-    const containsHtmlTags = /<[^>]*>/g.test(text);
+    const containsHtmlTags = /<[^>]*>/g.test(text)
     
     const fontInfo = getFontInfo(content)
     const size = getAdaptedFontsize({
@@ -195,9 +197,13 @@ export default () => {
     
     const parser = new DOMParser()
     const doc = parser.parseFromString(content, 'text/html')
-    
+    if (type === 'html') {
+      // 如果类型是html，直接替换内容
+      doc.body.innerHTML = text
+      content = doc.body.innerHTML
+    } else {
     if (containsHtmlTags) {
-      // 如果text包含HTML标签，解析text并与模板样式合并
+        // 如果传入的text包含HTML标签
       const textDoc = parser.parseFromString(text, 'text/html')
       
       // 获取模板中的样式信息
@@ -225,7 +231,6 @@ export default () => {
         fontStyle: /font-style:\s*([^;]+)/,
       }
       
-      // 查找模板中的样式
       const templateBodyElement = doc.body.firstElementChild
       if (templateBodyElement) {
         const styleAttr = templateBodyElement.getAttribute('style')
@@ -244,17 +249,13 @@ export default () => {
         // 将富文本内容插入到模板元素中
         templateBodyElement.innerHTML = textDoc.body.innerHTML
         
-        // 查找内部元素的字体大小，优先使用它
-        let fontSize = size
+          // 处理字体大小
         const elementsWithFontSize = templateBodyElement.querySelectorAll('[style*="font-size"]')
         if (elementsWithFontSize.length > 0) {
-          // 从第一个带有font-size的元素中提取字体大小
           const style = elementsWithFontSize[0].getAttribute('style') || ''
           const fontSizeMatch = style.match(/font-size:\s*([^;]+)/)
           if (fontSizeMatch && fontSizeMatch[1]) {
-            // 提取字体大小数值
             const extractedSize = fontSizeMatch[1].trim()
-            // 确保外层p元素也应用相同的字体大小
             let pStyle = templateBodyElement.getAttribute('style') || ''
             if (!pStyle.includes('font-size')) {
               pStyle += `; font-size: ${extractedSize}`
@@ -262,7 +263,6 @@ export default () => {
             }
           }
         } else {
-          // 如果内部元素没有设置字体大小，使用计算出的size
           let pStyle = templateBodyElement.getAttribute('style') || ''
           if (!pStyle.includes('font-size')) {
             pStyle += `; font-size: ${size}px`
@@ -286,17 +286,20 @@ export default () => {
           firstTextNode.textContent = '0' + text
         }
         else firstTextNode.textContent = text
+        }
+        
       }
+      if (doc.body.innerHTML.indexOf('font-size') === -1) {
+        const p = doc.querySelector('p')
+        if (p) p.style.fontSize = '16px'
+      }
+      
+      content = doc.body.innerHTML.replace(/font-size:(.+?)px/g, `font-size: ${size}px`)
     }
     
-    if (doc.body.innerHTML.indexOf('font-size') === -1) {
-      const p = doc.querySelector('p')
-      if (p) p.style.fontSize = '16px'
-    }
-    
-    content = doc.body.innerHTML.replace(/font-size:(.+?)px/g, `font-size: ${size}px`)
-    
-    return el.type === 'text' ? { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } : { ...el, text: { ...el.text!, content } }
+    return el.type === 'text' ?
+      { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } :
+      { ...el, text: { ...el.text!, content } }
   }
 
   const getUseableImage = (el: PPTImageElement): ImgPoolItem | null => {
@@ -366,7 +369,7 @@ export default () => {
     console.log(_AISlides)
     for (const template of _AISlides) {
       if (template.type === 'content') {
-        const items = template.data.items
+        const items = template.data.items || []
         if (items.length === 5 || items.length === 6) {
           const items1 = items.slice(0, 3)
           const items2 = items.slice(3)
@@ -399,46 +402,11 @@ export default () => {
           AISlides.push(template)
         }
       }
-      else if (template.type === 'contents') {
-        const items = template.data.items
-        if (items.length === 7) {
-          const items1 = items.slice(0, 5)
-          const items2 = items.slice(5)
-          AISlides.push({ ...template, data: { ...template.data, items: items1 } })
-          AISlides.push({ ...template, data: { ...template.data, items: items2 }, offset: 5 })
-        }
-        else if (items.length > 7 && items.length <= 12) {
-          const items1 = items.slice(0, 6)
-          const items2 = items.slice(6)
-          AISlides.push({ ...template, data: { ...template.data, items: items1 } })
-          AISlides.push({ ...template, data: { ...template.data, items: items2 }, offset: 6 })
-        }
-        else if (items.length === 13) {
-          const items1 = items.slice(0, 6)
-          const items2 = items.slice(6, 11)
-          const items3 = items.slice(11)
-          AISlides.push({ ...template, data: { ...template.data, items: items1 } })
-          AISlides.push({ ...template, data: { ...template.data, items: items2 }, offset: 6 })
-          AISlides.push({ ...template, data: { ...template.data, items: items3 }, offset: 11 })
-        }
-        else if (items.length > 13) {
-          const items1 = items.slice(0, 6)
-          const items2 = items.slice(6, 12)
-          const items3 = items.slice(12)
-          AISlides.push({ ...template, data: { ...template.data, items: items1 } })
-          AISlides.push({ ...template, data: { ...template.data, items: items2 }, offset: 6 })
-          AISlides.push({ ...template, data: { ...template.data, items: items3 }, offset: 12 })
-        }
-        else {
-          AISlides.push(template)
-        }
-      }
       else AISlides.push(template)
     }
 
     const coverTemplates = templateSlides.filter(slide => slide.type === 'cover')
     const contentTemplates = templateSlides.filter(slide => slide.type === 'content')
-    const contentsTemplates = templateSlides.filter(slide => slide.type === 'contents')
     const endTemplates = templateSlides.filter(slide => slide.type === 'end')
 
     const slides = []
@@ -455,6 +423,10 @@ export default () => {
           if (checkTextType(el, 'subtitle') && item.data.text) {
             return getNewTextElement({ el, text: item.data.text, maxLine: 3 })
           }
+          if (checkTextType(el, 'html') && item.data.html) {
+            debugger
+            return getNewTextElement({ el, text: item.data.html, maxLine: 3,type:"html" })
+          }
           return el
         })
         slides.push({
@@ -464,7 +436,43 @@ export default () => {
         })
       }
       else if (item.type === 'content') {
-        const _contentTemplates = getUseableTemplates(contentTemplates, item.data.items.length, 'item', item.data)
+        const data = item.data
+
+        // 如果存在 html 字段
+        if (data.html) {
+          const _contentTemplates = getUseableTemplates(contentTemplates, 1, 'html', data)
+          const contentTemplate = _contentTemplates[Math.floor(Math.random() * _contentTemplates.length)]
+
+          const elements = contentTemplate.elements.map(el => {
+            if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
+            if (el.type !== 'text' && el.type !== 'shape') return el
+            if (checkTextType(el, 'content')) {
+              return getNewTextElement({ el, text: data.content!, maxLine: 20 })
+            }
+            if (checkTextType(el, 'title') && data.title) {
+              return getNewTextElement({ el, text: data.title, maxLine: 1 })
+            }
+            if (checkTextType(el, 'header') && data.header) {
+              return getNewTextElement({ el, text: data.header, maxLine: 4 })
+            }
+            if (checkTextType(el, 'footer') && data.footer) {
+              return getNewTextElement({ el, text: data.footer, maxLine: 2 })
+            }
+            if (checkTextType(el, 'html') && data.html) {
+              return getNewTextElement({ el, text: data.html, maxLine: 2,type:"html" })
+            }
+            return el
+          })
+          slides.push({
+            ...contentTemplate,
+            id: nanoid(10),
+            elements,
+          })
+        }
+        // 否则使用原来的 items 逻辑
+        else if (data.items?.length) {
+          const items = data.items
+          const _contentTemplates = getUseableTemplates(contentTemplates, items.length, 'item', data)
         const contentTemplate = _contentTemplates[Math.floor(Math.random() * _contentTemplates.length)]
 
         const sortedTitleItemIds = contentTemplate.elements.filter(el => checkTextType(el, 'itemTitle')).sort((a, b) => {
@@ -487,7 +495,7 @@ export default () => {
         const itemTitles = []
         const itemTexts = []
 
-        for (const _item of item.data.items) {
+          for (const _item of items) {
           if (_item.title) itemTitles.push(_item.title)
           if (_item.text) itemTexts.push(_item.text)
         }
@@ -497,8 +505,8 @@ export default () => {
         const elements = contentTemplate.elements.map(el => {
           if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
           if (el.type !== 'text' && el.type !== 'shape') return el
-          if (item.data.items.length === 1) {
-            const contentItem = item.data.items[0]
+            if (items.length === 1) {
+              const contentItem = items[0]
             if (checkTextType(el, 'content') && contentItem.text) {
               return getNewTextElement({ el, text: contentItem.text, maxLine: 6 })
             }
@@ -506,14 +514,14 @@ export default () => {
           else {
             if (checkTextType(el, 'itemTitle')) {
               const index = sortedTitleItemIds.findIndex(id => id === el.id)
-              const contentItem = item.data.items[index]
+                const contentItem = items[index]
               if (contentItem && contentItem.title) {
                 return getNewTextElement({ el, text: contentItem.title, longestText: longestTitle, maxLine: 1 })
               }
             }
             if (checkTextType(el, 'item')) {
               const index = sortedTextItemIds.findIndex(id => id === el.id)
-              const contentItem = item.data.items[index]
+                const contentItem = items[index]
               if (contentItem && contentItem.text) {
                 return getNewTextElement({ el, text: contentItem.text, longestText, maxLine: 4 })
               }
@@ -524,14 +532,14 @@ export default () => {
               return getNewTextElement({ el, text: index + offset + 1 + '', maxLine: 1, digitPadding: true })
             }
           }
-          if (checkTextType(el, 'title') && item.data.title) {
-            return getNewTextElement({ el, text: item.data.title, maxLine: 1 })
+            if (checkTextType(el, 'title') && data.title) {
+              return getNewTextElement({ el, text: data.title, maxLine: 1 })
           }
-          if (checkTextType(el, 'header') && item.data.header) {
-            return getNewTextElement({ el, text: item.data.header, maxLine: 4 })
+            if (checkTextType(el, 'header') && data.header) {
+              return getNewTextElement({ el, text: data.header, maxLine: 4 })
           }
-          if (checkTextType(el, 'footer') && item.data.footer) {
-            return getNewTextElement({ el, text: item.data.footer, maxLine: 2 })
+            if (checkTextType(el, 'footer') && data.footer) {
+              return getNewTextElement({ el, text: data.footer, maxLine: 2 })
           }
           return el
         })
@@ -540,6 +548,7 @@ export default () => {
           id: nanoid(10),
           elements,
         })
+        }
       }
       else if (item.type === 'end') {
         const endTemplate = endTemplates[Math.floor(Math.random() * endTemplates.length)]

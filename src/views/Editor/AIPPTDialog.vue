@@ -139,7 +139,6 @@ const createOutline = async () => {
         outlineCreating.value = false
         return
       }
-      console.log('outline value',value)
       const chunk = decoder.decode(value, { stream: true })
       outline.value += chunk
 
@@ -156,7 +155,7 @@ const createOutline = async () => {
 const createPPT = async () => {
   loading.value = true
 
-  const stream = await api.AIPPT(outline.value, language.value, 'ep-20250411144626-zx55l')
+  const stream = await api.AIPPT(outline.value, language.value, 'ep-20250411144626-zx55l',selectedTemplate.value)
   const templateSlides: Slide[] = await api.getFileData(selectedTemplate.value).then(ret => ret.slides)
   const reader: ReadableStreamDefaultReader = stream.body.getReader()
   const decoder = new TextDecoder('utf-8')

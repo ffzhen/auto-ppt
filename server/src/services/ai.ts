@@ -6,6 +6,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai';
 import type { ChatCompletionMessageParam } from 'openai/resources';
+import { getTemplatePrompt } from '../configs/templates'
 
 // 加载环境变量
 dotenv.config();
@@ -674,12 +675,17 @@ Requirements:
   /**
    * 获取PPT生成的提示词
    */
-  getPPTPrompt(content: string, language: string, isStream: boolean = false): { systemPrompt: string, prompt: string } {
-    // 构建用户提示词
-    const prompt = `请根据以下主题生成一个完整卡片的JSON数据。主题: ${content}`;
-    
-    // 系统提示词 - 统一使用中文提示词
-    const systemPrompt = `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的文案可以是html片段，自动添加eomji和html高亮元素：
+  async getPPTPrompt(content: string, templateType: string, isStream: boolean = false): Promise<{ systemPrompt: string; userPrompt: string }> {
+    const systemPrompt = getTemplatePrompt(templateType, isStream)
+    const userPrompt = `请根据以下内容生成PPT大纲：\n\n${content}`
+    return { systemPrompt, userPrompt }
+  },
+  
+  /**
+   * 获取默认系统提示词
+   */
+  getDefaultSystemPrompt(isStream: boolean): string {
+    return `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的文案可以是html片段，自动添加eomji和html高亮元素：
 
 1. 首先输出封面页：标题符合小红书爆款标题特性，主副标题由完整标题拆分得到，例如："一年级家长必看！幼小衔接全攻略"拆分得到"一年级家长必看"和"幼小衔接全攻略"
 {
@@ -749,21 +755,19 @@ Requirements:
 - 内容对象至少包含3个要点，内容要符合主题风格
 - 所有输出必须是有效的JSON格式，不要包含额外的注释或说明文字
 - ${isStream ? '输出时请每个对象独立成行，不要将多个对象连在一起' : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'}`;
-
-    return { systemPrompt, prompt };
   },
 
   /**
    * 生成AI PPT（非流式）
    */
-  async generatePPT(content: string, language: string, model: string): Promise<any> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，非流式响应`);
+  async generatePPT(content: string, language: string, model: string, templateType: string = 'default'): Promise<any> {
+    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，非流式响应，模板类型: ${templateType}`);
     
     // 获取提示词
-    const { systemPrompt, prompt } = this.getPPTPrompt(content, language, false);
+    const { systemPrompt, userPrompt } = await this.getPPTPrompt(content, templateType, false);
     
     // 使用OpenAI SDK调用ARK API
-    const response = await callOpenAI(systemPrompt, prompt, model, {
+    const response = await callOpenAI(systemPrompt, userPrompt, model, {
       temperature: 0.7,
       max_tokens: 4000
     });
@@ -828,9 +832,10 @@ Requirements:
     content: string, 
     language: string, 
     model: string, 
-    handler: StreamHandler
+    handler: StreamHandler,
+    templateType: string = 'default'
   ): Promise<void> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，逐对象流式响应`);
+    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，逐对象流式响应，模板类型: ${templateType}`);
 
     // 用于对象计数和状态追踪
     let objectCounter = 0;
@@ -956,11 +961,11 @@ Requirements:
     
     try {
       // 获取提示词
-      const { systemPrompt, prompt } = this.getPPTPrompt(content, language, true);
+      const { systemPrompt, userPrompt } = await this.getPPTPrompt(content, templateType, true);
       
       // 使用流式API，通过自定义处理器捕获和解析返回的JSON对象
       console.log('[AIPPT Stream] 调用OpenAI流式API');
-      await callOpenAIStream(systemPrompt, prompt, model, jsonParserHandler, {
+      await callOpenAIStream(systemPrompt, userPrompt, model, jsonParserHandler, {
         temperature: 0.7,
         max_tokens: 10000
       });

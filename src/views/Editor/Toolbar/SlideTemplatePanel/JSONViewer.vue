@@ -61,7 +61,7 @@ const props = defineProps<{
 }>()
 
 const slidesStore = useSlidesStore()
-const { currentSlide } = storeToRefs(slidesStore)
+const { currentSlide, theme, title, viewportSize, viewportRatio } = storeToRefs(slidesStore)
 const { addHistorySnapshot } = useHistorySnapshot()
 
 // JSON 编辑状态
@@ -70,10 +70,18 @@ const editorContent = ref('')
 const errorMessage = ref('')
 const fileInput = ref<HTMLInputElement | null>(null)
 
-// 格式化JSON显示，优先使用传入的数据，否则使用当前幻灯片
+// 格式化JSON显示，优先使用传入的数据，否则使用当前幻灯片的完整信息
 const formattedJSON = computed(() => {
-  const data = props.data || currentSlide.value
-  return JSON.stringify(data, null, 2)
+  if (props.data) return JSON.stringify(props.data, null, 2)
+  
+  const jsonData = {
+    title: title.value,
+    width: viewportSize.value,
+    height: viewportSize.value * viewportRatio.value,
+    theme: theme.value,
+    slides: [currentSlide.value],
+  }
+  return JSON.stringify(jsonData, null, 2)
 })
 
 // 监听格式化的JSON，更新编辑器内容
@@ -168,14 +176,38 @@ const applyChanges = () => {
   try {
     const newData = JSON.parse(editorContent.value)
     
-    // 检查是否为有效的幻灯片数据结构
-    if (!newData.id || typeof newData !== 'object') {
+    // 检查是否为有效的数据结构
+    if (typeof newData !== 'object') {
+      message.error('无效的数据结构')
+      return
+    }
+    
+    // 如果是完整的演示文稿数据
+    if (newData.slides && Array.isArray(newData.slides)) {
+      // 更新主题
+      if (newData.theme) {
+        slidesStore.setTheme(newData.theme)
+      }
+      
+      // 更新标题
+      if (newData.title) {
+        slidesStore.setTitle(newData.title)
+      }
+      
+      // 更新当前幻灯片
+      if (newData.slides[0] && newData.slides[0].id) {
+        slidesStore.updateSlide(newData.slides[0])
+      }
+    }
+    // 如果只是单个幻灯片数据
+    else if (newData.id) {
+      slidesStore.updateSlide(newData)
+    }
+    else {
       message.error('无效的幻灯片数据结构')
       return
     }
     
-    // 应用更改
-    slidesStore.updateSlide(newData)
     addHistorySnapshot()
     message.success('已应用 JSON 更改')
     isEditMode.value = false

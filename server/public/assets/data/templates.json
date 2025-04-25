@@ -2,6 +2,12 @@
   { 
     "name": "虚拟资料卡片", 
     "id": "doc_template", 
-    "cover": "img/虚拟.jpg" 
+    "cover": "img/虚拟.jpg",
+    "description": "虚拟资料卡片"
+  },
+  {
+    "name": "高净值风格卡片", 
+    "id": "blue_template", 
+    "cover": "img/blue.jpg"
   }
-] 
+]

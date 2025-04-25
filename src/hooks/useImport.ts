@@ -140,7 +140,6 @@ export default () => {
 
   // 导入PPTX文件
   const importPPTXFile = (files: FileList, options?: { cover?: boolean }) => {
-    debugger
     const defaultOptions = {
       cover: false,
     }

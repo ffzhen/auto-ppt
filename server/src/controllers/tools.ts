@@ -45,7 +45,7 @@ export const ToolsController = {
    */
   async generateAIPPT(req: Request, res: Response) {
     try {
-      const { content, language = 'zh', model = 'doubao-1.5-pro-32k', stream = false } = req.body;
+      const { content, language = 'zh', model = 'doubao-1.5-pro-32k', templateId = 'default', stream = false } = req.body;
       
       if (!content) {
         return res.status(400).json({ message: '内容不能为空' });
@@ -64,10 +64,10 @@ export const ToolsController = {
         const streamHandler = AIService.getStreamHandler(res);
         
         // 调用AI服务生成PPT（流式）
-        await AIService.generatePPTStream(content, language, model, streamHandler);
+        await AIService.generatePPTStream(content, language, model, streamHandler, templateId);
       } else {
         // 调用AI服务生成PPT（非流式）
-        const ppt = await AIService.generatePPT(content, language, model);
+        const ppt = await AIService.generatePPT(content, language, model, templateId);
         res.status(200).json(ppt);
       }
     } catch (error) {

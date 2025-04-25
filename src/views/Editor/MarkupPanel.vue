@@ -69,6 +69,7 @@ const textTypeOptions = ref<{ label: string; value: TextType | '' }[]>([
   { label: '标题', value: 'title' },
   { label: '副标题', value: 'subtitle' },
   { label: '正文', value: 'content' },
+  { label: '嵌入HTML', value: 'html' },
   { label: '列表项目', value: 'item' },
   { label: '列表项标题', value: 'itemTitle' },
   { label: '注释', value: 'notes' },

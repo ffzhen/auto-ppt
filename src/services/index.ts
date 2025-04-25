@@ -77,6 +77,7 @@ export default {
     content: string,
     language: string,
     model: string,
+    templateId: string = 'default'
   ): Promise<any> {
     return fetch(`${SERVER_URL}/tools/aippt`, {
       method: 'POST',
@@ -87,6 +88,7 @@ export default {
         content,
         language,
         model,
+        templateId,
         stream: true,
       }),
     })

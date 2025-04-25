@@ -145,9 +145,14 @@ const generatePPT = async () => {
     if (coverSlides.length === 0 || contentSlides.length === 0) {
       throw new Error('模板缺少必要的幻灯片类型（封面或内容）')
     }
-    
+    debugger
     // 调用 AI 服务生成 PPT
-    const stream = await api.AIPPT(markdownContent.value, language.value, model.value)
+    const stream = await api.AIPPT(
+      markdownContent.value, 
+      language.value, 
+      model.value, 
+      selectedTemplateId.value,
+    )
     
     const reader = stream.body.getReader()
     const decoder = new TextDecoder('utf-8')
@@ -170,6 +175,7 @@ const generatePPT = async () => {
         }
         
         const chunk = decoder.decode(value, { stream: true })
+        console.log('收到的数据:', chunk)
         try {
           const slide: AIPPTSlide = JSON.parse(chunk)
           console.log('收到的幻灯片数据:', slide)

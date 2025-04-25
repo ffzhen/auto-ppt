@@ -39,7 +39,7 @@ const tabs: TabItem[] = [
   // { key: 'pptist', label: '导出 pptist 文件' },
   // { key: 'pptx', label: '导出 PPTX' },
   { key: 'image', label: '导出图片' },
-  // { key: 'json', label: '导出 JSON' },
+  { key: 'json', label: '导出 JSON' },
   // { key: 'pdf', label: '打印 / 导出 PDF' },
 ]
 

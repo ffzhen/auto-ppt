@@ -25,14 +25,16 @@ export interface AIPPTTransition {
 export interface AIPPTContent {
   type: 'content'
   data: {
-    title: string
+    title?: string
     header?: string
     footer?: string
-    items: {
+    html?: boolean
+    content?: string
+    items?: {
       title: string
       text: string
     }[]
-  },
+  }
   offset?: number
 }
 
