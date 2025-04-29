@@ -4,10 +4,6 @@ import ImageGeneratorTest from '@/views/ImageGeneratorTest.vue'
 const routes = [
   {
     path: '/',
-    redirect: { name: 'editor' }
-  },
-  {
-    path: '/editor',
     name: 'editor',
     component: () => import('@/views/Editor/index.vue')
   },

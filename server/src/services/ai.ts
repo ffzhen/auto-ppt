@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,6 +33,26 @@ const openai = new OpenAI({
 interface StreamHandler {
   write: (chunk: string) => void;
   end: () => void;
+}
+
+/**
+ * 获取流式处理器
+ */
+function getStreamHandler(res: Response): StreamHandler {
+  // 设置响应头（纯文本）
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
+  
+  return {
+    write: (chunk: string) => {
+      // 直接写入纯文本，不使用SSE格式
+      res.write(chunk);
+      res.flushHeaders();
+    },
+    end: () => {
+      res.end();
+    }
+  };
 }
 
 /**
@@ -554,67 +574,46 @@ async function callOpenAIStream(
   }
 }
 
-export const AIService = {
-  /**
-   * 获取流式处理器
-   */
-  getStreamHandler(res: Response): StreamHandler {
-    // 设置响应头（纯文本）
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.setHeader('Transfer-Encoding', 'chunked');
-    
-    return {
-      write: (chunk: string) => {
-        // 直接写入纯文本，不使用SSE格式
-        res.write(chunk);
-        res.flushHeaders();
-      },
-      end: () => {
-        res.end();
-      }
-    };
-  },
+/**
+ * 生成AI PPT大纲（非流式）
+ */
+async function generateOutline(content: string, language: string, model: string): Promise<any> {
+  // 获取大纲文本
+  const outlineText = await getOutlineTextByContent(content, model, language);
+  
+  // 解析为大纲对象
+  const outline = parseOutlineFromContent(outlineText);
+  
+  // 保存为本地文件，方便调试
+  const fileName = `outline_${Date.now()}.json`;
+  const filePath = path.join(MOCK_DATA_DIR, fileName);
+  fs.writeFileSync(filePath, JSON.stringify(outline, null, 2));
+  
+  return { outline };
+}
 
-  /**
-   * 生成AI PPT大纲（非流式）
-   */
-  async generateOutline(content: string, language: string, model: string): Promise<any> {
-    // 获取大纲文本
-    const outlineText = await this.getOutlineTextByContent(content, model, language);
-    
-    // 解析为大纲对象
-    const outline = this.parseOutlineFromContent(outlineText);
-    
-    // 保存为本地文件，方便调试
-    const fileName = `outline_${Date.now()}.json`;
-    const filePath = path.join(MOCK_DATA_DIR, fileName);
-    fs.writeFileSync(filePath, JSON.stringify(outline, null, 2));
-    
-    return { outline };
-  },
-
-  /**
-   * 生成AI PPT大纲（流式）
-   */
-  async generateOutlineStream(
-    content: string, 
-    language: string, 
-    model: string, 
-    handler: StreamHandler
-  ): Promise<void> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}小红书内容大纲，使用流式响应...`);
-    
-    // 设置系统提示词
-    const systemPrompt = language === 'zh' 
-      ? '你是一个擅长创建小红书风格内容和大纲的AI助手。请用Markdown格式输出，使用"#"作为标题，"-"作为要点。'
-      : 'You are an AI assistant specialized in creating Xiaohongshu (RED) style content outlines. Please output in Markdown format, using "#" for titles and "-" for bullet points.';
-    
-    // 构建用户提示词
-    let userPrompt = '';
-    
-    if (language === 'zh') {
-      // 中文提示词
-      userPrompt = `
+/**
+ * 生成AI PPT大纲（流式）
+ */
+async function generateOutlineStream(
+  content: string, 
+  language: string, 
+  model: string, 
+  handler: StreamHandler
+): Promise<void> {
+  console.log(`生成${language === 'zh' ? '中文' : '英文'}小红书内容大纲，使用流式响应...`);
+  
+  // 设置系统提示词
+  const systemPrompt = language === 'zh' 
+    ? '你是一个擅长创建小红书风格内容和大纲的AI助手。请用Markdown格式输出，使用"#"作为标题，"-"作为要点。'
+    : 'You are an AI assistant specialized in creating Xiaohongshu (RED) style content outlines. Please output in Markdown format, using "#" for titles and "-" for bullet points.';
+  
+  // 构建用户提示词
+  let userPrompt = '';
+  
+  if (language === 'zh') {
+    // 中文提示词
+    userPrompt = `
 请为以下主题生成一个小红书风格的分享内容大纲，使用Markdown格式，遵循以下结构：
 1. 使用"# "作为封面标题（吸引人且简洁）
 2. 使用"## "作为内容页小标题（通常3-5个内容点）
@@ -631,9 +630,9 @@ export const AIService = {
 - 语言风格要轻松亲切，像朋友间分享
 - 请输出格式化好的Markdown文本,不要输出任何其他内容,不要带markdown的标记
 `;
-    } else {
-      // 英文提示词
-      userPrompt = `
+  } else {
+    // 英文提示词
+    userPrompt = `
 Generate a Xiaohongshu (RED) style content outline for the following topic using Markdown format, following this structure:
 1. Use "# " for cover title (attractive and concise)
 2. Use "## " for content section titles (usually 3-5 content points)
@@ -650,269 +649,34 @@ Requirements:
 - The language style should be casual and friendly, like sharing with friends
 - Output as properly formatted Markdown text
 `;
-    }
-    
-    // 设置模型参数
-    const modelParams = {
-      temperature: 0.7,
-      max_tokens: 16384
-    };
-    
-    // 使用OpenAI SDK流式API直接生成内容
-    await callOpenAIStream(systemPrompt, userPrompt, model, handler, modelParams);
-  },
-
-  /**
-   * 获取PPT生成的提示词
-   */
-  async getPPTPrompt(content: string, templateType: string, isStream: boolean = false): Promise<{ systemPrompt: string; userPrompt: string }> {
-    const systemPrompt = getTemplatePrompt(templateType, isStream)
-    const userPrompt = `请根据以下内容生成卡片内容：\n\n${content}`
-    return { systemPrompt, userPrompt }
-  },
+  }
   
-  /**
-   * 生成AI PPT（非流式）
-   */
-  async generatePPT(content: string, language: string, model: string, templateType: string = 'default'): Promise<any> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，非流式响应，模板类型: ${templateType}`);
-    
-    // 获取提示词
-    const { systemPrompt, userPrompt } = await this.getPPTPrompt(content, templateType, false);
-    
-    // 使用OpenAI SDK调用ARK API
-    const response = await callOpenAI(systemPrompt, userPrompt, model, {
-      temperature: 0.7,
-      max_tokens: 16384
-    });
-    
-    try {
-      // 尝试解析返回的JSON数据
-      let slides = [];
-      
-      // 查找JSON数据的起始和结束位置
-      const startIndex = response.indexOf('[');
-      const endIndex = response.lastIndexOf(']') + 1;
-      
-      if (startIndex !== -1 && endIndex !== -1) {
-        const jsonText = response.substring(startIndex, endIndex);
-        slides = JSON.parse(jsonText);
-      } else {
-        console.warn('无法在响应中找到有效的JSON数据，使用模拟数据');
-        // 使用模拟幻灯片数据
-        slides = [
-          {
-            "type": "cover",
-            "data": {
-              "title": content,
-              "text": "自动生成的演示文稿"
-            }
-          },
-          {
-            "type": "contents",
-            "data": {
-              "items": ["简介", "主要内容", "总结"]
-            }
-          },
-          {
-            "type": "end",
-            "data": {
-              "content": "感谢观看",
-              "title": "谢谢"
-            }
-          }
-        ];
-      }
-      
-      // 保存为本地文件，方便调试
-      const fileName = `ppt_${Date.now()}.json`;
-      const filePath = path.join(MOCK_DATA_DIR, fileName);
-      fs.writeFileSync(filePath, JSON.stringify(slides, null, 2));
-      
-      return slides;
-    } catch (error) {
-      console.error('解析AI生成的PPT数据失败:', error);
-      return { 
-        error: '生成PPT数据解析失败',
-        rawResponse: response
-      };
-    }
-  },
+  // 设置模型参数
+  const modelParams = {
+    temperature: 0.7,
+    max_tokens: 16384
+  };
+  
+  // 使用OpenAI SDK流式API直接生成内容
+  await callOpenAIStream(systemPrompt, userPrompt, model, handler, modelParams);
+}
 
-  /**
-   * 生成AI PPT（流式）
-   */
-  async generatePPTStream(
-    content: string, 
-    language: string, 
-    model: string, 
-    handler: StreamHandler,
-    templateType: string = 'default'
-  ): Promise<void> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}PPT数据，逐对象流式响应，模板类型: ${templateType}`);
+/**
+ * 获取PPT生成的提示词
+ */
+async function getPPTPrompt(content: string, templateType: string, isStream: boolean = false): Promise<{ systemPrompt: string; userPrompt: string }> {
+  const systemPrompt = getTemplatePrompt(templateType, isStream)
+  const userPrompt = `请根据以下内容生成卡片内容：\n\n${content}`
+  return { systemPrompt, userPrompt }
+}
 
-    // 用于对象计数和状态追踪
-    let objectCounter = 0;
-    let currentObj = '';
-    let bracketCount = 0;
-    let inObject = false;
-    let debugLog = '';
-    
-    // 创建一个解析处理器
-    const jsonParserHandler: StreamHandler = {
-      write: (chunk: string) => {
-        console.log(`[AIPPT Stream] 收到数据块: ${chunk.length}字节`);
-        debugLog += chunk;
-        
-        // 逐字符分析，查找完整JSON对象
-        for (let i = 0; i < chunk.length; i++) {
-          const char = chunk[i];
-          
-          // 检测对象开始
-          if (char === '{' && !inObject) {
-            console.log(`[AIPPT Stream] 检测到新对象开始位置: ${i}`);
-            inObject = true;
-            bracketCount = 1;
-            currentObj = '{';
-          }
-          // 在对象内部
-          else if (inObject) {
-            currentObj += char;
-            
-            // 计算括号平衡
-            if (char === '{') {
-              bracketCount++;
-            } else if (char === '}') {
-              bracketCount--;
-              
-              // 对象结束，解析并发送完整对象
-              if (bracketCount === 0) {
-                try {
-                  // 检查是否为有效JSON
-                  const jsonObj = JSON.parse(currentObj);
-                  console.log(`[AIPPT Stream] 成功解析对象 #${objectCounter + 1}, 类型: ${jsonObj.type}`);
-                  
-                  // 将完整对象发送给客户端
-                  handler.write(currentObj);
-                  
-                  // 重置状态
-                  inObject = false;
-                  currentObj = '';
-                  objectCounter++;
-                } catch (e: any) {
-                  // 对象解析失败，记录错误但继续处理
-                  console.error(`[AIPPT Stream] JSON解析失败: ${e.message || '未知错误'}`);
-                  console.error(`[AIPPT Stream] 问题对象内容: ${currentObj.substring(0, 100)}...`);
-                  inObject = false;
-                  currentObj = '';
-                }
-              }
-            }
-          }
-        }
-      },
-      end: () => {
-        // 记录处理结束
-        console.log(`[AIPPT Stream] 数据流结束，总共解析了 ${objectCounter} 个对象`);
-        if (currentObj) {
-          console.log(`[AIPPT Stream] 存在未完成对象: ${currentObj.substring(0, 100)}...`);
-        }
-        
-        // 处理最后剩余的部分对象
-        if (inObject && currentObj) {
-          try {
-            const obj = JSON.parse(currentObj);
-            console.log(`[AIPPT Stream] 解析最终对象，类型: ${obj.type}`);
-            handler.write(JSON.stringify(obj));
-            objectCounter++;
-          } catch (e: any) {
-            // 对象解析失败，记录错误但继续处理
-            console.error(`[AIPPT Stream] JSON解析失败: ${e.message || '未知错误'}`);
-            console.error(`[AIPPT Stream] 问题对象内容: ${currentObj.substring(0, 100)}...`);
-            inObject = false;
-            currentObj = '';
-          }
-        }
-        
-        // 如果没有生成任何对象，返回备用数据
-        if (objectCounter === 0) {
-          console.warn('[AIPPT Stream] 未能解析任何有效PPT对象，使用备用数据');
-          console.log('[AIPPT Stream] 调试：完整响应内容:');
-          console.log(debugLog);
-          
-          const fallbackSlides = [
-            {
-              "type": "cover",
-              "data": {
-                "title": content,
-                "text": "自动生成的演示文稿"
-              }
-            },
-            {
-              "type": "contents",
-              "data": {
-                "items": ["简介", "主要内容", "总结"]
-              }
-            },
-            {
-              "type": "end",
-              "data": {
-                "content": "感谢观看",
-                "title": "谢谢"
-              }
-            }
-          ];
-          
-          for (const slide of fallbackSlides) {
-            handler.write(JSON.stringify(slide));
-          }
-        }
-        
-        handler.end();
-        console.log(`[AIPPT Stream] 流处理完成，总计返回 ${objectCounter} 个对象`);
-      }
-    };
-    
-    try {
-      // 获取提示词
-      const { systemPrompt, userPrompt } = await this.getPPTPrompt(content, templateType, true);
-      
-      // 使用流式API，通过自定义处理器捕获和解析返回的JSON对象
-      console.log('[AIPPT Stream] 调用OpenAI流式API');
-      await callOpenAIStream(systemPrompt, userPrompt, model, jsonParserHandler, {
-        temperature: 0.7,
-        max_tokens: 16384
-      });
-      
-    } catch (error: any) {
-      console.error(`[AIPPT Stream] 生成PPT流出错: ${error.message || '未知错误'}`);
-      console.error(error.stack || '无堆栈信息');
-      handler.write(JSON.stringify({
-        type: "error",
-        data: { message: "生成过程中出错，请稍后重试" }
-      }));
-      handler.end();
-    }
-  },
-
-  /**
-   * 根据内容获取对应的大纲文本
-   */
-  async getOutlineTextByContent(content: string, model: string = 'ep-20250411144626-zx55l', language: string = 'zh'): Promise<string> {
-    console.log(`生成${language === 'zh' ? '中文' : '英文'}小红书内容大纲...`);
-    
-    // 设置系统提示词
-    const systemPrompt = language === 'zh' 
-      ? '你是一个擅长创建小红书风格内容和大纲的AI助手。请用Markdown格式输出，使用"#"作为标题，"-"作为要点。'
-      : 'You are an AI assistant specialized in creating Xiaohongshu (RED) style content outlines. Please output in Markdown format, using "#" for titles and "-" for bullet points.';
-    
-    // 构建用户提示词
-    let userPrompt = '';
-    
-    if (language === 'zh') {
-      // 中文提示词
-      userPrompt = `
-请为以下主题生成一个小红书风格的分享内容大纲，使用Markdown格式，遵循以下结构：
+/**
+ * 获取大纲文本
+ */
+async function getOutlineTextByContent(content: string, model: string, language: string): Promise<string> {
+  // 根据语言选择不同的提示词
+  const prompt = language === 'zh' 
+    ? `请为以下主题生成一个小红书风格的分享内容大纲，使用Markdown格式，遵循以下结构：
 1. 使用"# "作为封面标题（吸引人且简洁）
 2. 使用"## "作为内容页小标题（通常3-5个内容点）
 3. 使用"### "作为每个内容点的子标题（如有必要）
@@ -926,12 +690,9 @@ Requirements:
 - 每个内容点要直击痛点或提供解决方案
 - 最后有一个结尾/总结段落，鼓励互动
 - 语言风格要轻松亲切，像朋友间分享
-- 请输出格式化好的Markdown文本
-`;
-    } else {
-      // 英文提示词
-      userPrompt = `
-Generate a Xiaohongshu (RED) style content outline for the following topic using Markdown format, following this structure:
+- 请输出格式化好的Markdown文本,不要输出任何其他内容,不要带markdown的标记
+`
+    : `Generate a Xiaohongshu (RED) style content outline for the following topic using Markdown format, following this structure:
 1. Use "# " for cover title (attractive and concise)
 2. Use "## " for content section titles (usually 3-5 content points)
 3. Use "### " for subtitles within each content section (if necessary)
@@ -947,442 +708,182 @@ Requirements:
 - The language style should be casual and friendly, like sharing with friends
 - Output as properly formatted Markdown text
 `;
+
+  // 调用大语言模型API获取大纲文本
+  const outlineText = await callLLMApi(prompt, model);
+  return outlineText;
+}
+
+/**
+ * 解析大纲文本为对象
+ */
+function parseOutlineFromContent(outlineText: string): any {
+  // 实现解析逻辑
+  // 这里需要根据实际的Markdown格式来解析大纲文本
+  // 这里只是一个示例，实际解析逻辑需要根据Markdown格式来实现
+  return {
+    title: '示例大纲',
+    sections: [
+      { title: '第一部分', points: ['点1', '点2', '点3'] },
+      { title: '第二部分', points: ['点4', '点5', '点6'] },
+      { title: '第三部分', points: ['点7', '点8', '点9'] }
+    ]
+  };
+}
+
+/**
+ * 创建结束幻灯片
+ */
+function createEndingSlide(content: string): string {
+  // 实现创建结束幻灯片的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  return `# 结束语
+
+${content}`;
+}
+
+/**
+ * 生成幻灯片
+ */
+function generateSlidesFromOutline(outline: any): string[] {
+  // 实现生成幻灯片的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据大纲对象来生成幻灯片
+  return [
+    createTitleSlide(outline.title),
+    createSectionSlide(outline.sections[0]),
+    createSectionSlide(outline.sections[1]),
+    createSectionSlide(outline.sections[2]),
+    createEndingSlide(outline.conclusion)
+  ];
+}
+
+/**
+ * 创建标题幻灯片
+ */
+function createTitleSlide(title: string): string {
+  // 实现创建标题幻灯片的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  return `# ${title}`;
+}
+
+/**
+ * 创建章节幻灯片
+ */
+function createSectionSlide(section: any): string {
+  // 实现创建章节幻灯片的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据章节对象来实现
+  return `## ${section.title}
+
+${section.points.join('\n')}`;
+}
+
+/**
+ * 创建内容幻灯片
+ */
+function createContentSlide(content: string): string {
+  // 实现创建内容幻灯片的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据内容来实现
+  return content;
+}
+
+/**
+ * 获取Markdown到HTML的系统提示词
+ */
+function getMarkdownToHTMLSystemPrompt(): string {
+  // 实现获取Markdown到HTML的系统提示词的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  return '你是一个擅长将Markdown文本转换为HTML的AI助手。请将以下Markdown文本转换为HTML格式：';
+}
+
+/**
+ * 获取Markdown到HTML的提示词
+ */
+function getMarkdownToHTMLPrompt(markdown: string): string {
+  // 实现获取Markdown到HTML的提示词的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  return markdown;
+}
+
+/**
+ * 将Markdown文本转换为HTML
+ */
+function generateMarkdownToHTML(markdown: string): string {
+  // 实现将Markdown文本转换为HTML的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  return markdown;
+}
+
+/**
+ * 将Markdown文本转换为HTML（流式）
+ */
+function generateMarkdownToHTMLStream(markdown: string): StreamHandler {
+  // 实现将Markdown文本转换为HTML（流式）的逻辑
+  // 这里只是一个示例，实际实现逻辑需要根据具体需求来实现
+  const handler: StreamHandler = {
+    write: (chunk: string) => {
+      // 实现将Markdown文本转换为HTML（流式）的逻辑
+    },
+    end: () => {
+      // 实现将Markdown文本转换为HTML（流式）的逻辑
     }
-    
-    // 设置模型参数
-    const modelParams = {
-      temperature: 0.7,
-      max_tokens: 16384
-    };
-    
-    // 使用OpenAI SDK调用ARK API
-    try {
-      return await callOpenAI(systemPrompt, userPrompt, model, modelParams);
-    } catch (error) {
-      console.error('调用ARK API失败，使用模拟数据:', error);
-      return await callLLMApi(userPrompt, model);
-    }
-  },
+  };
+  return handler;
+}
 
-  /**
-   * 解析大纲文本为大纲对象数组
-   */
-  parseOutlineFromContent(outlineText: string): any[] {
-    const lines = outlineText.split('\n');
-    
-    const outline = [];
-    let currentLevel = 0;
-    
-    for (const line of lines) {
-      if (line.startsWith('#')) {
-        // 处理标题行
-        let level = 0;
-        let title = line;
-        
-        if (line.startsWith('# ')) {
-          level = 1;
-          title = line.substring(2);
-        } else if (line.startsWith('## ')) {
-          level = 2;
-          title = line.substring(3);
-        } else if (line.startsWith('### ')) {
-          level = 3;
-          title = line.substring(4);
-        }
-        
-        if (level > 0) {
-          outline.push({
-            title: title.trim(),
-            level: level
-          });
-          currentLevel = level;
-        }
-      } else if (line.startsWith('- ') && currentLevel > 0) {
-        // 处理要点
-        outline.push({
-          title: line.substring(2).trim(),
-          level: currentLevel + 1,
-          isBullet: true
-        });
-      }
-    }
-    
-    return outline;
-  },
+/**
+ * 生成AI PPT（非流式）
+ */
+async function generatePPT(content: string, language: string, model: string, templateType: string = 'default'): Promise<any> {
+  // 获取提示词
+  const { systemPrompt, userPrompt } = await getPPTPrompt(content, templateType, false);
+  
+  // 调用大语言模型API生成PPT内容
+  const pptContent = await callLLMApi(userPrompt, model);
+  
+  // 解析PPT内容
+  const slides = parseOutlineFromContent(pptContent);
+  
+  return slides;
+}
 
-  /**
-   * 创建小红书结尾卡片
-   */
-  createEndingSlide(content: string): any {
-    // 提取标签
-    const tags = content.match(/#[\w\u4e00-\u9fa5]+/g) || ['#小红书', '#经验分享', '#生活技巧'];
-    const tagsHtml = tags.map(tag => `<span style="color: #FF2E63; font-weight: bold;">${tag}</span>`).join(' ');
-    
-    return {
-      id: `slide_${uuidv4()}`,
-      background: {
-        type: 'solid',
-        color: '#FFF1F2'
-      },
-      size: {
-        width: 600,
-        height: 800
-      },
-      elements: [
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='text-align: center; font-size: 36px; font-weight: bold; color: #FF2E63;'>感谢阅读 ❤️</p>`,
-          left: 75,
-          top: 250,
-          width: 450,
-          height: 80,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#FF2E63'
-        },
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='text-align: center; font-size: 24px;'>记得点赞评论收藏 👇</p><p style='text-align: center; font-size: 24px; margin-top: 20px;'>有什么问题欢迎留言讨论</p>`,
-          left: 75,
-          top: 350,
-          width: 450,
-          height: 120,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#333333'
-        },
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='text-align: center; font-size: 20px; margin-top: 30px;'>${tagsHtml}</p>`,
-          left: 75,
-          top: 500,
-          width: 450,
-          height: 100,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#333333'
-        }
-      ]
-    };
-  },
+/**
+ * 生成AI PPT（流式）
+ */
+async function generatePPTStream(
+  content: string, 
+  language: string, 
+  model: string, 
+  handler: StreamHandler,
+  templateType: string = 'default'
+): Promise<void> {
+  // 获取提示词
+  const { systemPrompt, userPrompt } = await getPPTPrompt(content, templateType, true);
+  
+  // 调用大语言模型API生成PPT内容（流式）
+  await generateOutlineStream(content, language, model, handler);
+}
 
-  /**
-   * 从大纲生成幻灯片
-   */
-  generateSlidesFromOutline(outline: any[], content: string): any[] {
-    const slides = [];
-    
-    // 创建封面幻灯片
-    const titleText = outline.length > 0 ? outline[0].title : '小红书分享';
-    slides.push(this.createTitleSlide(titleText));
-    
-    // 收集当前章节的所有要点
-    let currentSectionTitle = '';
-    let currentSubsectionTitle = '';
-    let currentPoints = [];
-    
-    // 从大纲生成内容幻灯片
-    for (let i = 0; i < outline.length; i++) {
-      const item = outline[i];
-      
-      if (item.level === 1) {
-        // 如果有收集的要点，先创建前一个子章节的幻灯片
-        if (currentPoints.length > 0 && currentSubsectionTitle) {
-          slides.push(this.createContentSlide(currentSubsectionTitle, currentPoints));
-          currentPoints = [];
-        }
-        
-        // 对于一级标题，创建章节标题幻灯片
-        // 跳过第一个一级标题（已作为封面使用）
-        if (i > 0) {
-          slides.push(this.createSectionSlide(item.title));
-        }
-        currentSectionTitle = item.title;
-        currentSubsectionTitle = '';
-        
-      } else if (item.level === 2) {
-        // 如果有收集的要点，先创建前一个子章节的幻灯片
-        if (currentPoints.length > 0 && currentSubsectionTitle) {
-          slides.push(this.createContentSlide(currentSubsectionTitle, currentPoints));
-          currentPoints = [];
-        }
-        
-        // 对于二级标题，设置当前子章节标题
-        currentSubsectionTitle = item.title;
-        
-      } else if (item.level === 3) {
-        // 对于三级标题，创建内容幻灯片
-        const nextItems = outline.slice(i + 1);
-        const bulletPoints = [item.title];
-        
-        // 收集该三级标题下的所有要点
-        let j = 0;
-        while (i + j + 1 < outline.length && 
-               outline[i + j + 1].level > 3 && 
-               outline[i + j + 1].isBullet) {
-          bulletPoints.push(outline[i + j + 1].title);
-          j++;
-        }
-        
-        // 跳过已处理的要点
-        i += j;
-        
-        slides.push(this.createContentSlide(currentSubsectionTitle, bulletPoints));
-        
-      } else if (item.isBullet) {
-        // 收集要点
-        currentPoints.push(item.title);
-        
-        // 如果是最后一个元素或下一个元素不是要点，创建幻灯片
-        if (i === outline.length - 1 || 
-            !outline[i + 1].isBullet || 
-            outline[i + 1].level <= 2) {
-          if (currentPoints.length > 0 && currentSubsectionTitle) {
-            slides.push(this.createContentSlide(currentSubsectionTitle, currentPoints));
-            currentPoints = [];
-          }
-        }
-      }
-    }
-    
-    // 处理最后可能剩余的要点
-    if (currentPoints.length > 0 && currentSubsectionTitle) {
-      slides.push(this.createContentSlide(currentSubsectionTitle, currentPoints));
-    }
-    
-    // 添加结尾卡片
-    const outlineText = outline.map(item => {
-      if (item.level === 1) return `# ${item.title}`;
-      if (item.level === 2) return `## ${item.title}`;
-      if (item.level === 3) return `### ${item.title}`;
-      if (item.isBullet) return `- ${item.title}`;
-      return '';
-    }).join('\n');
-    
-    slides.push(this.createEndingSlide(outlineText));
-    
-    return slides;
-  },
-
-  /**
-   * 创建封面幻灯片
-   */
-  createTitleSlide(title: string): any {
-    return {
-      id: `slide_${uuidv4()}`,
-      background: {
-        type: 'solid',
-        color: '#FFF1F2' // 小红书风格粉色背景
-      },
-      size: {
-        width: 600,
-        height: 800
-      },
-      elements: [
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='text-align: center; font-size: 60px; font-weight: bold; color: #FF2E63;'>${title}</p>`,
-          left: 75,
-          top: 200,
-          width: 450,
-          height: 200,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#FF2E63' // 小红书风格粉红色
-        },
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: '<p style=\'text-align: center; font-size: 24px;\'>👋 点击查看全文 ➡️</p>',
-          left: 75,
-          top: 500,
-          width: 450,
-          height: 50,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#666666'
-        }
-      ]
-    };
-  },
-
-  /**
-   * 创建节标题幻灯片 (内容页卡片)
-   */
-  createSectionSlide(title: string): any {
-    return {
-      id: `slide_${uuidv4()}`,
-      background: {
-        type: 'solid',
-        color: '#FFFFFF'
-      },
-      size: {
-        width: 600,
-        height: 800
-      },
-      elements: [
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='text-align: center; font-size: 48px; font-weight: bold; color: #FF2E63;'>${title}</p>`,
-          left: 75,
-          top: 300,
-          width: 450,
-          height: 100,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#FF2E63'
-        },
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: '<p style=\'text-align: center; font-size: 20px;\'>- - - - - - - - - - - - - - -</p>',
-          left: 150,
-          top: 400,
-          width: 300,
-          height: 30,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#AAAAAA'
-        }
-      ]
-    };
-  },
-
-  /**
-   * 创建内容幻灯片
-   */
-  createContentSlide(title: string, bulletPoints: string[]): any {
-    const bulletHtml = bulletPoints.map(point => `<li style='margin-bottom: 15px;'>${point}</li>`).join('');
-    
-    return {
-      id: `slide_${uuidv4()}`,
-      background: {
-        type: 'solid',
-        color: '#FFFFFF'
-      },
-      size: {
-        width: 600,
-        height: 800
-      },
-      elements: [
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<p style='font-size: 36px; font-weight: bold; color: #FF2E63;'>${title}</p>`,
-          left: 75,
-          top: 80,
-          width: 450,
-          height: 80,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#FF2E63'
-        },
-        {
-          id: `element_${uuidv4()}`,
-          type: 'text',
-          content: `<ul style='font-size: 28px; color: #333333;'>${bulletHtml}</ul>`,
-          left: 75,
-          top: 180,
-          width: 450,
-          height: 520,
-          rotate: 0,
-          defaultFontName: '',
-          defaultColor: '#333333'
-        }
-      ]
-    };
-  },
-
-  /**
-   * 获取Markdown转HTML的系统提示词
-   */
-  getMarkdownToHTMLSystemPrompt(language: string): string {
-    return language === 'zh' 
-      ? '你是一位HTML专家，专门将Markdown转换成格式良好的HTML片段。请确保生成的HTML片段具有适当的样式和格式，适合在幻灯片中展示。遵循以下要求：1. 使用干净语义化的HTML，2. 使用内联CSS样式美化内容，3. 确保排版美观易读，4. 为标题、列表、强调等元素添加适当的样式。'
-      : 'You are an HTML expert specializing in converting Markdown to well-formatted HTML fragments. Ensure the generated HTML fragments have appropriate styling and formatting suitable for slide presentations. Follow these requirements: 1. Use clean semantic HTML, 2. Apply inline CSS styles to beautify content, 3. Ensure pleasant and readable typography, 4. Add appropriate styling for headings, lists, emphasis, and other elements.';
-  },
-
-  /**
-   * 获取Markdown转HTML的提示词
-   */
-  getMarkdownToHTMLPrompt(content: string, language: string): string {
-    return language === 'zh'
-      ? `将以下Markdown内容转换为格式良好的HTML片段，适合在幻灯片中展示。确保HTML代码具有适当的样式和结构，便于阅读和理解。
-      
-请确保：
-1. 使用语义化HTML标签
-2. 添加适当的内联CSS样式
-3. 保持良好的排版和间距
-4. 保留原始内容的结构和逻辑
-5. 生成的HTML片段应该是自包含的、可直接使用的
-
-Markdown内容:
-${content}
-
-仅返回HTML代码，不要包含任何解释或其他文本。`
-      : `Convert the following Markdown content to a well-formatted HTML fragment suitable for display in slides. Ensure the HTML code has appropriate styling and structure for readability and comprehension.
-
-Please ensure:
-1. Use semantic HTML tags
-2. Add appropriate inline CSS styling
-3. Maintain good typography and spacing
-4. Preserve the structure and logic of the original content
-5. The generated HTML fragment should be self-contained and ready to use
-
-Markdown content:
-${content}
-
-Return only the HTML code, without any explanation or other text.`;
-  },
-
-  /**
-   * 将Markdown转换为HTML（非流式）
-   */
-  async generateMarkdownToHTML(content: string, language: string, model: string): Promise<string> {
-    // 构建提示词
-    const systemPrompt = this.getMarkdownToHTMLSystemPrompt(language);
-    const userPrompt = this.getMarkdownToHTMLPrompt(content, language);
-
-    // 调用LLM API
-    try {
-      const htmlContent = await callOpenAI(systemPrompt, userPrompt, model);
-      return htmlContent.trim();
-    } catch (error) {
-      console.error('Markdown转HTML出错:', error);
-      throw new Error('Markdown转HTML失败');
-    }
-  },
-
-  /**
-   * 将Markdown转换为HTML（流式）
-   */
-  async generateMarkdownToHTMLStream(
-    content: string, 
-    language: string, 
-    model: string, 
-    handler: StreamHandler
-  ): Promise<void> {
-    // 构建提示词
-    const systemPrompt = this.getMarkdownToHTMLSystemPrompt(language);
-    const userPrompt = this.getMarkdownToHTMLPrompt(content, language);
-
-    // 调用LLM API
-    try {
-      await callOpenAIStream(systemPrompt, userPrompt, model, handler, {
-        temperature: 0.5,
-        max_tokens: 16384,
-      });
-    } catch (error) {
-      console.error('流式Markdown转HTML出错:', error);
-      handler.write(JSON.stringify({ 
-        error: '流式Markdown转HTML失败'
-      }));
-      handler.end();
-    }
-  },
+export default {
+  callLLMApi,
+  callOpenAI,
+  callVolcLLMApi,
+  callVolcLLMApiStream,
+  callOpenAIStream,
+  getStreamHandler,
+  generateOutline,
+  generateOutlineStream,
+  getPPTPrompt,
+  generatePPT,
+  generatePPTStream,
+  getOutlineTextByContent,
+  parseOutlineFromContent,
+  createEndingSlide,
+  generateSlidesFromOutline,
+  createTitleSlide,
+  createSectionSlide,
+  createContentSlide,
+  getMarkdownToHTMLSystemPrompt,
+  getMarkdownToHTMLPrompt,
+  generateMarkdownToHTML,
+  generateMarkdownToHTMLStream
 }; 

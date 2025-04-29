@@ -14,18 +14,18 @@ interface VolcengineImageParams {
 
 // API服务器URL - 修改为总是使用本地服务器
 export const SERVER_URL = (import.meta.env.MODE === 'development') 
-  ? 'http://localhost:4001/api' 
-  : 'https://server.pptist.cn'
+  ? 'http://localhost:3002/api' 
+  : '/api'
 
   // export const SERVER_URL = 'https://server.pptist.cn'
 
 // 添加开发环境下的直接API地址
-export const DEV_API_URL = 'http://localhost:4001/api'
+export const DEV_API_URL = 'http://localhost:3002/api'
 
 // 资源URL - 使用本地服务器
 export const ASSET_URL = (import.meta.env.MODE === 'development') 
-  ? 'http://localhost:4001/assets' 
-  : 'https://asset.pptist.cn'
+  ? 'http://localhost:3002/assets' 
+  : '/assets'
 
 // 允许通过环境变量覆盖资源URL
 export const LOCAL_ASSET_URL = import.meta.env.VITE_LOCAL_ASSET_URL || ASSET_URL

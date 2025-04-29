@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="btns">
-        <Button class="btn" type="primary" @click="generatePPT()">生成PPT</Button>
+        <Button class="btn" type="primary" @click="generatePPT()">生成卡片</Button>
         <Button class="btn" @click="step = 'input'">返回大纲</Button>
       </div>
     </div>
@@ -73,7 +73,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useSlidesStore, useMainStore } from '@/store'
+import { useSlidesStore } from '@/store'
 import Button from '@/components/Button.vue'
 import Select from '@/components/Select.vue'
 import TextArea from '@/components/TextArea.vue'
