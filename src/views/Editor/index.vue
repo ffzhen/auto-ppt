@@ -22,9 +22,6 @@
       <div class="md-to-ppt-btn" @click="showMarkdownToPPT = true" title="Markdown转PPT">
         <span>MD→PPT</span>
       </div>
-      <div class="md-to-html-btn" @click="showMarkdownToHTML = true" title="Markdown转HTML幻灯片">
-        <span>MD→HTML</span>
-      </div>
     </div>
   </div>
 
@@ -71,7 +68,7 @@
     closeButton
     @closed="showMarkdownToPPT = false"
   >
-    <MarkdownToPPT  />
+    <MarkdownToPPT @closed="showMarkdownToPPT = false" />
   </Modal>
   
   <!-- Markdown to HTML modal -->

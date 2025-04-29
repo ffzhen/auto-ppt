@@ -6,7 +6,6 @@ import { useSlidesStore } from '@/store'
 import useAddSlidesOrElements from './useAddSlidesOrElements'
 import useSlideHandler from './useSlideHandler'
 import api from '@/services'
-import { words } from 'lodash'
 
 interface ImgPoolItem {
   id: string
@@ -273,24 +272,51 @@ export default () => {
           }
         } else {
           // 如果无法解析，退回到简单替换
-          const firstTextNode = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT).nextNode()
-          if (firstTextNode) {
-            firstTextNode.textContent = text
+          // 替换所有文本节点，而不仅仅是第一个
+          const treeWalker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT)
+          let node = treeWalker.nextNode()
+          let isFirstNode = true
+          
+          while (node) {
+            if (isFirstNode) {
+              // 第一个节点替换为完整文本
+              node.textContent = text
+              isFirstNode = false
+            } 
+            else {
+              // 其他节点清空
+              node.textContent = ''
+            }
+            node = treeWalker.nextNode()
           }
         }
         content = textDoc.body.innerHTML.replace(/font-size:\s*(\d+.?\d+)(px)?/g, `font-size: ${size}px`)
-      } else {
+      } 
+      else {
         // 如果text是纯文本，使用原来的逻辑
         const treeWalker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT)
-
-        const firstTextNode = treeWalker.nextNode()
-        if (firstTextNode) {
-          if (digitPadding && firstTextNode.textContent && firstTextNode.textContent.length === 2 && text.length === 1) {
-            firstTextNode.textContent = '0' + text
+        
+        // 替换所有文本节点，而不仅仅是第一个
+        let node = treeWalker.nextNode()
+        let isFirstNode = true
+        
+        while (node) {
+          if (isFirstNode) {
+            // 第一个节点替换为完整文本
+            if (digitPadding && node.textContent && node.textContent.length === 2 && text.length === 1) {
+              node.textContent = '0' + text
+            } 
+            else {
+              node.textContent = text
+            }
+            isFirstNode = false
+          } 
+          else {
+            // 其他节点清空
+            node.textContent = ''
           }
-          else firstTextNode.textContent = text
+          node = treeWalker.nextNode()
         }
-
       }
       if (doc.body.innerHTML.indexOf('font-size') === -1) {
         const p = doc.querySelector('p')
@@ -322,7 +348,7 @@ export default () => {
     return img
   }
 
-  const getNewImgElement = async (el: PPTImageElement, data?: any): Promise<PPTImageElement> => {
+  const getNewImgElement = (el: PPTImageElement, data?: any): PPTImageElement => {
     // 原有本地图片处理逻辑
     const getLocalImageElement = () => {
       const img = getUseableImage(el)
@@ -353,42 +379,92 @@ export default () => {
     }
     
     // 如果有传入data且包含图像生成配置，则进行AI图像生成
-    if (data && el.imageType && data[el.imageType] && data[el.imageType].imageRenderType === 'doubao') {
-      try {
-        console.log('开始AI图像生成请求...', data[el.imageType].params)
-        
-        // 创建一个临时的加载中元素（如果需要在界面显示加载状态）
-        const loadingImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgMkM2LjUgMiAyIDYuNSAyIDEyQzIgMTcuNSA2LjUgMjIgMTIgMjJDMTcuNSAyMiAyMiAxNy41IDIyIDEyQzIyIDYuNSAxNy41IDIgMTIgMk0xMiA0QzE2LjQgNCAyMCA3LjYgMjAgMTJDMjAgMTYuNCAxNi40IDIwIDEyIDIwQzcuNiAyMCA0IDE2LjQgNCAxMkM0IDcuNiA3LjYgNCAxMiA0TTEyIDEwLjVDMTEuMiAxMC41IDEwLjUgMTEuMiAxMC41IDEyQzEwLjUgMTIuOCAxMS4yIDEzLjUgMTIgMTMuNUMxMi44IDEzLjUgMTMuNSAxMi44IDEzLjUgMTJDMTMuNSAxMS4yIDEyLjggMTAuNSAxMiAxMC41TTcuNSA5QzYuNyA5IDYgOS43IDYgMTAuNUM2IDExLjMgNi43IDEyIDcuNSAxMkM4LjMgMTIgOSAxMS4zIDkgMTAuNUM5IDkuNyA4LjMgOSA3LjUgOU0xNi41IDlDMTUuNyA5IDE1IDkuNyAxNSAxMC41QzE1IDExLjMgMTUuNyAxMiAxNi41IDEyQzE3LjMgMTIgMTggMTEuMyAxOCAxMC41QzE4IDkuNyAxNy4zIDkgMTYuNSA5WiIgZmlsbD0iI2NjY2NjYyIvPjwvc3ZnPg=='
-        
-        // 发起AI图像生成请求
-        const res = await api.generateVolcengineImage({
-          prompt: data[el.imageType].params.text_prompt,
-          workflow_id: '7497907182836858915',
-          api_token: 'pat_1HpbPRDq4dMBICHLYDyv3NQD4RYt6zb6a416ywPPxgql0g7AS0cuqoFjCLX408yi'
-        })
-        
-        console.log('AI图像生成完成:', res)
-        
-        // 返回包含生成图片URL的元素
-        return {
-          ...el,
-          src: res.image_url
-        }
-      } catch (error) {
-        console.error('AI图像生成失败:', error)
-        // 如果AI生成失败，回退到本地图片
-        return getLocalImageElement()
+    if (data && el.imageType && data[el.imageType as string] && data[el.imageType as string].imageRenderType === 'doubao') {
+      // 创建一个临时的加载中元素
+      const loadingImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgMkM2LjUgMiAyIDYuNSAyIDEyQzIgMTcuNSA2LjUgMjIgMTIgMjJDMTcuNSAyMiAyMiAxNy41IDIyIDEyQzIyIDYuNSAxNy41IDIgMTIgMk0xMiA0QzE2LjQgNCAyMCA3LjYgMjAgMTJDMjAgMTYuNCAxNi40IDIwIDEyIDIwQzcuNiAyMCA0IDE2LjQgNCAxMkM0IDcuNiA3LjYgNCAxMiA0TTEyIDEwLjVDMTEuMiAxMC41IDEwLjUgMTEuMiAxMC41IDEyQzEwLjUgMTIuOCAxMS4yIDEzLjUgMTIgMTMuNUMxMi44IDEzLjUgMTMuNSAxMi44IDEzLjUgMTJDMTMuNSAxMS4yIDEyLjggMTAuNSAxMiAxMC41TTcuNSA5QzYuNyA5IDYgOS43IDYgMTAuNUM2IDExLjMgNi43IDEyIDcuNSAxMkM4LjMgMTIgOSAxMS4zIDkgMTAuNUM5IDkuNyA4LjMgOSA3LjUgOU0xNi41IDlDMTUuNyA5IDE1IDkuNyAxNSAxMC41QzE1IDExLjMgMTUuNyAxMiAxNi41IDEyQzE3LjMgMTIgMTggMTEuMyAxOCAxMC41QzE4IDkuNyAxNy4zIDkgMTYuNSA5WiIgZmlsbD0iI2NjY2NjYyIvPjwvc3ZnPg=='
+      
+      // 先返回占位元素
+      const placeholderElement = {
+        ...el,
+        src: loadingImage,
+        isPlaceholder: true, // 添加标记，表示这是一个占位元素
+        originalImageType: el.imageType, // 保存原始imageType以便后续更新
+        originalData: data // 保存原始data以便后续更新
       }
+      
+      // 异步生成图片
+      setTimeout(async () => {
+        try {
+          console.log('开始AI图像生成请求...', data[el.imageType as string].params)
+          
+          // 发起AI图像生成请求
+          const res = await api.generateVolcengineImage({
+            prompt: data[el.imageType as string].params.text_prompt,
+            workflow_id: '7497907182836858915',
+            api_token: 'pat_1HpbPRDq4dMBICHLYDyv3NQD4RYt6zb6a416ywPPxgql0g7AS0cuqoFjCLX408yi'
+          })
+          
+          console.log('AI图像生成完成:', res)
+          
+          // 更新幻灯片中的图片元素
+          updateSlideImage(placeholderElement.id, res.image_url)
+        } catch (error) {
+          console.error('AI图像生成失败:', error)
+          // 如果AI生成失败，回退到本地图片
+          const localElement = getLocalImageElement()
+          updateSlideImage(placeholderElement.id, localElement.src, localElement.clip)
+        }
+      }, 0)
+      
+      return placeholderElement
     }
 
     // 默认返回本地图片元素
     return getLocalImageElement()
   }
 
+  // 更新幻灯片中的图片元素
+  const updateSlideImage = (elementId: string, src: string, clip?: any) => {
+    // 查找包含该元素的幻灯片
+    const slideIndex = slidesStore.slides.findIndex(slide => 
+      slide.elements.some(el => el.id === elementId)
+    )
+    
+    if (slideIndex !== -1) {
+      // 找到幻灯片
+      const slide = slidesStore.slides[slideIndex]
+      
+      // 更新元素
+      const updatedElements = slide.elements.map(el => {
+        if (el.id === elementId && el.type === 'image') {
+          return {
+            ...el,
+            src,
+            isPlaceholder: false, // 移除占位标记
+            clip: clip || (el as PPTImageElement).clip
+          }
+        }
+        return el
+      })
+      
+      // 更新幻灯片
+      const updatedSlide = {
+        ...slide,
+        elements: updatedElements
+      }
+      
+      // 更新store中的幻灯片
+      slidesStore.setSlides(slidesStore.slides.map((s, index) => 
+        index === slideIndex ? updatedSlide : s
+      ))
+    }
+  }
+
   // 修改处理图片元素的逻辑，支持异步生成图片
   const processImageElement = async (el: PPTImageElement, data?: any): Promise<PPTImageElement> => {
     if (el.type === 'image' && el.imageType) {
-      return await getNewImgElement(el, data)
+      const result = getNewImgElement(el, data)
+      return result
     }
     return el
   }
@@ -396,7 +472,8 @@ export default () => {
   // 处理元素，支持异步处理图片
   const processElement = async (el: PPTElement, data?: any): Promise<PPTElement> => {
     if (el.type === 'image') {
-      return await processImageElement(el, data)
+      const result = await processImageElement(el as PPTImageElement, data)
+      return result
     }
     
     // 其他元素类型处理逻辑
@@ -407,7 +484,7 @@ export default () => {
 
   // 处理幻灯片中的所有元素，包括异步图片生成
   const processSlideElements = async (elements: PPTElement[], data?: any): Promise<PPTElement[]> => {
-    const processedElements = []
+    const processedElements: PPTElement[] = []
     for (const element of elements) {
       const processedElement = await processElement(element, data)
       processedElements.push(processedElement)
@@ -430,6 +507,7 @@ export default () => {
   }
 
   const AIPPT = async (templateSlides: Slide[], _AISlides: AIPPTSlide[], imgs?: ImgPoolItem[]) => {
+    debugger
     slidesStore.updateSlideIndex(slidesStore.slides.length - 1)
 
     if (imgs) imgPool.value = imgs
@@ -517,6 +595,7 @@ export default () => {
         })
       }
       else if (item.type === 'content') {
+        debugger
         const data = item.data
 
         // 如果存在 html 字段
@@ -524,8 +603,10 @@ export default () => {
           const _contentTemplates = getUseableTemplates(contentTemplates, 1, 'html', data)
           const contentTemplate = _contentTemplates[Math.floor(Math.random() * _contentTemplates.length)]
 
-          const elements = contentTemplate.elements.map(el => {
-            if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
+          const elements = await Promise.all(contentTemplate.elements.map(async el => {
+            if (el.type === 'image' && el.imageType && imgPool.value.length) {
+              return getNewImgElement(el)
+            }
             if (el.type !== 'text' && el.type !== 'shape') return el
             if (checkTextType(el, 'content')) {
               return getNewTextElement({ el, text: data.content!, maxLine: 20 })
@@ -540,10 +621,10 @@ export default () => {
               return getNewTextElement({ el, text: data.footer, maxLine: 2 })
             }
             if (checkTextType(el, 'html') && data.html) {
-              return getNewTextElement({ el, text: data.html, maxLine: 2, type: "html" })
+              return getNewTextElement({ el, text: data.html, maxLine: 2, type: 'html' })
             }
             return el
-          })
+          }))
           slides.push({
             ...contentTemplate,
             id: nanoid(10),
@@ -583,8 +664,10 @@ export default () => {
           const longestTitle = itemTitles.reduce((longest, current) => current.length > longest.length ? current : longest, '')
           const longestText = itemTexts.reduce((longest, current) => current.length > longest.length ? current : longest, '')
 
-          const elements = contentTemplate.elements.map(el => {
-            if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
+          const elements = await Promise.all(contentTemplate.elements.map(async el => {
+            if (el.type === 'image' && el.imageType && imgPool.value.length) {
+              return getNewImgElement(el)
+            }
             if (el.type !== 'text' && el.type !== 'shape') return el
             if (items.length === 1) {
               const contentItem = items[0]
@@ -616,6 +699,10 @@ export default () => {
             if (checkTextType(el, 'title') && data.title) {
               return getNewTextElement({ el, text: data.title, maxLine: 1 })
             }
+            debugger
+            if (checkTextType(el, 'subtitle') && data.subtitle) {
+              return getNewTextElement({ el, text: data.subtitle, maxLine: 1 })
+            }
             if (checkTextType(el, 'header') && data.header) {
               return getNewTextElement({ el, text: data.header, maxLine: 4 })
             }
@@ -623,7 +710,7 @@ export default () => {
               return getNewTextElement({ el, text: data.footer, maxLine: 2 })
             }
             return el
-          })
+          }))
           slides.push({
             ...contentTemplate,
             id: nanoid(10),
@@ -633,8 +720,10 @@ export default () => {
       }
       else if (item.type === 'end') {
         const endTemplate = endTemplates[Math.floor(Math.random() * endTemplates.length)]
-        const elements = endTemplate.elements.map(el => {
-          if (el.type === 'image' && el.imageType && imgPool.value.length) return getNewImgElement(el)
+        const elements = await Promise.all(endTemplate.elements.map(async el => {
+          if (el.type === 'image' && el.imageType && imgPool.value.length) {
+            return getNewImgElement(el)
+          }
           if (el.type !== 'text' && el.type !== 'shape') return el
 
           // 处理结束页的文本内容
@@ -648,7 +737,7 @@ export default () => {
           }
 
           return el
-        })
+        }))
         slides.push({
           ...endTemplate,
           id: nanoid(10),

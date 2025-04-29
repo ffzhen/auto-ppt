@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-to-ppt">
     <div class="header">
-      <span class="title">Markdown 转 PPT</span>
+      <span class="title">Markdown 转 卡片</span>
       <span class="subtitle" v-if="step === 'template'">从下方挑选合适的模板，开始生成精美PPT</span>
       <span class="subtitle" v-else-if="step === 'outline'">确认下方内容大纲（点击编辑内容），开始选择模板</span>
       <span class="subtitle" v-else>在下方输入Markdown内容，系统将自动生成大纲</span>
@@ -39,7 +39,7 @@
               @click="step = 'template'"
               :disabled="!markdownContent || loading"
             >
-              生成大纲
+              选择模版
             </Button>
           </div>
         </div>
@@ -77,7 +77,6 @@ import { useSlidesStore, useMainStore } from '@/store'
 import Button from '@/components/Button.vue'
 import Select from '@/components/Select.vue'
 import TextArea from '@/components/TextArea.vue'
-import OutlineEditor from '@/components/OutlineEditor.vue'
 import FullscreenSpin from '@/components/FullscreenSpin.vue'
 import message from '@/utils/message'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
@@ -87,21 +86,18 @@ import type { Slide } from '@/types/slides'
 import type { AIPPTSlide } from '@/types/AIPPT'
 
 const emit = defineEmits<{
-  (event: 'close'): void
+  (event: 'closed'): void
 }>()
 
 const slidesStore = useSlidesStore()
 const { templates } = storeToRefs(slidesStore)
 const { addHistorySnapshot } = useHistorySnapshot()
 const { AIPPT } = useAIPPT()
-const mainStore = useMainStore()
 
 // 三步流程状态管理
 const step = ref<'input' | 'template'>('input')
 const markdownContent = ref('')
-const outlineContent = ref('')
-const outlineCreating = ref(false)
-const outlineRef = ref<HTMLElement>()
+
 const inputRef = ref<InstanceType<typeof TextArea>>()
 const loading = ref(false)
 const language = ref<'zh' | 'en'>('zh')
@@ -165,7 +161,7 @@ const generatePPT = async () => {
     const readStream = () => {
       reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
         if (done) {
-          emit('close') // 关闭对话框
+          emit('closed') // 关闭对话框
           loading.value = false
           markdownContent.value = ''
           step.value = 'input'

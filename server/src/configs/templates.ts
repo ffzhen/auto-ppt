@@ -106,7 +106,7 @@ function getBlueTemplatePrompt({ isStream }: TemplatePrompt): string {
   "type": "cover",
   "data": {
     "html": "主标题（7-14字）标题包含富文本格式重点高亮内容，字号为132px，行高为1，文字颜色为白色，高亮内容自动添加下划线且字号为188px，例如：<p style="line-height:1;" ><span style="font-size: 188.1px;"><span style="font-family: 三极刻本雅宋简体;"><span style="color: rgb(255, 255, 255);"><span style="text-decoration: underline;">40岁</span></span></span></span><span style="font-size: 131.7px;"><span style="font-family: 三极刻本雅宋简体;"><span style="color: rgb(255, 255, 255);">以下</span></span></span></p><p style=""><span style="font-size: 131.7px;"><span style="font-family: 三极刻本雅宋简体;"><span style="color: rgb(255, 255, 255);">高净值人群画像</span></span></span></p>",
-    "text": "副标题（7-14字"
+    "text": "副标题（7-14字）"
   }
 }
 
@@ -137,17 +137,16 @@ function getYsTemplatePrompt({ isStream }: TemplatePrompt): string {
 
   return `你是一个生成养生风格卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片：
 
-1. 封面页格式：
+1. 封面页格式有2种，一种是主标题+副标题+背景图片，一种是html标题+背景图片，主副标题由完整标题拆分得到，例如："从春到夏减脂排毒黄金时间"拆分得到"从春到夏"和"减脂排毒黄金时间"例如：
 {
   "type": "cover",
   "data": {
     "html": "主标题（建议7-14字，养生健康主题），可以再带换行和重点内容字号放大，颜色为白色，普通字号为120px，放大字号为166px，font-family: LXGWWenKai;，例如<p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">中医建议：</span></span></span><span style="font-size: 166px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">小暑养生</span></span></span></p>或者<p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">顺应天时：</span></span></span></p><p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></span></span><span style="font-size: 166px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">春季养生</span></span></span></p>",
+    "title": "主标题（由完整标题拆分得到的前半部分）",
+     "text": "副标题（由完整标题拆分得到的后半部分）",
     "background": {
       "imageRenderType": "doubao",
       "params": {
-        "style_id": "v2.1",
-        "resolution": "1024*1536",
-        "n": 1,
         "text_prompt": "根据标题{主标题}生成一张富有意境的养生主题图片，描述要点：
         - 场景选择：
           * 如果是饮食类主题：选择茶室、庭院餐桌、农家小院等场景，突出食材的新鲜与摆盘的精致
@@ -185,35 +184,37 @@ function getYsTemplatePrompt({ isStream }: TemplatePrompt): string {
           * 具有中国传统水墨画意境
           * 现代简约与传统美学的融合",
         "negative_prompt": "避免以下元素：人物、现代化建筑或设施、电子产品或现代器械、医疗场景或器材、商业化元素、塑料制品或工业制品、鲜艳对比的色彩、杂乱或拥挤的构图、过度处理的HDR效果、模糊或失真的画面、任何文字或标识、不自然的边框或装饰",
-        "seed": -1
       }
     }
   }
 }
-  2. 内容页：每页一个主题，每页的主题标题保持一致，每页内容2个分论点说明，例如
+  2. 内容页：每页一个主题，每页的主题标题保持一致，每页内容2个分论点说明，主副标题由完整标题拆分得到，例如："6个超简单的夏日中药香囊配方"拆分得到"6个超简单的"和"夏日中药香囊配方"
+{例如
   {
   "type": "content",
   "data": {
-    "title": "6个超简单的夏日中药香囊配方",
+    "title": "完整标题拆分得到的前半部分",
+    "subtitle": "完整标题拆分得到的后半部分",
     "items": [
       {
         "title": "要点标题1，如：配方1:预防感冒",
         "text": "要点内容1（20-40字），如：生黄芪、炒苍术、防风、辛夷、白芷、蝉蜕、柴胡、桑叶、野菊花、鱼腥草、花椒、川芎、桂枝、炒麦芽砂仁、紫苏叶、桔梗..."
       },
       {
-        "title": "要点标题2，如：效果: 🌟🌟🌟🌟",
-        "text": "要点内容2（20-40字），如：桑叶:祛风清热凉血明目柴胡:解表退热,疏肝解元升举阳气，鱼腥草:清痈排脓,清热通淋年喜光"
+        "title": "要点补充标题1，如：效果: 🌟🌟🌟🌟",
+        "text": "要点补充内容1（20-40字），如：桑叶:祛风清热凉血明目柴胡:解表退热,疏肝解元升举阳气，鱼腥草:清痈排脓,清热通淋年喜光"
       }
     ]
   }
 }{
   "type": "content",
   "data": {
-    "title": "6个超简单的夏日中药香囊配方",
+    "title": "完整标题拆分得到的前半部分",
+    "subtitle": "完整标题拆分得到的后半部分",
     "items": [
       {
-        "title": "配方2:xxxx",
-        "text": "要点内容1（20-40字），如：生黄芪、炒苍术、防风、辛夷、白芷、蝉蜕、柴胡、桑叶、野菊花、鱼腥草、花椒、川芎、桂枝、炒麦芽砂仁、紫苏叶、桔梗..."
+        "title": "要点标题2:xxxx",
+        "text": "要点内容2（20-40字），如：生黄芪、炒苍术、防风、辛夷、白芷、蝉蜕、柴胡、桑叶、野菊花、鱼腥草、花椒、川芎、桂枝、炒麦芽砂仁、紫苏叶、桔梗..."
       },
       ...
     ]
