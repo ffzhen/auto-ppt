@@ -211,7 +211,7 @@ async function callVolcLLMApi(prompt: string, model: string, options: any = {}):
     // 默认参数
     const defaultParams = {
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 16384,
       top_p: 1
     };
     
@@ -310,7 +310,7 @@ async function callVolcLLMApiStream(prompt: string, model: string, handler: Stre
     // 默认参数
     const defaultParams = {
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 16384,
       top_p: 1,
       stream: true
     };
@@ -477,7 +477,7 @@ async function callOpenAIStream(
     const params = {
       model: model || 'qwen-max',
       temperature: options.temperature || 0.7,
-      max_tokens: options.max_tokens || 3000,
+      max_tokens: options.max_tokens || 16384,
       stream: true,
       ...options
     };
@@ -655,108 +655,22 @@ Requirements:
     // 设置模型参数
     const modelParams = {
       temperature: 0.7,
-      max_tokens: 3000
+      max_tokens: 16384
     };
     
     // 使用OpenAI SDK流式API直接生成内容
     await callOpenAIStream(systemPrompt, userPrompt, model, handler, modelParams);
   },
-  
-  getCardPrompt(content: string, language: string): string {
-    return language === 'zh' ? 
-      `请根据以下主题生成一个完整卡片的JSON数据。主题: ${content}` : 
-      `Please generate complete card JSON data based on the following topic. Topic: ${content}`;
-  },
-  getCardSystemPrompt(language: string): string {
-    return language === 'zh' ? 
-      `你是一个生成PPT内容的专家。请严格按照以下JSON格式生成内容，不要添加额外的文本、注释或标记。格式如下：` : 
-      `You are an expert in generating PPT content. Please generate content strictly in the following JSON format without any additional text, comments, or markup. Format as follows:`;
-  },
+
   /**
    * 获取PPT生成的提示词
    */
   async getPPTPrompt(content: string, templateType: string, isStream: boolean = false): Promise<{ systemPrompt: string; userPrompt: string }> {
     const systemPrompt = getTemplatePrompt(templateType, isStream)
-    const userPrompt = `请根据以下内容生成PPT大纲：\n\n${content}`
+    const userPrompt = `请根据以下内容生成卡片内容：\n\n${content}`
     return { systemPrompt, userPrompt }
   },
   
-  /**
-   * 获取默认系统提示词
-   */
-  getDefaultSystemPrompt(isStream: boolean): string {
-    return `你是一个生成卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的文案可以是html片段，自动添加eomji和html高亮元素：
-
-1. 首先输出封面页：标题符合小红书爆款标题特性，主副标题由完整标题拆分得到，例如："一年级家长必看！幼小衔接全攻略"拆分得到"一年级家长必看"和"幼小衔接全攻略"
-{
-  "type": "cover",
-  "data": {
-    "title": "主标题（7-14字）",
-    "text": "副标题（7-14字）"
-  }
-}
-
-2. 内容页有2种格式随机生成，items中至少3个要点,很重要！
-内容1:{
-  "type": "content",
-  "data": {
-    "title": "页面标题",
-    "header":"引言（60-80字，背景和引言）",
-    "footer":"结语（非必选，footer出现时必须有header，20-40字，总结与呼吁）",
-    "items": [
-      {
-        "title": "要点标题1",
-        "text": "要点内容1（20-40字）"
-      },
-      {
-        "title": "要点标题2",
-        "text": "要点内容2（20-40字）"
-      },
-      {
-        "title": "要点标题3",
-        "text": "要点内容3（20-40字）"
-      }
-    ]
-  }
-}
-  内容2:没有header或footer时
-  {
-  "type": "content",
-  "data": {
-    "title": "页面标题",
-    "items": [
-      {
-        "title": "要点标题1（4-6字）",
-        "text": "要点内容1（70-90字）"
-      },
-      {
-        "title": "要点标题2（4-6字）",
-        "text": "要点内容2（70-90字）"
-      },
-      {
-        "title": "要点标题3（4-6字）",
-        "text": "要点内容3（70-90字）"
-      }
-    ]
-  }
-}
-
-3. 最后输出结束页：
-{
-  "type": "end",
-  "data": {
-    "content": "结束内容（70-90字）",
-    "title": "谢谢观看"
-  }
-}
-
-重要说明：
-- ${isStream ? '每个对象输出后会立即处理，所以确保每个对象都独立有效' : '所有对象应该组成一个有效的JSON数组'}
-- 内容对象至少包含3个要点，内容要符合主题风格
-- 所有输出必须是有效的JSON格式，不要包含额外的注释或说明文字
-- ${isStream ? '输出时请每个对象独立成行，不要将多个对象连在一起' : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'}`;
-  },
-
   /**
    * 生成AI PPT（非流式）
    */
@@ -769,7 +683,7 @@ Requirements:
     // 使用OpenAI SDK调用ARK API
     const response = await callOpenAI(systemPrompt, userPrompt, model, {
       temperature: 0.7,
-      max_tokens: 4000
+      max_tokens: 16384
     });
     
     try {
@@ -967,7 +881,7 @@ Requirements:
       console.log('[AIPPT Stream] 调用OpenAI流式API');
       await callOpenAIStream(systemPrompt, userPrompt, model, jsonParserHandler, {
         temperature: 0.7,
-        max_tokens: 10000
+        max_tokens: 16384
       });
       
     } catch (error: any) {
@@ -1038,7 +952,7 @@ Requirements:
     // 设置模型参数
     const modelParams = {
       temperature: 0.7,
-      max_tokens: 3000
+      max_tokens: 16384
     };
     
     // 使用OpenAI SDK调用ARK API
@@ -1461,7 +1375,7 @@ Return only the HTML code, without any explanation or other text.`;
     try {
       await callOpenAIStream(systemPrompt, userPrompt, model, handler, {
         temperature: 0.5,
-        max_tokens: 4000,
+        max_tokens: 16384,
       });
     } catch (error) {
       console.error('流式Markdown转HTML出错:', error);

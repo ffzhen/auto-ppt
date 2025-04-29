@@ -1,10 +1,6 @@
 <template>
-  <template v-if="slides.length">
-    <Screen v-if="screening" />
-    <Editor v-else-if="_isPC" />
-    <Mobile v-else />
-  </template>
-  <FullscreenSpin tip="数据初始化中，请稍等 ..." v-else  loading :mask="false" />
+  <router-view v-if="slides.length" />
+  <FullscreenSpin tip="数据初始化中，请稍等 ..." v-else loading :mask="false" />
 </template>
 
 
@@ -40,38 +36,31 @@ if (import.meta.env.MODE !== 'development') {
 
 onMounted(async () => {
   try {
-    // 检查localStorage中是否有保存的幻灯片数据
-    const savedSlides = localStorage.getItem(LOCALSTORAGE_KEY_SLIDES);
+    // 初始化 IndexedDB 并加载数据
+    await slidesStore.initFromStorage()
     
-    // 如果localStorage中有数据，则直接使用
-    if (savedSlides && JSON.parse(savedSlides).length > 0) {
-      console.log('从本地存储加载幻灯片数据');
-      // 注意：slidesStore的state已经在初始化时从localStorage加载了数据
-    } 
-    // 否则从服务器加载
-    else {
-      // 加载幻灯片数据
-      const slides = await api.getMockData('slides');
-      slidesStore.setSlides(slides);
-      console.log('从服务器加载幻灯片数据成功');
+    // 如果没有数据，则从服务器加载
+    if (slidesStore.slides.length === 0) {
+      const slides = await api.getMockData('slides')
+      slidesStore.setSlides(slides)
+      console.log('从服务器加载幻灯片数据成功')
     }
     
     // 加载模板
     try {
-      await slidesStore.loadTemplatesFromServer();
-      console.log('模板加载成功');
+      await slidesStore.loadTemplatesFromServer()
+      console.log('模板加载成功')
     } catch (error) {
-      console.error('加载模板失败:', error);
+      console.error('加载模板失败:', error)
     }
   } catch (error) {
-    console.error('加载幻灯片数据失败:', error);
-    // 显示错误提示
-    message.error('加载幻灯片数据失败，请检查网络连接', { duration: 5000, closable: true });
+    console.error('初始化失败:', error)
+    message.error('初始化失败，请刷新页面重试', { duration: 5000, closable: true })
   }
 
-  await deleteDiscardedDB();
-  snapshotStore.initSnapshotDatabase();
-});
+  await deleteDiscardedDB()
+  snapshotStore.initSnapshotDatabase()
+})
 
 // 应用注销时向 localStorage 中记录下本次 indexedDB 的数据库ID，用于之后清除数据库
 window.addEventListener('unload', () => {

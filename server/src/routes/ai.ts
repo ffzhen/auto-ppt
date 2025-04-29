@@ -9,4 +9,7 @@ router.post('/aippt_outline', AIController.generateOutline);
 // AI PPT生成
 router.post('/aippt', AIController.generatePPT);
 
+// 火山引擎生成图片
+router.post('/volcengine/image', AIController.generateVolcengineImage);
+
 export default router; 

@@ -118,13 +118,13 @@
     <Modal
       v-model:visible="showConfirmModal"
       :width="400"
-      title="确认删除"
     >
+      <template #title>确认删除</template>
       <p>确定要删除所有幻灯片？此操作无法恢复。</p>
       <div style="text-align: right;">
           <Button @click="showConfirmModal = false">取消</Button>
           <Button type="primary" @click="deleteAllSlides">删除</Button>
-        </div>
+      </div>
     </Modal>
   </div>
 </template>

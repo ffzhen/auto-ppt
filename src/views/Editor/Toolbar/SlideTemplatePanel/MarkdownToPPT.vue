@@ -140,12 +140,11 @@ const generatePPT = async () => {
 
     // 检查模板是否包含必要的幻灯片类型
     const coverSlides = templateSlides.filter(slide => slide.type === 'cover')
-    const contentSlides = templateSlides.filter(slide => slide.type === 'content')
+    // const contentSlides = templateSlides.filter(slide => slide.type === 'content')
     
-    if (coverSlides.length === 0 || contentSlides.length === 0) {
-      throw new Error('模板缺少必要的幻灯片类型（封面或内容）')
+    if (coverSlides.length === 0 ) {
+      throw new Error('模板缺少必要的幻灯片类型（封面）')
     }
-    debugger
     // 调用 AI 服务生成 PPT
     const stream = await api.AIPPT(
       markdownContent.value, 

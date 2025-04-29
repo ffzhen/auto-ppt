@@ -3,6 +3,7 @@ export interface AIPPTCover {
   data: {
     title: string
     text: string
+    html?: string
   }
 }
 

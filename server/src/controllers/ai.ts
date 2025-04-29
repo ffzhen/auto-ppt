@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { AIService } from '../services/ai';
+import imageService from '../services/image';
 
 export class AIController {
   /**
@@ -71,6 +72,57 @@ export class AIController {
     } catch (error) {
       console.error('生成AI PPT出错:', error);
       res.status(500).json({ error: '生成PPT时发生错误' });
+    }
+  }
+
+  // 图片生成（使用Coze工作流API）
+  static async generateVolcengineImage(req: Request, res: Response) {
+    try {
+      const {
+        prompt,
+        workflow_id,
+        api_token,
+      } = req.body
+
+      if (!prompt) {
+        return res.status(400).json({ 
+          error: 'prompt is required' 
+        })
+      }
+
+      if (!workflow_id) {
+        return res.status(400).json({ 
+          error: 'workflow_id is required' 
+        })
+      }
+
+      try {
+        console.log('使用Coze工作流API生成图片...')
+        
+        // 调用Coze工作流API生成图片
+        const result = await imageService.generateImageWithCoze({
+          prompt,
+          workflow_id,
+          api_token
+        })
+        
+        // 封装并返回结果
+        return res.json(result)
+      } catch (apiError) {
+        console.error('API Error:', apiError)
+        
+        // 返回API错误给调用方
+        return res.status(500).json({
+          error: 'Image generation failed',
+          message: apiError instanceof Error ? apiError.message : '未知错误'
+        })
+      }
+    } catch (error) {
+      console.error('Error generating image:', error)
+      return res.status(500).json({
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : '未知错误'
+      })
     }
   }
 } 

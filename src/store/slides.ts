@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { omit } from 'lodash'
 import type { Slide, SlideTheme, PPTElement, PPTAnimation, SlideTemplate } from '@/types/slides'
-import { LOCALSTORAGE_KEY_SLIDES, LOCALSTORAGE_KEY_TITLE, LOCALSTORAGE_KEY_THEME } from '@/configs/storage'
+import { indexedDBService } from '@/services/indexedDB'
 import api from '@/services'
+import message from '@/utils/message'
 
 interface RemovePropData {
   id: string
@@ -35,14 +36,9 @@ const getTemplateCover = (path: string) => api.getAssetUrl(path)
 
 export const useSlidesStore = defineStore('slides', {
   state: (): SlidesState => {
-    // 从本地存储加载数据
-    const savedTitle = localStorage.getItem(LOCALSTORAGE_KEY_TITLE)
-    const savedTheme = localStorage.getItem(LOCALSTORAGE_KEY_THEME)
-    const savedSlides = localStorage.getItem(LOCALSTORAGE_KEY_SLIDES)
-    
     return {
-      title: savedTitle || '未命名演示文稿', // 从localStorage加载幻灯片标题
-      theme: savedTheme ? JSON.parse(savedTheme) : {
+      title: '未命名演示文稿',
+      theme: {
         themeColors: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#4472c4', '#70ad47'],
         fontColor: '#333',
         fontName: '',
@@ -58,13 +54,12 @@ export const useSlidesStore = defineStore('slides', {
           color: '#525252',
           style: 'solid',
         },
-      }, // 从localStorage加载主题
-      slides: savedSlides ? JSON.parse(savedSlides) : [], // 从localStorage加载幻灯片数据
-      slideIndex: 0, // 当前页面索引
-      viewportSize: 1656, // 可视区域宽度基数
-      viewportRatio: 1.33333, // 可视区域比例，高宽比 2208:1656 = 1.33333
-      templates: [
-      ],
+      },
+      slides: [],
+      slideIndex: 0,
+      viewportSize: 1656,
+      viewportRatio: 1.33333,
+      templates: [],
     }
   },
 
@@ -116,22 +111,42 @@ export const useSlidesStore = defineStore('slides', {
   },
 
   actions: {
-    // 保存数据到localStorage
-    saveDataToLocalStorage() {
-      localStorage.setItem(LOCALSTORAGE_KEY_TITLE, this.title)
-      localStorage.setItem(LOCALSTORAGE_KEY_THEME, JSON.stringify(this.theme))
-      localStorage.setItem(LOCALSTORAGE_KEY_SLIDES, JSON.stringify(this.slides))
+    async initFromStorage() {
+      try {
+        const data = await indexedDBService.getData()
+        if (data) {
+          this.title = data.title
+          this.theme = data.theme
+          this.slides = data.slides
+        }
+      } catch (error) {
+        console.error('Failed to load data from IndexedDB:', error)
+        message.error('加载数据失败，请刷新页面重试')
+      }
     },
-    
+
+    async saveDataToStorage() {
+      try {
+        await indexedDBService.saveData({
+          title: this.title,
+          theme: this.theme,
+          slides: this.slides,
+        })
+      } catch (error) {
+        console.error('Failed to save data to IndexedDB:', error)
+        message.error('保存数据失败，请确保有足够的存储空间')
+      }
+    },
+
     setTitle(title: string) {
       if (!title) this.title = '未命名演示文稿'
       else this.title = title
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     setTheme(themeProps: Partial<SlideTheme>) {
       this.theme = { ...this.theme, ...themeProps }
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     setViewportSize(size: number) {
@@ -144,7 +159,7 @@ export const useSlidesStore = defineStore('slides', {
   
     setSlides(slides: Slide[]) {
       this.slides = slides
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     setTemplates(templates: SlideTemplate[]) {
@@ -200,13 +215,13 @@ export const useSlidesStore = defineStore('slides', {
       const addIndex = this.slideIndex + 1
       this.slides.splice(addIndex, 0, ...slides)
       this.slideIndex = addIndex
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     updateSlide(props: Partial<Slide>, slideId?: string) {
       const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
       this.slides[slideIndex] = { ...this.slides[slideIndex], ...props }
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     removeSlideProps(data: RemovePropData) {
@@ -218,7 +233,7 @@ export const useSlidesStore = defineStore('slides', {
       const slide = this.slides[slideIndex]
       
       this.slides[slideIndex] = omit(slide, propsNames) as Slide
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     deleteSlide(slideId: string | string[]) {
@@ -248,7 +263,7 @@ export const useSlidesStore = defineStore('slides', {
   
       this.slideIndex = newIndex
       this.slides = slides
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     updateSlideIndex(index: number) {
@@ -260,7 +275,7 @@ export const useSlidesStore = defineStore('slides', {
       const currentSlideEls = this.slides[this.slideIndex].elements
       const newEls = [...currentSlideEls, ...elements]
       this.slides[this.slideIndex].elements = newEls
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     deleteElement(elementId: string | string[]) {
@@ -268,7 +283,7 @@ export const useSlidesStore = defineStore('slides', {
       const currentSlideEls = this.slides[this.slideIndex].elements
       const newEls = currentSlideEls.filter(item => !elementIdList.includes(item.id))
       this.slides[this.slideIndex].elements = newEls
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     updateElement(data: UpdateElementData) {
@@ -282,7 +297,7 @@ export const useSlidesStore = defineStore('slides', {
         return elementIdList.includes(el.id) ? { ...el, ...props } : el
       })
       this.slides[slideIndex].elements = (elements as PPTElement[])
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   
     removeElementProps(data: RemovePropData) {
@@ -297,28 +312,28 @@ export const useSlidesStore = defineStore('slides', {
         return el.id === id ? omit(el, propsNames) : el
       })
       this.slides[slideIndex].elements = (newElements as PPTElement[])
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     addTableCell(rowIndex: number, colIndex: number) {
       // ... existing code ...
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     deleteTableRow(rowIndex: number) {
       // ... existing code ...
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     deleteTableCol(colIndex: number) {
       // ... existing code ...
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     clearSlideAnimations(slideId?: string) {
       const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
       this.slides[slideIndex].animations = []
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     addAnimation(animation: PPTAnimation) {
@@ -328,7 +343,7 @@ export const useSlidesStore = defineStore('slides', {
   
       animations.splice(addIndex, 0, animation)
       this.slides[this.slideIndex].animations = animations
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     updateAnimation(animation: PPTAnimation) {
@@ -338,7 +353,7 @@ export const useSlidesStore = defineStore('slides', {
       animations[index] = animation
       
       this.slides[this.slideIndex].animations = animations
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     deleteAnimation(animationId: string) {
@@ -348,7 +363,7 @@ export const useSlidesStore = defineStore('slides', {
       animations.splice(index, 1)
       
       this.slides[this.slideIndex].animations = animations
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     sortAnimations() {
@@ -385,7 +400,7 @@ export const useSlidesStore = defineStore('slides', {
         }
       }
       this.slides[this.slideIndex].animations = animations
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
 
     moveAnimation(sourceIndex: number, targetIndex: number) {
@@ -397,7 +412,7 @@ export const useSlidesStore = defineStore('slides', {
       animations.splice(targetIndex, 0, animation)
       
       this.slides[this.slideIndex].animations = animations
-      this.saveDataToLocalStorage()
+      this.saveDataToStorage()
     },
   },
 })

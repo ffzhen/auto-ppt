@@ -66,7 +66,7 @@
   <!-- Markdown to PPT modal -->
   <Modal
     :visible="showMarkdownToPPT" 
-    :width="900"
+    :width="1020"
     :height="700"
     closeButton
     @closed="showMarkdownToPPT = false"
@@ -78,11 +78,20 @@
   <Modal
     :visible="showMarkdownToHTML" 
     :width="800"
-    :mask-closable="false"
+    :closeOnClickMask="false"
     closeButton
     @closed="showMarkdownToHTML = false"
   >
     <MarkdownToHTML @close="showMarkdownToHTML = false" />
+  </Modal>
+
+  <Modal
+    v-model:visible="showExportModal"
+    :width="800"
+    :closeOnClickMask="false"
+  >
+    <template #title>导出幻灯片</template>
+    <ExportSlide />
   </Modal>
 </template>
 
@@ -110,6 +119,7 @@ import MarkdownToPPT from './Toolbar/SlideTemplatePanel/MarkdownToPPT.vue'
 import Modal from '@/components/Modal.vue'
 import SlideTemplatePanel from '@/views/Editor/Toolbar/SlideTemplatePanel/index.vue'
 import MarkdownToHTML from '@/views/Editor/Toolbar/SlideTemplatePanel/MarkdownToHTML.vue'
+// import ExportSlide from './ExportSlide.vue'
 
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
@@ -122,6 +132,7 @@ const remarkHeight = ref(40)
 const showJSONViewer = ref(false)
 const showMarkdownToPPT = ref(false)
 const showMarkdownToHTML = ref(false)
+const showExportModal = ref(false)
 
 useGlobalHotkey()
 usePasteEvent()

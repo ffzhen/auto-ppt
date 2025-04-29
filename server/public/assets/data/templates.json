@@ -6,8 +6,13 @@
     "description": "虚拟资料卡片"
   },
   {
-    "name": "高净值风格卡片", 
+    "name": "高净值风格", 
     "id": "blue_template", 
     "cover": "img/blue.jpg"
+  },
+  {
+    "name": "养生风格1", 
+    "id": "ys_template", 
+    "cover": "img/ys1.jpg"
   }
 ]

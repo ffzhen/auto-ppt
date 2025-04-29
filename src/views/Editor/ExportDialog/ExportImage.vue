@@ -58,12 +58,12 @@
         />
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="title">忽略在线字体：</div>
         <div class="config-item">
           <Switch v-model:value="ignoreWebfont" v-tooltip="'导出时默认忽略在线字体，若您在幻灯片中使用了在线字体，且希望导出后保留相关样式，可选择关闭【忽略在线字体】选项，但要注意这将会增加导出用时。'" />
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="btns">
@@ -103,7 +103,7 @@ const rangeType = ref<'all' | 'current' | 'custom' | 'separate'>('separate')
 const range = ref<[number, number]>([1, slides.value.length])
 const format = ref<'jpeg' | 'png'>('jpeg')
 const quality = ref(1)
-const ignoreWebfont = ref(true)
+const ignoreWebfont = ref(false)
 
 const renderSlides = computed(() => {
   if (rangeType.value === 'all') return slides.value

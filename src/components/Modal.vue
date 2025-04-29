@@ -8,6 +8,9 @@
           @before-enter="contentVisible = true"
         >
           <div class="modal-content" v-show="visible" :style="contentStyle">
+            <div class="modal-header" v-if="$slots.title">
+              <slot name="title"></slot>
+            </div>
             <span class="close-btn" v-if="closeButton" @click="close()"><IconClose /></span>
             <slot v-if="contentVisible"></slot>
           </div>
@@ -26,12 +29,14 @@ const { IconClose } = icons
 const props = withDefaults(defineProps<{
   visible: boolean
   width?: number
+  height?: number
   closeButton?: boolean
   closeOnClickMask?: boolean
   closeOnEsc?: boolean
   contentStyle?: CSSProperties
 }>(), {
   width: 480,
+  height: undefined,
   closeButton: false,
   closeOnClickMask: true,
   closeOnEsc: true,
@@ -49,6 +54,7 @@ const contentVisible = ref(false)
 const contentStyle = computed(() => {
   return {
     width: props.width + 'px',
+    ...(props.height ? { height: props.height + 'px' } : {}),
     ...(props.contentStyle || {})
   }
 })
@@ -150,5 +156,13 @@ const onClickMask = () => {
   to {
     transform: scale3d(.3, .3, .3);
   }
+}
+
+.modal-header {
+  margin: -20px -20px 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid $borderColor;
+  font-size: 16px;
+  font-weight: 500;
 }
 </style>
