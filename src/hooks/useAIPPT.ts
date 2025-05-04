@@ -20,6 +20,8 @@ export default () => {
   const { isEmptySlide } = useSlideHandler()
 
   const imgPool = ref<ImgPoolItem[]>([])
+  // 存储异步生成的封面图片URL，用于后续同步
+  const asyncGeneratedCoverImage = ref<string | null>(null)
 
   const checkTextType = (el: PPTElement, type: TextType) => {
     return (el.type === 'text' && el.textType === type) || (el.type === 'shape' && el.text && el.text.type === type)
@@ -401,7 +403,7 @@ export default () => {
           const res = await api.generateVolcengineImage({
             prompt: data[el.imageType as string].params.text_prompt,
             workflow_id: '7497907182836858915',
-            api_token: 'pat_1HpbPRDq4dMBICHLYDyv3NQD4RYt6zb6a416ywPPxgql0g7AS0cuqoFjCLX408yi'
+            api_token: 'pat_TJMUrXzSSsr2YwFVENZBIe2eAAqxH8d87Jugf4sikAntAOtOYKKNJ6AFWUOvDLAk'
           })
           
           console.log('AI图像生成完成:', res)
@@ -437,6 +439,10 @@ export default () => {
       // 更新元素
       const updatedElements = slide.elements.map(el => {
         if (el.id === elementId && el.type === 'image') {
+          // 如果是封面图片，保存生成的URL供后续同步使用
+          if (slide.type === 'cover') {
+            asyncGeneratedCoverImage.value = src
+          }
           return {
             ...el,
             src,
@@ -457,7 +463,43 @@ export default () => {
       slidesStore.setSlides(slidesStore.slides.map((s, index) => 
         index === slideIndex ? updatedSlide : s
       ))
+
+      // 如果是封面图片生成完成，且需要同步更新其他页面的背景图片
+      if (slide.type === 'cover' && asyncGeneratedCoverImage.value) {
+        synchronizeBackgroundImages()
+      }
     }
+  }
+
+  // 同步背景图片到其他幻灯片
+  const synchronizeBackgroundImages = () => {
+    if (!asyncGeneratedCoverImage.value) return
+
+    // 更新其他幻灯片中的背景图片
+    const updatedSlides = slidesStore.slides.map(slide => {
+      // 跳过封面幻灯片
+      if (slide.type === 'cover') return slide
+      
+      // 查找具有background属性的图片元素
+      const updatedElements = slide.elements.map(el => {
+        if (el.type === 'image' && (el as any).imageType === 'background') {
+          return {
+            ...el,
+            src: asyncGeneratedCoverImage.value as string, // 添加类型断言
+            isPlaceholder: false
+          }
+        }
+        return el
+      })
+      
+      return {
+        ...slide,
+        elements: updatedElements
+      }
+    })
+    
+    // 更新store中的所有幻灯片
+    slidesStore.setSlides(updatedSlides)
   }
 
   // 修改处理图片元素的逻辑，支持异步生成图片
@@ -557,6 +599,18 @@ export default () => {
     const endTemplates = templateSlides.filter(slide => slide.type === 'end')
 
     const slides: Slide[] = []
+    
+    // 检查是否需要同步背景图片
+    const coverSlide = AISlides.find(slide => slide.type === 'cover')
+    // 使用类型安全的方式检查属性存在
+    const needsSyncBackgrounds = coverSlide && 
+      typeof coverSlide.data === 'object' && 
+      'background' in coverSlide.data && 
+      typeof coverSlide.data.background === 'object' &&
+      coverSlide.data.background !== null &&
+      'contentImageAsync' in coverSlide.data.background && 
+      coverSlide.data.background.contentImageAsync === true
+    console.log('needsSyncBackgrounds', needsSyncBackgrounds)
 
     // 使用异步处理幻灯片元素
     for (const item of AISlides) {
@@ -595,7 +649,6 @@ export default () => {
         })
       }
       else if (item.type === 'content') {
-        debugger
         const data = item.data
 
         // 如果存在 html 字段
@@ -609,7 +662,7 @@ export default () => {
             }
             if (el.type !== 'text' && el.type !== 'shape') return el
             if (checkTextType(el, 'content')) {
-              return getNewTextElement({ el, text: data.content!, maxLine: 20 })
+              return getNewTextElement({ el, text: data.content || '', maxLine: 20 })
             }
             if (checkTextType(el, 'title') && data.title) {
               return getNewTextElement({ el, text: data.title, maxLine: 1 })
@@ -621,7 +674,7 @@ export default () => {
               return getNewTextElement({ el, text: data.footer, maxLine: 2 })
             }
             if (checkTextType(el, 'html') && data.html) {
-              return getNewTextElement({ el, text: data.html, maxLine: 2, type: 'html' })
+              return getNewTextElement({ el, text: typeof data.html === 'string' ? data.html : '', maxLine: 2, type: 'html' })
             }
             return el
           }))
@@ -699,9 +752,8 @@ export default () => {
             if (checkTextType(el, 'title') && data.title) {
               return getNewTextElement({ el, text: data.title, maxLine: 1 })
             }
-            debugger
-            if (checkTextType(el, 'subtitle') && data.subtitle) {
-              return getNewTextElement({ el, text: data.subtitle, maxLine: 1 })
+            if (checkTextType(el, 'subtitle') && 'subtitle' in data && data.subtitle) {
+              return getNewTextElement({ el, text: String(data.subtitle), maxLine: 1 })
             }
             if (checkTextType(el, 'header') && data.header) {
               return getNewTextElement({ el, text: data.header, maxLine: 4 })
@@ -747,6 +799,32 @@ export default () => {
     }
     if (isEmptySlide.value) slidesStore.setSlides(slides)
     else addSlidesFromData(slides)
+    
+    // 等待所有幻灯片渲染完成后再同步背景图片
+    // 使用setTimeout确保幻灯片已经渲染到store中
+    setTimeout(() => {
+      // 如果已经有封面图片，进行背景同步
+      if (asyncGeneratedCoverImage.value) {
+        console.log('所有幻灯片渲染完成，开始同步背景图片')
+        synchronizeBackgroundImages()
+      } else {
+        // 设置监听器等待封面图片生成完成
+        console.log('等待封面图片生成...')
+        const syncInterval = setInterval(() => {
+          if (asyncGeneratedCoverImage.value) {
+            console.log('封面图片已生成，开始同步背景图片')
+            synchronizeBackgroundImages()
+            clearInterval(syncInterval)
+          }
+        }, 500)
+        
+        // 最多等待10秒
+        setTimeout(() => {
+          clearInterval(syncInterval)
+          console.log('等待封面图片生成超时')
+        }, 10000)
+      }
+    }, 300) // 给幻灯片渲染留出足够时间
   }
 
   return {

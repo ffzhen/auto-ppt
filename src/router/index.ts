@@ -4,7 +4,17 @@ import ImageGeneratorTest from '@/views/ImageGeneratorTest.vue'
 const routes = [
   {
     path: '/',
+    name: 'projects',
+    component: () => import('@/views/ProjectList/index.vue')
+  },
+  {
+    path: '/editor',
     name: 'editor',
+    component: () => import('@/views/Editor/index.vue')
+  },
+  {
+    path: '/pic',
+    name: 'pic-viewer',
     component: () => import('@/views/Editor/index.vue')
   },
   {

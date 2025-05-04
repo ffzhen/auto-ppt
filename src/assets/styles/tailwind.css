@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --el-color-primary: theme('colors.primary.500');
+    --el-color-primary-light-3: theme('colors.primary.400');
+    --el-color-primary-light-5: theme('colors.primary.300');
+    --el-color-primary-light-7: theme('colors.primary.200');
+    --el-color-primary-light-8: theme('colors.primary.100');
+    --el-color-primary-light-9: theme('colors.primary.50');
+    --el-color-primary-dark-2: theme('colors.primary.600');
+  }
+} 

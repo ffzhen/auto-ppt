@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import PptxGenJS from 'pptxgenjs';
 import { PresentationData } from '../types';
 import JSZip from 'jszip';
+import type { Slide } from '../types/slides'
 
 // Create temp directory if it doesn't exist
 const TEMP_DIR = path.join(__dirname, '../../temp');
@@ -443,5 +444,113 @@ export const RenderService = {
     cleaned = cleaned.replace(/<br\s*\/?>/g, '\n');
     cleaned = cleaned.replace(/<[^>]*>/g, ''); // Remove all remaining HTML tags
     return cleaned;
+  },
+
+  /**
+   * 导出幻灯片为图片
+   */
+  async exportImages(slides: Slide[]): Promise<string[]> {
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox']
+    })
+
+    try {
+      const page = await browser.newPage()
+      
+      // 设置视口大小
+      await page.setViewport({
+        width: 1920,
+        height: 1080,
+        deviceScaleFactor: 2
+      })
+
+      const images: string[] = []
+
+      // 遍历幻灯片，将每一页转换为图片
+      for (let i = 0; i < slides.length; i++) {
+        const slide = slides[i]
+        
+        // 生成幻灯片的HTML
+        const html = `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="UTF-8">
+              <style>
+                body {
+                  margin: 0;
+                  overflow: hidden;
+                }
+                .slide {
+                  width: 1920px;
+                  height: 1080px;
+                  position: relative;
+                  background: ${slide.background?.color || '#ffffff'};
+                }
+                /* 添加更多样式... */
+              </style>
+            </head>
+            <body>
+              <div class="slide">
+                ${this.renderElements(slide.elements)}
+              </div>
+            </body>
+          </html>
+        `
+
+        // 设置页面内容
+        await page.setContent(html)
+
+        // 等待渲染完成
+        await page.waitForSelector('.slide')
+
+        // 截图
+        const imageBuffer = await page.screenshot({
+          type: 'jpeg',
+          quality: 80,
+          fullPage: true
+        })
+
+        // 将图片转换为base64
+        const base64Image = imageBuffer.toString('base64')
+        images.push(`data:image/jpeg;base64,${base64Image}`)
+      }
+
+      return images
+    } finally {
+      await browser.close()
+    }
+  },
+
+  /**
+   * 渲染幻灯片元素
+   */
+  renderElements(elements: any[]): string {
+    if (!elements?.length) return ''
+
+    return elements.map(element => {
+      // 根据元素类型生成对应的HTML
+      switch (element.type) {
+        case 'text':
+          return `
+            <div style="
+              position: absolute;
+              left: ${element.left}px;
+              top: ${element.top}px;
+              width: ${element.width}px;
+              height: ${element.height}px;
+              transform: rotate(${element.rotate || 0}deg);
+              color: ${element.defaultColor};
+              font-family: ${element.defaultFontName};
+            ">
+              ${element.content}
+            </div>
+          `
+        // 添加其他元素类型的渲染...
+        default:
+          return ''
+      }
+    }).join('')
   }
 }; 

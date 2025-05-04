@@ -143,9 +143,10 @@ function getYsTemplatePrompt({ isStream }: TemplatePrompt): string {
   "data": {
     "html": "主标题（建议7-14字，养生健康主题），可以再带换行和重点内容字号放大，颜色为白色，普通字号为120px，放大字号为166px，font-family: LXGWWenKai;，例如<p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">中医建议：</span></span></span><span style="font-size: 166px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">小暑养生</span></span></span></p>或者<p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">顺应天时：</span></span></span></p><p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></span></span><span style="font-size: 166px;"><span style="font-family: LXGWWenKai;"><span style="color: rgb(255, 255, 255);">春季养生</span></span></span></p>",
     "title": "主标题（由完整标题拆分得到的前半部分）",
-     "text": "副标题（由完整标题拆分得到的后半部分）",
+    "text": "副标题（由完整标题拆分得到的后半部分）",
     "background": {
       "imageRenderType": "doubao",
+      "contentImageAsync": true,
       "params": {
         "text_prompt": "根据标题{主标题}生成一张富有意境的养生主题图片，描述要点：
         - 场景选择：

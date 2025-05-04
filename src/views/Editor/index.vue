@@ -90,14 +90,27 @@
     <template #title>导出幻灯片</template>
     <ExportSlide />
   </Modal>
+
+  <Modal
+    :visible="showAutoPPT" 
+    :width="1020"
+    :height="700"
+    closeButton
+    @closed="showAutoPPT = false"
+  >
+    <AutoPPT @closed="showAutoPPT = false" />
+  </Modal>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 import { useMainStore, useSlidesStore } from '@/store'
+import { useProjectStore } from '@/store/projects'
 import useGlobalHotkey from '@/hooks/useGlobalHotkey'
 import usePasteEvent from '@/hooks/usePasteEvent'
+import api from '@/services'
 
 import EditorHeader from './EditorHeader/index.vue'
 import Canvas from './Canvas/index.vue'
@@ -116,10 +129,13 @@ import MarkdownToPPT from './Toolbar/SlideTemplatePanel/MarkdownToPPT.vue'
 import Modal from '@/components/Modal.vue'
 import SlideTemplatePanel from '@/views/Editor/Toolbar/SlideTemplatePanel/index.vue'
 import MarkdownToHTML from '@/views/Editor/Toolbar/SlideTemplatePanel/MarkdownToHTML.vue'
+import AutoPPT from '@/views/Editor/Toolbar/SlideTemplatePanel/AutoPPT.vue'
 // import ExportSlide from './ExportSlide.vue'
 
+const route = useRoute()
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
+const projectStore = useProjectStore()
 const { dialogForExport, showSelectPanel, showSearchPanel, showNotesPanel, showMarkupPanel, showAIPPTDialog } = storeToRefs(mainStore)
 const { currentSlide } = storeToRefs(slidesStore)
 const closeExportDialog = () => mainStore.setDialogForExport('')
@@ -129,7 +145,56 @@ const remarkHeight = ref(40)
 const showJSONViewer = ref(false)
 const showMarkdownToPPT = ref(false)
 const showMarkdownToHTML = ref(false)
+const showAutoPPT = ref(false)
 const showExportModal = ref(false)
+const isLoading = ref(false)
+
+onMounted(async () => {
+  try {
+    const projectId = route.query.id as string
+    
+    if (projectId) {
+      console.log('[Editor] Loading project data for ID:', projectId)
+      isLoading.value = true
+      
+      // Get project data from the database
+      const project = await projectStore.getProject(projectId)
+      
+      if (project && project.slides && project.slides.length > 0) {
+        // If project has slides, use them
+        console.log('[Editor] Project has slides, setting them')
+        slidesStore.setSlides(project.slides)
+      } 
+      else {
+        // If no slides in project, get from mock data
+        console.log('[Editor] Project has no slides, loading from mock data')
+        const slides = await api.getMockData('slides')
+        slidesStore.setSlides(slides)
+        
+        // Save slides to project
+        if (project) {
+          project.slides = slides
+          await projectStore.updateProject(project)
+          console.log('[Editor] Updated project with new slides')
+        }
+      }
+      
+      console.log('[Editor] Slides loaded successfully')
+    } 
+    else {
+      console.warn('[Editor] No project ID provided')
+      // If no project ID, use default mock data
+      const slides = await api.getMockData('slides')
+      slidesStore.setSlides(slides)
+    }
+  } 
+  catch (error) {
+    console.error('[Editor] Error loading project data:', error)
+  } 
+  finally {
+    isLoading.value = false
+  }
+})
 
 useGlobalHotkey()
 usePasteEvent()
@@ -167,7 +232,7 @@ usePasteEvent()
 .floating-buttons {
   position: fixed;
   right: 270px;
-  top: 6px;
+  top: 13px;
   z-index: 100;
   display: flex;
   gap: 10px;

@@ -281,5 +281,26 @@ export const PresentationController = {
         }
       });
     }
+  },
+
+  /**
+   * 导出幻灯片为图片
+   */
+  async exportImages(req: Request, res: Response) {
+    try {
+      const { slides } = req.body
+
+      if (!slides || !Array.isArray(slides)) {
+        return res.status(400).json({ message: '无效的幻灯片数据' })
+      }
+
+      // 调用渲染服务导出图片
+      const images = await RenderService.exportImages(slides)
+
+      res.status(200).json(images)
+    } catch (error) {
+      console.error('导出图片失败:', error)
+      res.status(500).json({ message: '导出图片失败' })
+    }
   }
 }; 

@@ -79,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useSlidesStore } from '@/store'
 import useExport from '@/hooks/useExport'
@@ -94,6 +94,7 @@ import RadioGroup from '@/components/RadioGroup.vue'
 
 const emit = defineEmits<{
   (event: 'close'): void
+  (event: 'export-complete', images: string[]): void
 }>()
 
 const { slides, currentSlide } = storeToRefs(useSlidesStore())
@@ -142,6 +143,87 @@ const expZipImage = () => {
     ignoreWebfont.value
   )
 }
+
+// 导出图片并返回数据URLs（用于小红书发布）
+const exportImagesForXHS = async () => {
+  if (!imageThumbnailsRef.value) return []
+  
+  // 创建一个Promise来获取图片数据
+  return new Promise<string[]>((resolve) => {
+    const originalCreateObjectURL = URL.createObjectURL
+    const imageUrls: string[] = []
+    const totalSlides = renderSlides.value.length
+    
+    // 替换URL.createObjectURL以捕获图片数据
+    URL.createObjectURL = (blob: Blob) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (reader.result) {
+          imageUrls.push(reader.result.toString())
+        }
+        
+        // 检查是否所有图片都已处理
+        if (imageUrls.length === totalSlides) {
+          // 恢复原始函数
+          URL.createObjectURL = originalCreateObjectURL
+          
+          // 返回结果
+          resolve(imageUrls)
+          // 发出完成事件
+          emit('export-complete', imageUrls)
+        }
+      }
+      reader.readAsDataURL(blob)
+      
+      // 返回临时URL
+      return originalCreateObjectURL(blob)
+    }
+    
+    // 使用现有导出功能
+    if (imageThumbnailsRef.value) {
+      exportSingleImage(
+        imageThumbnailsRef.value,
+        renderSlides.value,
+        'png',
+        quality.value,
+        ignoreWebfont.value
+      )
+    }
+    
+    // 防止永久挂起
+    setTimeout(() => {
+      if (imageUrls.length === 0) {
+        URL.createObjectURL = originalCreateObjectURL
+        const placeholder = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==']
+        resolve(placeholder)
+        emit('export-complete', placeholder)
+      } else if (imageUrls.length < totalSlides) {
+        URL.createObjectURL = originalCreateObjectURL
+        resolve(imageUrls)
+        emit('export-complete', imageUrls)
+      }
+    }, 10000)
+  })
+}
+
+// 监听自定义事件
+onMounted(() => {
+  // 创建一个全局事件，可以从外部触发导出
+  window.addEventListener('trigger-xhs-export', async (event: any) => {
+    console.log('Received trigger-xhs-export event')
+    const images = await exportImagesForXHS()
+    
+    // 如果事件有回调，调用它
+    if (event.detail && typeof event.detail.callback === 'function') {
+      event.detail.callback(images)
+    }
+  })
+})
+
+// 暴露给外部使用
+defineExpose({
+  exportImagesForXHS
+})
 </script>
 
 <style lang="scss" scoped>

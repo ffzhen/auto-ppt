@@ -167,26 +167,55 @@ export const useSlidesStore = defineStore('slides', {
     },
     
     // 从服务器加载模板
-    async loadTemplatesFromServer(retryCount = 3): Promise<SlideTemplate[]> {
+    async loadTemplatesFromServer(retryCount = 2): Promise<SlideTemplate[]> {
+      console.log('[SlidesStore] Starting to load templates from server...')
       try {
-        const templates = await api.getMockData('templates');
-        // 处理封面图片URL
-        const templatesWithCovers = templates.map((template: SlideTemplate) => ({
-          ...template,
-          cover: getTemplateCover(template.cover)
-        }));
-        this.setTemplates(templatesWithCovers);
-        return templatesWithCovers;
-      } catch (error) {
+        // Set a timeout for the API call
+        const timeoutPromise = new Promise<SlideTemplate[]>((_, reject) => {
+          setTimeout(() => {
+            reject(new Error('Template loading timed out'))
+          }, 5000) // 5 second timeout
+        })
+        
+        // Actual API call
+        const apiPromise = api.getMockData('templates')
+          .then((templates) => {
+            console.log('[SlidesStore] Templates data received:', templates?.length || 0, 'templates')
+            
+            // If templates data is not valid, throw an error
+            if (!templates || !Array.isArray(templates) || templates.length === 0) {
+              throw new Error('Invalid templates data received')
+            }
+            
+            // Process templates
+            const templatesWithCovers = templates.map((template: SlideTemplate) => ({
+              ...template,
+              cover: getTemplateCover(template.cover)
+            }))
+            console.log('[SlidesStore] Templates processed with covers')
+            
+            this.setTemplates(templatesWithCovers)
+            return templatesWithCovers
+          })
+        
+        // Race between the API call and timeout
+        return await Promise.race([apiPromise, timeoutPromise])
+      } 
+      catch (error) {
+        console.error('[SlidesStore] Error loading templates:', error)
+        
         if (retryCount > 0) {
-          console.warn(`加载模板列表失败，剩余重试次数: ${retryCount - 1}`);
+          console.warn(`[SlidesStore] Loading templates failed, retrying (${retryCount} left)`)
           // 延迟1秒后重试
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          return this.loadTemplatesFromServer(retryCount - 1);
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return this.loadTemplatesFromServer(retryCount - 1)
         }
-        console.error('加载模板列表失败:', error);
-        // 保留当前模板列表
-        return this.templates;
+        
+        console.error('[SlidesStore] Failed to load templates after all retries')
+        message.error('模板加载失败，但您仍然可以使用基本功能')
+        
+        // Return empty array instead of throwing error to allow app to continue
+        return []
       }
     },
     
