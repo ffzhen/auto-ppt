@@ -22,7 +22,7 @@
           <RadioButton style="width: 50%;" value="png">PNG</RadioButton>
         </RadioGroup>
       </div>
-      <!-- <div class="row">
+      <div class="row">
         <div class="title">导出范围：</div>
         <RadioGroup
           class="config-item"
@@ -32,11 +32,20 @@
           <RadioButton style="width: 25%;" value="all">全部</RadioButton>
           <RadioButton style="width: 25%;" value="current">当前页</RadioButton>
           <RadioButton style="width: 25%;" value="custom">自定义</RadioButton>
-          
         </RadioGroup>
-      </div> -->
+      </div>
       <div class="row" v-if="rangeType === 'custom'">
-        <div class="title" :data-range="`（${range[0]} ~ ${range[1]}）`">自定义范围：</div>
+        <div class="title">选择方式：</div>
+        <RadioGroup
+          class="config-item"
+          v-model:value="customSelectionType"
+        >
+          <RadioButton style="width: 50%;" value="range">连续范围</RadioButton>
+          <RadioButton style="width: 50%;" value="individual">自由选择</RadioButton>
+        </RadioGroup>
+      </div>
+      <div class="row" v-if="rangeType === 'custom' && customSelectionType === 'range'">
+        <div class="title" :data-range="`（${range[0]} ~ ${range[1]}）`">范围选择：</div>
         <Slider
           class="config-item"
           range
@@ -46,7 +55,27 @@
           v-model:value="range"
         />
       </div>
-
+      <div class="row custom-slides-selector" v-if="rangeType === 'custom' && customSelectionType === 'individual'">
+        <div class="title">幻灯片选择：</div>
+        <div class="config-item slides-checkbox-container">
+          <div class="slides-checkbox-grid">
+            <div 
+              v-for="(slide, index) in slides" 
+              :key="slide.id"
+              class="slide-checkbox-item"
+            >
+              <Checkbox 
+                :value="selectedSlideIds.includes(slide.id)"
+                @change="toggleSlideSelection(slide.id)"
+              >
+                <div class="slide-number-label">
+                  {{ index + 1 }}
+                </div>
+              </Checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="title">图片质量：</div>
         <Slider
@@ -91,6 +120,7 @@ import Slider from '@/components/Slider.vue'
 import Button from '@/components/Button.vue'
 import RadioButton from '@/components/RadioButton.vue'
 import RadioGroup from '@/components/RadioGroup.vue'
+import Checkbox from '@/components/Checkbox.vue'
 
 const emit = defineEmits<{
   (event: 'close'): void
@@ -105,14 +135,23 @@ const range = ref<[number, number]>([1, slides.value.length])
 const format = ref<'jpeg' | 'png'>('jpeg')
 const quality = ref(1)
 const ignoreWebfont = ref(false)
+const selectedSlideIds = ref<string[]>([])
+const customSelectionType = ref<'range' | 'individual'>('range')
 
 const renderSlides = computed(() => {
   if (rangeType.value === 'all') return slides.value
   if (rangeType.value === 'current') return [currentSlide.value]
-  return slides.value.filter((item, index) => {
-    const [min, max] = range.value
-    return index >= min - 1 && index <= max - 1
-  })
+  if (rangeType.value === 'custom') {
+    if (selectedSlideIds.value.length === 0) {
+      return slides.value.filter((item, index) => {
+        const [min, max] = range.value
+        return index >= min - 1 && index <= max - 1
+      })
+    }
+    
+    return slides.value.filter(slide => selectedSlideIds.value.includes(slide.id))
+  }
+  return slides.value
 })
 
 const { exportImage, exportSingleImage, exportZippedImages, exporting } = useExport()
@@ -124,10 +163,11 @@ const expImage = () => {
     // 逐页导出，每页单独生成一个图片文件
     const slidesToExport = renderSlides.value
     exportSingleImage(imageThumbnailsRef.value, slidesToExport, format.value, quality.value, ignoreWebfont.value)
-  } else {
-    // 普通导出，所有页面合并为一个图片文件
-    exportImage(imageThumbnailsRef.value, format.value, quality.value, ignoreWebfont.value)
+    return
   }
+  
+  // 普通导出，所有页面合并为一个图片文件
+  exportImage(imageThumbnailsRef.value, format.value, quality.value, ignoreWebfont.value)
 }
 
 // 导出图片压缩包
@@ -145,7 +185,7 @@ const expZipImage = () => {
 }
 
 // 导出图片并返回数据URLs（用于小红书发布）
-const exportImagesForXHS = async () => {
+const exportImagesForXHS = () => {
   if (!imageThumbnailsRef.value) return []
   
   // 创建一个Promise来获取图片数据
@@ -168,9 +208,19 @@ const exportImagesForXHS = async () => {
           URL.createObjectURL = originalCreateObjectURL
           
           // 返回结果
-          resolve(imageUrls)
-          // 发出完成事件
-          emit('export-complete', imageUrls)
+          if (imageUrls.length === 0) {
+            URL.createObjectURL = originalCreateObjectURL
+            const placeholder = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==']
+            resolve(placeholder)
+            emit('export-complete', placeholder)
+            return
+          }
+          
+          if (imageUrls.length < totalSlides) {
+            URL.createObjectURL = originalCreateObjectURL
+            resolve(imageUrls)
+            emit('export-complete', imageUrls)
+          }
         }
       }
       reader.readAsDataURL(blob)
@@ -197,13 +247,25 @@ const exportImagesForXHS = async () => {
         const placeholder = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==']
         resolve(placeholder)
         emit('export-complete', placeholder)
-      } else if (imageUrls.length < totalSlides) {
+        return
+      }
+      
+      if (imageUrls.length < totalSlides) {
         URL.createObjectURL = originalCreateObjectURL
         resolve(imageUrls)
         emit('export-complete', imageUrls)
       }
     }, 10000)
   })
+}
+
+const toggleSlideSelection = (id: string) => {
+  if (selectedSlideIds.value.includes(id)) {
+    selectedSlideIds.value = selectedSlideIds.value.filter((i) => i !== id)
+    return
+  }
+  
+  selectedSlideIds.value.push(id)
 }
 
 // 监听自定义事件
@@ -299,5 +361,54 @@ defineExpose({
     width: 100px;
     margin-left: 10px;
   }
+}
+
+// 添加复选框选择器的样式
+.custom-slides-selector {
+  margin-bottom: 10px;
+}
+
+.slides-checkbox-container {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.slides-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 8px;
+}
+
+.slide-checkbox-item {
+  text-align: center;
+}
+
+.slide-number-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #f5f7fa;
+  color: #606266;
+  transition: all 0.2s;
+  margin: 0 auto;
+  border: 2px solid transparent;
+}
+
+:deep(.el-checkbox.is-checked) .slide-number-label {
+  background-color: #ecf5ff;
+  color: #409eff;
+  border-color: #409eff;
+}
+
+:deep(.el-checkbox:hover) .slide-number-label {
+  border-color: #c0c4cc;
 }
 </style>

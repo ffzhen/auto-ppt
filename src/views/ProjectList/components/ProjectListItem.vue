@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import type { Project } from '@/services/database'
+import ThumbnailSlide from '@/views/components/ThumbnailSlide/index.vue'
+import { computed } from 'vue'
+import { Document } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   project: Project
@@ -37,6 +40,18 @@ function handleCommand(command: string) {
       break
   }
 }
+
+// 获取项目第一张幻灯片
+const firstSlide = computed(() => {
+  return props.project.slides && props.project.slides.length > 0 
+    ? props.project.slides[0] 
+    : null
+})
+
+// 检查是否有幻灯片
+const hasSlides = computed(() => {
+  return !!firstSlide.value
+})
 </script>
 
 <template>
@@ -46,7 +61,19 @@ function handleCommand(command: string) {
     role="listitem"
   >
     <div class="grid grid-cols-12 gap-4 items-center">
-      <div class="col-span-6">
+      <div class="col-span-1">
+        <div class="thumbnail-container" v-if="hasSlides">
+          <ThumbnailSlide
+            :slide="firstSlide"
+            :size="60"
+            class="thumbnail"
+          />
+        </div>
+        <div class="thumbnail-placeholder" v-else>
+          <el-icon><Document /></el-icon>
+        </div>
+      </div>
+      <div class="col-span-5">
         <h3 class="text-base font-medium text-gray-900 truncate">
           {{ project.title || '未命名项目' }}
         </h3>
@@ -114,5 +141,35 @@ function handleCommand(command: string) {
 
 .slides-count {
   @apply bg-gradient-to-r from-blue-500 to-cyan-500 text-white border-none;
+}
+
+.thumbnail-container {
+  width: 60px;
+  height: 45px; /* 按照4:3的比例 */
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border: 1px solid #e0e0e0;
+}
+
+.thumbnail {
+  transform-origin: top left;
+}
+
+.thumbnail-placeholder {
+  width: 60px;
+  height: 45px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  
+  .el-icon {
+    font-size: 20px;
+    color: #909399;
+  }
 }
 </style> 
