@@ -151,7 +151,9 @@ export const useProjectStore = defineStore('projects', () => {
   
   async function updateProject(project: Project) {
     try {
-      await database.updateProject(project)
+      // 创建可序列化的副本以避免DataCloneError
+      const serializableProject = JSON.parse(JSON.stringify(project))
+      await database.updateProject(serializableProject)
       const index = projects.value.findIndex(p => p.id === project.id)
       if (index !== -1) {
         projects.value[index] = project

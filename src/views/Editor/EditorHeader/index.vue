@@ -26,6 +26,7 @@
         <div class="menu-item"><IconHamburgerButton class="icon" /></div>
       </Popover>
 
+
       <div class="title">
         <Input 
           class="title-input" 
@@ -40,6 +41,16 @@
           :title="title"
           v-else
         >{{ title }}</div>
+      </div>
+
+      <div class="nav-button" v-tooltip="'返回项目列表'" @click="goToProjectList()">
+        <IconBack class="icon" />
+        <span class="button-text">返回列表</span>
+      </div>
+
+      <div class="nav-button" v-tooltip="'新建项目'" @click="createNewProject()">
+        <IconAdd class="icon" />
+        <span class="button-text">新建项目</span>
       </div>
     </div>
 
@@ -70,12 +81,11 @@
       <div class="menu-item" v-tooltip="'导出'" @click="setDialogForExport('image')">
         <IconDownload class="icon" />
       </div>
-      <div class="menu-item" v-tooltip="'保存'" @click="savePresentationToIndexedDB">
-        <IconSave class="icon" />
+      <div class="save-status" v-tooltip="lastSavedTimeFormatted">
+        <IconDone class="icon" v-if="savedStatus === 'saved'" />
+        <IconLoading class="icon rotating" v-else />
+        <span class="status-text">{{ savedStatus === 'saved' ? '已保存' : '保存中...' }}</span>
       </div>
-      <!-- <a class="github-link" v-tooltip="'Copyright © 2020-PRESENT pipipi-pikachu'" href="https://github.com/pipipi-pikachu/PPTist" target="_blank">
-        <div class="menu-item"><IconGithub class="icon" /></div>
-      </a> -->
     </div>
 
     <Drawer
@@ -92,17 +102,30 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, shallowRef } from 'vue'
+import { nextTick, ref, shallowRef, computed, watch, onMounted } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore, useSlidesStore } from '@/store'
+import { useProjectStore } from '@/store/projects'
 import useScreening from '@/hooks/useScreening'
 import useImport from '@/hooks/useImport'
 import useSlideHandler from '@/hooks/useSlideHandler'
 import useExport from '@/hooks/useExport'
 import type { DialogForExportTypes } from '@/types/export'
-import { Upload as IconUpload, Save as IconSave } from '@icon-park/vue-next'
+import { 
+  Upload as IconUpload, 
+  Save as IconSave, 
+  Back as IconBack, 
+  Add as IconAdd,
+  Loading as IconLoading,
+  DoneAll as IconDone
+} from '@icon-park/vue-next'
+import { useRouter, useRoute } from 'vue-router'
+import { formatDistanceToNow } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
 
-declare const chrome: any;
+// Safe type declaration for Chrome API
+declare let chrome: any
 
 import HotkeyDoc from './HotkeyDoc.vue'
 import FileInput from '@/components/FileInput.vue'
@@ -115,7 +138,7 @@ import ExportImage from '../ExportDialog/ExportImage.vue'
 
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
-const { title } = storeToRefs(slidesStore)
+const { title, slides, theme } = storeToRefs(slidesStore)
 const { enterScreening, enterScreeningFromStart } = useScreening()
 const { importSpecificFile, importPPTXFile, exporting } = useImport()
 const { resetSlides } = useSlideHandler()
@@ -124,11 +147,28 @@ const { exportSingleImage } = useExport()
 const mainMenuVisible = ref(false)
 const hotkeyDrawerVisible = ref(false)
 const editingTitle = ref(false)
-const titleInputRef = ref<InstanceType<typeof Input>>()
+const titleInputRef = ref<ComponentPublicInstance & { focus: () => void }>()
 const titleValue = ref('')
 
+// 保存状态管理
+const savedStatus = ref<'saving' | 'saved'>('saved')
+const lastSavedTime = ref<Date>(new Date())
+const lastSavedTimeFormatted = computed(() => {
+  return `上次保存: ${formatDistanceToNow(lastSavedTime.value, { locale: zhCN, addSuffix: true })}`
+})
+
 // 导出组件实例
-const exportImageRef = shallowRef<InstanceType<typeof ExportImage>>()
+const exportImageRef = shallowRef<ComponentPublicInstance>()
+
+const router = useRouter()
+const route = useRoute()
+const projectStore = useProjectStore()
+
+// Get current project ID from route
+const currentProjectId = computed(() => route.query.id as string)
+
+// 用于标记是否正在创建新项目的状态
+const isCreatingNewProject = ref(false)
 
 const startEditTitle = () => {
   titleValue.value = title.value
@@ -137,8 +177,14 @@ const startEditTitle = () => {
 }
 
 const handleUpdateTitle = () => {
+  // Update the title in the slides store
   slidesStore.setTitle(titleValue.value)
   editingTitle.value = false
+  
+  // Update project data in database to ensure synchronization
+  if (currentProjectId.value) {
+    updateCurrentProject()
+  }
 }
 
 const goLink = (url: string) => {
@@ -159,185 +205,192 @@ const openAIPPTDialog = () => {
   mainStore.setAIPPTDialogState(true)
 }
 
-async function onPublish() {
+// Function to update the current project in the database
+const updateCurrentProject = async () => {
+  const id = currentProjectId.value
+  if (!id) return
+  
   try {
-    // 检查是否安装了插件
-    if (!window.pptistXHSHelper?.isInstalled) {
-      alert('请先安装小红书发布助手插件')
-      return
-    }
-
-    console.log('正在准备发布...')
+    // Set status to saving
+    savedStatus.value = 'saving'
     
-    // 显示加载状态
-    const loadingEl = document.createElement('div')
-    loadingEl.className = 'xhs-exporting-mask'
-    loadingEl.innerHTML = '<div class="spinner"></div><div class="text">正在导出并发布到小红书...</div>'
-    loadingEl.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;'
-    document.body.appendChild(loadingEl)
+    // Get current project data
+    const project = await projectStore.getProject(id)
     
-    try {
-      // 使用插件的 Promise-based API
-      console.log('调用 pptistXHSHelper.publish...')
-      await window.pptistXHSHelper.publish({
-        images: ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg=='],
-        title: title.value || 'Test Title'
-      })
+    if (project) {
+      // Update project with current slides data
+      project.title = title.value
+      project.slides = [...slides.value]
+      project.theme = { ...theme.value }
+      project.timestamp = Date.now()
       
-      alert('发布成功！')
-    } finally {
-      // 移除加载元素
-      loadingEl.remove()
+      // Save to database - this will now update both the project store AND IndexedDB
+      await projectStore.updateProject(project)
+      
+      // Update save status
+      savedStatus.value = 'saved'
+      lastSavedTime.value = new Date()
     }
   } catch (error) {
-    console.error('发布失败:', error)
-    alert('发布失败，请稍后重试')
+    console.error('Failed to update project:', error)
+    // Still set to saved to avoid stuck in saving state
+    savedStatus.value = 'saved'
   }
 }
 
-const generatePicId = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-}
-
-// Fallback to localStorage for testing
-const saveToLocalStorage = (picId: string, data: any) => {
+const createNewProject = async () => {
   try {
-    console.log('Saving presentation to localStorage with ID:', picId)
-    const serializedData = JSON.stringify(data)
-    localStorage.setItem(`pptist-presentation-${picId}`, serializedData)
-    return true
+    // 标记正在创建新项目，防止自动保存触发
+    isCreatingNewProject.value = true
+    
+    // First save current project if needed
+    if (currentProjectId.value) {
+      await updateCurrentProject()
+    }
+    
+    // Then create a new project and navigate to it
+    const projectId = await projectStore.createProject('未命名项目')
+    console.log('[EditorHeader] Created new project with ID:', projectId)
+    
+    // 在导航前先手动设置标题
+    titleValue.value = '未命名项目'
+    slidesStore.setTitle('未命名项目')
+    
+    // Reset slide data before navigation to ensure clean state
+    resetSlides()
+    
+    // 暂停一下，确保状态已更新
+    await nextTick()
+    
+    // Navigate to the new project
+    console.log('[EditorHeader] Navigating to new project...')
+    await router.push(`/editor?id=${projectId}`)
+    
+    // 导航后再次确认标题设置正确
+    setTimeout(() => {
+      console.log('[EditorHeader] Confirming title after navigation')
+      titleValue.value = '未命名项目'
+      slidesStore.setTitle('未命名项目', projectId)
+      
+      // 在导航完成后，重置标记
+      isCreatingNewProject.value = false
+    }, 500)
   } catch (error) {
-    console.error('Failed to save to localStorage:', error)
-    return false
+    isCreatingNewProject.value = false
+    console.error('Failed to create new project:', error)
+    alert('创建项目失败，请重试')
   }
 }
 
-// Get presentation from localStorage
-const getFromLocalStorage = (picId: string) => {
-  try {
-    const data = localStorage.getItem(`pptist-presentation-${picId}`)
-    if (data) {
-      return JSON.parse(data)
-    }
-    return null
-  } catch (error) {
-    console.error('Failed to get from localStorage:', error)
-    return null
+// 监听slides变化，实现自动保存
+watch(() => [...slides.value], () => {
+  // 如果正在创建新项目，不触发自动保存
+  if (isCreatingNewProject.value) {
+    console.log('[EditorHeader] Skipping auto-save because a new project is being created')
+    return
   }
-}
 
-const savePresentationToIndexedDB = async () => {
-  try {
-    // Generate a unique picture ID
-    const picId = generatePicId()
-    console.log('Generated picId:', picId)
-    
-    // Create a deep clone of slides to remove non-serializable objects
-    console.log('Creating serialized copies of slides and theme data...')
-    const serializedSlides = JSON.parse(JSON.stringify(slidesStore.slides))
-    const serializedTheme = JSON.parse(JSON.stringify(slidesStore.theme))
-    
-    // Create the presentation data object with serialized data
-    const presentationData = {
-      id: picId,
-      title: title.value,
-      slides: serializedSlides,
-      theme: serializedTheme,
-      timestamp: new Date().getTime()
-    }
-    console.log('Prepared presentation data for storage')
-    
-    // For testing, try saving to localStorage first
-    const savedToLocalStorage = saveToLocalStorage(picId, presentationData)
-    
-    let savedSuccessfully = false
-    
-    // Use a promise-based approach for IndexedDB operations
+  savedStatus.value = 'saving'
+  
+  // 添加延迟，避免频繁保存
+  const saveTimeout = setTimeout(async () => {
     try {
-      await new Promise<void>((resolve, reject) => {
-        // Open IndexedDB
-        console.log('Opening IndexedDB database...')
-        const request = indexedDB.open('pptist-presentations', 1)
-        
-        // Handle database setup
-        request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-          console.log('Database upgrade needed, creating object store...')
-          const db = (event.target as IDBOpenDBRequest).result
-          if (!db.objectStoreNames.contains('presentations')) {
-            db.createObjectStore('presentations', { keyPath: 'id' })
-          }
-        }
-        
-        // Handle database open success
-        request.onsuccess = (event: Event) => {
-          console.log('Database opened successfully')
-          const db = (event.target as IDBOpenDBRequest).result
-          
-          try {
-            console.log('Creating transaction...')
-            const transaction = db.transaction(['presentations'], 'readwrite')
-            const store = transaction.objectStore('presentations')
-            
-            // Save the presentation data
-            console.log('Storing presentation data...')
-            const saveRequest = store.put(presentationData)
-            
-            saveRequest.onsuccess = () => {
-              console.log('Presentation saved successfully with ID:', picId)
-              savedSuccessfully = true
-              resolve()
-            }
-            
-            saveRequest.onerror = (event) => {
-              console.error('保存失败 (IndexedDB):', saveRequest.error)
-              console.error('Error event:', event)
-              reject(saveRequest.error)
-            }
-            
-            transaction.oncomplete = () => {
-              console.log('Transaction completed')
-              db.close()
-            }
-            
-            transaction.onerror = () => {
-              console.error('Transaction error:', transaction.error)
-              reject(transaction.error)
-            }
-          } catch (err) {
-            console.error('Error during database transaction:', err)
-            reject(err)
-          }
-        }
-        
-        // Handle database open error
-        request.onerror = () => {
-          console.error('Failed to open database:', request.error)
-          reject(request.error)
-        }
-      })
-    } catch (dbError) {
-      console.error('IndexedDB operation failed:', dbError)
-      if (!savedToLocalStorage) {
-        throw new Error('Failed to save presentation (both IndexedDB and localStorage failed)')
+      if (currentProjectId.value) {
+        console.log(`[EditorHeader] Auto-saving slides for project ID: ${currentProjectId.value}`)
+        // Use slidesStore's saveDataToStorage with project ID
+        await slidesStore.saveDataToStorage(currentProjectId.value)
+        console.log('[EditorHeader] Auto-save successful')
+        savedStatus.value = 'saved'
+        lastSavedTime.value = new Date()
+      } else {
+        console.log('[EditorHeader] No project ID found, using default save mechanism')
+        // Fallback to updateCurrentProject when no project ID is available
+        await updateCurrentProject()
       }
+    } catch (error) {
+      console.error('[EditorHeader] Auto-save failed:', error)
+      savedStatus.value = 'saved' // Prevent UI being stuck in saving state
     }
-    
-    // Show success message with fallback to localStorage if needed
-    const shareUrl = `${window.location.origin}/pic?id=${picId}`
-    const storageType = savedSuccessfully ? 'IndexedDB' : 'localStorage'
-    
-    // Show success message
-    alert(`保存成功！(使用${storageType})\n分享链接: ${shareUrl}`)
-    
-    // Copy URL to clipboard
-    navigator.clipboard.writeText(shareUrl)
-      .then(() => console.log('URL已复制到剪贴板'))
-      .catch(err => console.error('无法复制URL:', err))
-    
-  } catch (error: unknown) {
-    console.error('保存失败:', error)
-    alert(`保存失败: ${error instanceof Error ? error.message : '请稍后重试'}`)
+  }, 1000)
+  
+  // Clean up timeout if component unmounts or watch triggers again
+  return () => clearTimeout(saveTimeout)
+}, { deep: true })
+
+// 监听主题变化，实现自动保存
+watch(() => theme.value, () => {
+  // 如果正在创建新项目，不触发自动保存
+  if (isCreatingNewProject.value) {
+    console.log('[EditorHeader] Skipping theme auto-save because a new project is being created')
+    return
   }
+
+  savedStatus.value = 'saving'
+  
+  // 添加延迟，避免频繁保存
+  const saveTimeout = setTimeout(async () => {
+    try {
+      if (currentProjectId.value) {
+        console.log(`[EditorHeader] Auto-saving theme for project ID: ${currentProjectId.value}`)
+        // Use slidesStore's saveDataToStorage with project ID
+        await slidesStore.saveDataToStorage(currentProjectId.value)
+        console.log('[EditorHeader] Auto-save successful')
+        savedStatus.value = 'saved'
+        lastSavedTime.value = new Date()
+      } else {
+        console.log('[EditorHeader] No project ID found, using default save mechanism')
+        // Fallback to updateCurrentProject when no project ID is available
+        await updateCurrentProject()
+      }
+    } catch (error) {
+      console.error('[EditorHeader] Auto-save failed:', error)
+      savedStatus.value = 'saved' // Prevent UI being stuck in saving state
+    }
+  }, 1000)
+  
+  // Clean up timeout if component unmounts or watch triggers again
+  return () => clearTimeout(saveTimeout)
+}, { deep: true })
+
+// 监听项目ID变化，更新标题
+watch(() => currentProjectId.value, async (newId) => {
+  if (newId) {
+    try {
+      const project = await projectStore.getProject(newId)
+      if (project?.title) {
+        slidesStore.setTitle(project.title, newId)
+        titleValue.value = project.title
+      }
+    } catch (error) {
+      console.error('Failed to update title on project ID change:', error)
+    }
+  }
+}, { immediate: true })
+
+// 初始化时设置最后保存时间
+onMounted(() => {
+  // Set initial save time
+  lastSavedTime.value = new Date()
+  
+  // 确保titleValue与当前项目保持同步
+  titleValue.value = title.value
+  
+  // 如果有项目ID，尝试从项目中获取标题
+  if (currentProjectId.value) {
+    projectStore.getProject(currentProjectId.value).then(project => {
+      if (project?.title) {
+        // 如果项目存在并且有标题，使用项目标题更新slidesStore
+        slidesStore.setTitle(project.title, currentProjectId.value)
+        titleValue.value = project.title
+      }
+    }).catch(err => {
+      console.error('Failed to get project title:', err)
+    })
+  }
+})
+
+const goToProjectList = () => {
+  router.push('/')
 }
 </script>
 
@@ -380,11 +433,48 @@ const savePresentationToIndexedDB = async () => {
     color: transparent;
     font-weight: 700;
   }
+  .button-text {
+    margin-left: 5px;
+    font-size: 14px;
+    color: #666;
+  }
 
   &:hover {
     background-color: #f1f1f1;
   }
 }
+
+.save-status {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 10px;
+  margin-left: 8px;
+  color: #666;
+
+  .icon {
+    font-size: 16px;
+    margin-right: 4px;
+    color: #67c23a;
+    
+    &.rotating {
+      animation: rotate 1s linear infinite;
+      color: #909399;
+    }
+  }
+  
+  .status-text {
+    font-size: 12px;
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .group-menu-item {
   height: 30px;
   display: flex;
@@ -440,5 +530,34 @@ const savePresentationToIndexedDB = async () => {
 .github-link {
   display: inline-block;
   height: 30px;
+}
+.nav-button {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 12px;
+  margin: 0 4px;
+  border-radius: $borderRadius;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+
+  .icon {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .button-text {
+    margin-left: 5px;
+    font-size: 13px;
+    color: #666;
+  }
+
+  &:hover {
+    background-color: #f1f1f1;
+    border-color: #e0e0e0;
+  }
 }
 </style>

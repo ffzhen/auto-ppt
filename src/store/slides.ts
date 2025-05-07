@@ -4,6 +4,7 @@ import type { Slide, SlideTheme, PPTElement, PPTAnimation, SlideTemplate } from 
 import { indexedDBService } from '@/services/indexedDB'
 import api from '@/services'
 import message from '@/utils/message'
+import { useProjectStore } from './projects'
 
 interface RemovePropData {
   id: string
@@ -125,28 +126,53 @@ export const useSlidesStore = defineStore('slides', {
       }
     },
 
-    async saveDataToStorage() {
+    async saveDataToStorage(projectId?: string) {
       try {
-        await indexedDBService.saveData({
-          title: this.title,
-          theme: this.theme,
-          slides: this.slides,
-        })
+        if (projectId) {
+          // 使用项目数据库存储
+          const projectStore = useProjectStore()
+          const project = await projectStore.getProject(projectId)
+          
+          if (project) {
+            // 更新项目的slides数据
+            project.slides = this.slides
+            project.title = this.title
+            project.theme = this.theme
+            project.timestamp = Date.now()
+            
+            // 使用项目存储服务保存
+            await projectStore.updateProject(project)
+            console.log('[SlidesStore] Saved slides to project database')
+          } 
+          else {
+            console.error('[SlidesStore] Project not found:', projectId)
+            throw new Error('Project not found')
+          }
+        } 
+        else {
+          // 没有项目ID时使用原有存储方式作为备份
+          console.log('[SlidesStore] No project ID provided, using legacy storage')
+          await indexedDBService.saveData({
+            title: this.title,
+            theme: this.theme,
+            slides: this.slides,
+          })
+        }
       } catch (error) {
-        console.error('Failed to save data to IndexedDB:', error)
+        console.error('Failed to save data:', error)
         message.error('保存数据失败，请确保有足够的存储空间')
       }
     },
 
-    setTitle(title: string) {
+    setTitle(title: string, projectId?: string) {
       if (!title) this.title = '未命名演示文稿'
       else this.title = title
-      this.saveDataToStorage()
+      this.saveDataToStorage(projectId)
     },
   
-    setTheme(themeProps: Partial<SlideTheme>) {
+    setTheme(themeProps: Partial<SlideTheme>, projectId?: string) {
       this.theme = { ...this.theme, ...themeProps }
-      this.saveDataToStorage()
+      this.saveDataToStorage(projectId)
     },
   
     setViewportSize(size: number) {
@@ -157,9 +183,9 @@ export const useSlidesStore = defineStore('slides', {
       this.viewportRatio = viewportRatio
     },
   
-    setSlides(slides: Slide[]) {
+    setSlides(slides: Slide[], projectId?: string) {
       this.slides = slides
-      this.saveDataToStorage()
+      this.saveDataToStorage(projectId)
     },
   
     setTemplates(templates: SlideTemplate[]) {
@@ -235,7 +261,7 @@ export const useSlidesStore = defineStore('slides', {
       }
     },
   
-    addSlide(slide: Slide | Slide[]) {
+    addSlide(slide: Slide | Slide[], projectId?: string) {
       const slides = Array.isArray(slide) ? slide : [slide]
       for (const slide of slides) {
         if (slide.sectionTag) delete slide.sectionTag
@@ -244,13 +270,13 @@ export const useSlidesStore = defineStore('slides', {
       const addIndex = this.slideIndex + 1
       this.slides.splice(addIndex, 0, ...slides)
       this.slideIndex = addIndex
-      this.saveDataToStorage()
+      this.saveDataToStorage(projectId)
     },
   
-    updateSlide(props: Partial<Slide>, slideId?: string) {
+    updateSlide(props: Partial<Slide>, slideId?: string, projectId?: string) {
       const slideIndex = slideId ? this.slides.findIndex(item => item.id === slideId) : this.slideIndex
       this.slides[slideIndex] = { ...this.slides[slideIndex], ...props }
-      this.saveDataToStorage()
+      this.saveDataToStorage(projectId)
     },
   
     removeSlideProps(data: RemovePropData) {

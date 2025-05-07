@@ -160,19 +160,27 @@ onMounted(async () => {
       // Get project data from the database
       const project = await projectStore.getProject(projectId)
       
-      if (project && project.slides && project.slides.length > 0) {
-        // If project has slides, use them
-        console.log('[Editor] Project has slides, setting them')
-        slidesStore.setSlides(project.slides)
-      } 
-      else {
-        // If no slides in project, get from mock data
-        console.log('[Editor] Project has no slides, loading from mock data')
-        const slides = await api.getMockData('slides')
-        slidesStore.setSlides(slides)
+      if (project) {
+        // 确保设置正确的项目标题
+        slidesStore.setTitle(project.title || '未命名项目', projectId)
         
-        // Save slides to project
-        if (project) {
+        if (project.slides && project.slides.length > 0) {
+          // If project has slides, use them
+          console.log('[Editor] Project has slides, setting them')
+          slidesStore.setSlides(project.slides, projectId)
+          
+          // 如果项目有主题，也设置主题
+          if (project.theme) {
+            slidesStore.setTheme(project.theme, projectId)
+          }
+        } 
+        else {
+          // If no slides in project, get from mock data
+          console.log('[Editor] Project has no slides, loading from mock data')
+          const slides = await api.getMockData('slides')
+          slidesStore.setSlides(slides, projectId)
+          
+          // Save slides to project
           project.slides = slides
           await projectStore.updateProject(project)
           console.log('[Editor] Updated project with new slides')
