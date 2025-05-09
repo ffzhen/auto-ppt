@@ -22,7 +22,6 @@ export const initProsemirrorEditor = (
   props: Omit<DirectEditorProps, 'state'>,
   pluginOptions?: PluginOptions,
 ) => {
-  console.log('initProsemirrorEditor', createDocument(content))
   return new EditorView(dom, {
     state: EditorState.create({
       doc: createDocument(content),

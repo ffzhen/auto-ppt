@@ -2,7 +2,7 @@
   <MoveablePanel 
     class="notes-panel" 
     :width="300" 
-    :height="130" 
+    :height="180" 
     title="幻灯片类型标注" 
     :left="-270" 
     :top="90"
@@ -27,6 +27,26 @@
           :options="textTypeOptions"
         />
       </div>
+      <div class="row" v-if="handleElement && (handleElement.type === 'text' || (handleElement.type === 'shape' && handleElement.text)) && textType">
+        <div style="width: 40%;">最大行数：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <input 
+            type="number" 
+            class="input-number" 
+            :value="maxLine" 
+            @input="e => updateMaxLine(parseInt((e.target as HTMLInputElement).value, 10))" 
+            min="1" 
+            max="50"
+          />
+          <button 
+            class="reset-button" 
+            @click="resetMaxLineToDefault" 
+            title="重置为默认值"
+          >
+            重置
+          </button>
+        </div>
+      </div>
       <div class="row" v-else-if="handleElement && handleElement.type === 'image'">
         <div style="width: 40%;">当前图片类型：</div>
         <Select
@@ -42,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore, useSlidesStore } from '@/store'
 import type { ImageType, SlideType, TextType } from '@/types/slides'
@@ -54,6 +74,8 @@ const slidesStore = useSlidesStore()
 const mainStore = useMainStore()
 const { currentSlide } = storeToRefs(slidesStore)
 const { handleElement, handleElementId } = storeToRefs(mainStore)
+
+const currentElementId = ref('')
 
 const slideTypeOptions = ref<{ label: string; value: SlideType | '' }[]>([
   { label: '未标记类型', value: '' },
@@ -98,6 +120,113 @@ const imageType = computed(() => {
   if (handleElement.value.type === 'image') return handleElement.value.imageType || ''
   return ''
 })
+
+const maxLine = computed(() => {
+  console.log('Computing maxLine. Element ID:', handleElementId.value)
+  
+  if (handleElementId.value && currentSlide.value) {
+    const slideIndex = slidesStore.slideIndex
+    if (slideIndex < 0 || !slidesStore.slides[slideIndex]) return 1
+    
+    const freshElement = slidesStore.slides[slideIndex].elements.find(el => el.id === handleElementId.value)
+    console.log('Fresh element found:', freshElement)
+    
+    if (freshElement) {
+      if (freshElement.type === 'text') {
+        console.log('Text element maxLine from direct access:', freshElement.maxLine)
+        return freshElement.maxLine !== undefined && freshElement.maxLine !== null 
+          ? freshElement.maxLine 
+          : getDefaultMaxLine()
+      }
+      if (freshElement.type === 'shape' && freshElement.text) {
+        console.log('Shape text maxLine from direct access:', freshElement.text.maxLine)
+        return freshElement.text.maxLine !== undefined && freshElement.text.maxLine !== null
+          ? freshElement.text.maxLine
+          : getDefaultMaxLine()
+      }
+    }
+  }
+  return 1
+})
+
+const getDefaultMaxLine = (): number => {
+  if (!textType.value) return 1
+  
+  // Default values based on text type, matching useAIPPT.ts logic
+  switch (textType.value) {
+    case 'title': return 1
+    case 'subtitle': return 1
+    case 'content': return 20
+    case 'item': return 4
+    case 'itemTitle': return 1
+    case 'header': return 4
+    case 'footer': return 2
+    case 'html': return 2
+    case 'partNumber': return 1
+    case 'itemNumber': return 1
+    case 'notes': return 10
+    default: return 1
+  }
+}
+
+const updateMaxLine = (value: number) => {
+  if (!handleElement.value || isNaN(value) || value < 1) return
+  
+  console.log('Updating maxLine to:', value)
+  
+  // 获取当前幻灯片索引和元素索引
+  const slideIndex = slidesStore.slideIndex
+  const elementIndex = slidesStore.slides[slideIndex].elements.findIndex(el => el.id === handleElementId.value)
+  
+  if (elementIndex === -1) {
+    console.error('Element not found:', handleElementId.value)
+    return
+  }
+  
+  // 直接修改store中的数据
+  if (handleElement.value.type === 'text') {
+    console.log('Updating text element maxLine:', handleElementId.value)
+    // 创建元素的深拷贝并更新maxLine
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    element.maxLine = value
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  if (handleElement.value.type === 'shape' && handleElement.value.text) {
+    console.log('Updating shape text maxLine:', handleElementId.value)
+    // 创建元素的深拷贝
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    if (!element.text) element.text = {}
+    element.text.maxLine = value
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  // 强制立即保存
+  slidesStore.saveDataToStorage()
+  
+  setTimeout(() => {
+    // 验证更新是否成功
+    const updatedElement = slidesStore.slides[slideIndex].elements[elementIndex]
+    if (updatedElement.type === 'text') {
+      console.log('Text element maxLine after update:', updatedElement.maxLine)
+    }
+    if (updatedElement.type === 'shape' && updatedElement.text) {
+      console.log('Shape text maxLine after update:', updatedElement.text.maxLine)
+    }
+  }, 100)
+}
+
+const resetMaxLineToDefault = () => {
+  updateMaxLine(getDefaultMaxLine())
+}
 
 const updateSlide = (type: SlideType | '') => {
   if (type) slidesStore.updateSlide({ type })
@@ -153,9 +282,93 @@ const updateElement = (type: TextType | ImageType | '') => {
   }
 }
 
+onMounted(() => {
+  watch(handleElementId, (newId) => {
+    if (newId) {
+      currentElementId.value = newId
+    }
+  }, { immediate: true })
+})
+
+const refreshElementData = () => {
+  console.log('Refreshing element data for ID:', handleElementId.value)
+  
+  if (handleElementId.value && handleElement.value) {
+    currentElementId.value = handleElementId.value
+    console.log('Current element after refresh:', currentSlide.value.elements.find(el => el.id === handleElementId.value))
+  }
+}
+
+watch(textType, (newType, oldType) => {
+  if (newType && handleElement.value) {
+    // 只在以下情况下重置maxLine:
+    // 1. 从未设置类型变为有类型 (oldType为空)
+    // 2. 当前元素没有自定义的maxLine值
+    const slideIndex = slidesStore.slideIndex
+    if (slideIndex >= 0 && slidesStore.slides[slideIndex]) {
+      const element = slidesStore.slides[slideIndex].elements.find(el => el.id === handleElementId.value)
+      
+      if (element) {
+        let currentMaxLine = undefined
+        if (element.type === 'text') {
+          currentMaxLine = element.maxLine
+        } 
+        else if (element.type === 'shape' && element.text) {
+          currentMaxLine = element.text.maxLine
+        }
+        
+        console.log('Current maxLine when changing textType:', currentMaxLine)
+        
+        // 只有在maxLine不存在时才重置为默认值
+        if (currentMaxLine === undefined || currentMaxLine === null) {
+          console.log('Resetting maxLine to default for new textType')
+          resetMaxLineToDefault()
+        } 
+        else {
+          console.log('Keeping existing maxLine value:', currentMaxLine)
+        }
+      }
+    }
+    
+    refreshElementData()
+  }
+})
+
 const close = () => {
   mainStore.setMarkupPanelState(false)
 }
+
+watch(() => mainStore.showMarkupPanel, (isVisible) => {
+  if (isVisible && handleElementId.value) {
+    console.log('Panel opened. Refreshing current element state...')
+    
+    // 强制重新计算maxLine
+    setTimeout(() => {
+      // 直接访问store中的元素数据
+      const slideIndex = slidesStore.slideIndex
+      if (slideIndex >= 0 && slidesStore.slides[slideIndex]) {
+        const element = slidesStore.slides[slideIndex].elements.find(el => el.id === handleElementId.value)
+        
+        if (element) {
+          console.log('==== PANEL OPENED: ELEMENT STATE ====')
+          if (element.type === 'text') {
+            console.log('Text element direct maxLine:', element.maxLine)
+          } 
+          else if (element.type === 'shape' && element.text) {
+            console.log('Shape text direct maxLine:', element.text.maxLine)
+          }
+          console.log('===================================')
+          
+          // 触发ui更新
+          currentElementId.value = handleElementId.value + '_refresh_' + Date.now()
+          setTimeout(() => {
+            currentElementId.value = handleElementId.value
+          }, 10)
+        }
+      }
+    }, 100)
+  }
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>
@@ -187,5 +400,35 @@ const close = () => {
   border: 1px dashed #ccc;
   border-radius: $borderRadius;
   margin-top: 5px;
+}
+.input-number {
+  flex: 1;
+  height: 24px;
+  padding: 0 5px;
+  border: 1px solid #d9d9d9;
+  border-radius: $borderRadius;
+  outline: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+}
+
+.reset-button {
+  margin-left: 5px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: $borderRadius;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #e6f7ff;
+    border-color: #1890ff;
+  }
 }
 </style>

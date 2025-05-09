@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed, onMounted } from 'vue'
 import { useDatabase, type Project } from '@/services/database'
+import type { PPTElement } from '@/types/slides'
 
 export const useProjectStore = defineStore('projects', () => {
   const database = useDatabase()
@@ -151,6 +152,27 @@ export const useProjectStore = defineStore('projects', () => {
   
   async function updateProject(project: Project) {
     try {
+      console.log('Updating project:', project.id)
+      console.log('Project slides count:', project.slides.length)
+      
+      // Check if maxLine property exists in any text elements
+      let textElementsWithMaxLine = 0
+      let shapeElementsWithMaxLine = 0
+      
+      project.slides.forEach(slide => {
+        slide.elements.forEach((element: any) => {
+          if (element.type === 'text' && 'maxLine' in element) {
+            textElementsWithMaxLine++
+          }
+          if (element.type === 'shape' && element.text && 'maxLine' in element.text) {
+            shapeElementsWithMaxLine++
+          }
+        })
+      })
+      
+      console.log('Text elements with maxLine:', textElementsWithMaxLine)
+      console.log('Shape elements with maxLine:', shapeElementsWithMaxLine)
+      
       // 创建可序列化的副本以避免DataCloneError
       const serializableProject = JSON.parse(JSON.stringify(project))
       await database.updateProject(serializableProject)

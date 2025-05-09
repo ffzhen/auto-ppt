@@ -133,7 +133,6 @@ const handleSelect = (option: SelectOption) => {
 .select {
   width: 100%;
   height: 32px;
-  padding-right: 32px;
   border-radius: $borderRadius;
   transition: border-color .25s;
   font-size: 13px;

@@ -139,7 +139,7 @@ function handleBackgroundMessage(message) {
 }
 
 // 初始连接
-connectToBackground();
+// connectToBackground();
 
 // // 监听网页发来的消息
 // window.addEventListener('message', (event) => {

@@ -14,5 +14,10 @@
     "name": "养生风格1", 
     "id": "ys_template", 
     "cover": "img/ys1.jpg"
+  },
+  {
+    "name": "模版004", 
+    "id": "template004", 
+    "cover": "img/template004.jpg"
   }
 ]

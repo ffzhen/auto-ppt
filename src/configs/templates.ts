@@ -159,11 +159,31 @@ export const templates: SlideTemplate[] = [
     name: '虚拟资料卡片',
     id: 'doc_template',
     cover: 'img/虚拟.jpg',
+    textConfig: {
+      title: { maxLine: 2 },
+      subtitle: { maxLine: 3 },
+      content: { maxLine: 15 },
+      item: { maxLine: 5 },
+      itemTitle: { maxLine: 2 },
+      notes: { maxLine: 10 },
+      header: { maxLine: 3 },
+      footer: { maxLine: 2 },
+      html: { maxLine: 20 }
+    }
   },
   {
     name: '小红书风格卡片',
     id: 'redbook_template',
     cover: 'img/redbook.jpg',
+    textConfig: {
+      title: { maxLine: 1 },
+      subtitle: { maxLine: 2 },
+      content: { maxLine: 8 },
+      item: { maxLine: 3 },
+      itemTitle: { maxLine: 1 },
+      header: { maxLine: 5 },
+      footer: { maxLine: 3 }
+    }
   }
 ]
 

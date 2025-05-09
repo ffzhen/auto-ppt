@@ -186,6 +186,7 @@ export interface PPTTextElement extends PPTBaseElement {
   paragraphSpace?: number
   vertical?: boolean
   textType?: TextType
+  maxLine?: number
 }
 
 
@@ -312,6 +313,7 @@ export interface ShapeText {
   defaultColor: string
   align: ShapeTextAlign
   type?: TextType
+  maxLine?: number
 }
 
 /**
@@ -766,8 +768,23 @@ export interface SlideTheme {
   shadow: PPTElementShadow
 }
 
+export interface SlideTemplateTextConfig {
+  title?: { maxLine?: number };
+  subtitle?: { maxLine?: number };
+  content?: { maxLine?: number };
+  item?: { maxLine?: number };
+  itemTitle?: { maxLine?: number };
+  notes?: { maxLine?: number };
+  header?: { maxLine?: number };
+  footer?: { maxLine?: number };
+  partNumber?: { maxLine?: number };
+  itemNumber?: { maxLine?: number };
+  html?: { maxLine?: number };
+}
+
 export interface SlideTemplate {
   name: string
   id: string
   cover: string
+  textConfig?: SlideTemplateTextConfig
 }

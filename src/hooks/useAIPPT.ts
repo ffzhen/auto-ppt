@@ -185,6 +185,11 @@ export default () => {
     const width = el.width - padding * 2 - 10
 
     let content = el.type === 'text' ? el.content : el.text!.content
+    
+    // 使用元素中配置的maxLine（如果存在），否则使用传入的maxLine
+    const effectiveMaxLine = el.type === 'text' 
+      ? (el.maxLine || maxLine)
+      : (el.text?.maxLine || maxLine)
 
     // 检查text是否包含HTML标签
     const containsHtmlTags = /<[^>]*>/g.test(text)
@@ -195,7 +200,7 @@ export default () => {
       fontSize: fontInfo.fontSize,
       fontFamily: fontInfo.fontFamily,
       width,
-      maxLine,
+      maxLine: effectiveMaxLine,
     })
 
     const parser = new DOMParser()
@@ -328,10 +333,85 @@ export default () => {
       // 保留原始样式结构，仅更新字体大小值
       content = doc.body.innerHTML.replace(/font-size:\s*(\d+.?\d+)(px)?/g, `font-size: ${size}px`)
     }
-
+    console.log('返回元素', el.type === 'text' ?
+      { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } :
+      { ...el, text: { ...el.text!, content } })
     return el.type === 'text' ?
       { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } :
       { ...el, text: { ...el.text!, content } }
+  }
+
+  const createSlideTextElement = (
+    el: PPTTextElement | PPTShapeElement, 
+    data: any,
+  ): PPTTextElement | PPTShapeElement => {
+    // Get text type
+    const textType = el.type === 'text' ? el.textType : el.text?.type
+    
+    // 先获取元素自身的maxLine
+    const elementMaxLine = el.type === 'text' ? el.maxLine : el.text?.maxLine
+    
+    // 如果元素没有maxLine，则使用默认值
+    const maxLine = elementMaxLine !== undefined ? elementMaxLine : getDefaultMaxLineValue(textType)
+    
+    if (data.content) {
+      return getNewTextElement({ 
+        el, 
+        text: data.content || '', 
+        maxLine
+      })
+    }
+    if (data.title) {
+      return getNewTextElement({ 
+        el, 
+        text: data.title, 
+        maxLine
+      })
+    }
+    if (data.header) {
+      return getNewTextElement({ 
+        el, 
+        text: data.header, 
+        maxLine
+      })
+    }
+    if (data.footer) {
+      return getNewTextElement({ 
+        el, 
+        text: data.footer, 
+        maxLine
+      })
+    }
+    if (data.html) {
+      return getNewTextElement({ 
+        el, 
+        text: typeof data.html === 'string' ? data.html : '', 
+        maxLine,
+        type: 'html' 
+      })
+    }
+    
+    return el
+  }
+
+  // 将默认值逻辑抽取为单独的函数以便复用
+  const getDefaultMaxLineValue = (textType?: TextType): number => {
+    if (!textType) return 1
+    
+    switch (textType) {
+      case 'title': return 1
+      case 'subtitle': return 1
+      case 'content': return 20
+      case 'item': return 4
+      case 'itemTitle': return 1
+      case 'header': return 4
+      case 'footer': return 2
+      case 'html': return 2
+      case 'partNumber': return 1
+      case 'itemNumber': return 1
+      case 'notes': return 10
+      default: return 1
+    }
   }
 
   const getUseableImage = (el: PPTImageElement): ImgPoolItem | null => {
@@ -549,13 +629,11 @@ export default () => {
   }
 
   const AIPPT = async (templateSlides: Slide[], _AISlides: AIPPTSlide[], imgs?: ImgPoolItem[]) => {
-    debugger
     slidesStore.updateSlideIndex(slidesStore.slides.length - 1)
 
     if (imgs) imgPool.value = imgs
 
     const AISlides: AIPPTSlide[] = []
-    console.log(_AISlides)
     for (const template of _AISlides) {
       if (template.type === 'content') {
         const items = template.data.items || []
@@ -610,7 +688,6 @@ export default () => {
       coverSlide.data.background !== null &&
       'contentImageAsync' in coverSlide.data.background && 
       coverSlide.data.background.contentImageAsync === true
-    console.log('needsSyncBackgrounds', needsSyncBackgrounds)
 
     // 使用异步处理幻灯片元素
     for (const item of AISlides) {
@@ -629,13 +706,13 @@ export default () => {
             tempElements.push(el)
           }
           else if (checkTextType(el, 'title') && item.data.title) {
-            tempElements.push(getNewTextElement({ el, text: item.data.title, maxLine: 1 }))
+            tempElements.push(createSlideTextElement(el, { title: item.data.title }))
           }
           else if (checkTextType(el, 'subtitle') && item.data.text) {
-            tempElements.push(getNewTextElement({ el, text: item.data.text, maxLine: 3 }))
+            tempElements.push(createSlideTextElement(el, { content: item.data.text }))
           }
           else if (checkTextType(el, 'html') && item.data.html) {
-            tempElements.push(getNewTextElement({ el, text: item.data.html, maxLine: 3, type: 'html' }))
+            tempElements.push(createSlideTextElement(el, { html: item.data.html }))
           }
           else {
             tempElements.push(el)
@@ -662,19 +739,19 @@ export default () => {
             }
             if (el.type !== 'text' && el.type !== 'shape') return el
             if (checkTextType(el, 'content')) {
-              return getNewTextElement({ el, text: data.content || '', maxLine: 20 })
+              return createSlideTextElement(el, { content: data.content || '' })
             }
             if (checkTextType(el, 'title') && data.title) {
-              return getNewTextElement({ el, text: data.title, maxLine: 1 })
+              return createSlideTextElement(el, { title: data.title })
             }
             if (checkTextType(el, 'header') && data.header) {
-              return getNewTextElement({ el, text: data.header, maxLine: 4 })
+              return createSlideTextElement(el, { header: data.header })
             }
             if (checkTextType(el, 'footer') && data.footer) {
-              return getNewTextElement({ el, text: data.footer, maxLine: 2 })
+              return createSlideTextElement(el, { footer: data.footer })
             }
             if (checkTextType(el, 'html') && data.html) {
-              return getNewTextElement({ el, text: typeof data.html === 'string' ? data.html : '', maxLine: 2, type: 'html' })
+              return createSlideTextElement(el, { html: data.html })
             }
             return el
           }))
@@ -725,7 +802,7 @@ export default () => {
             if (items.length === 1) {
               const contentItem = items[0]
               if (checkTextType(el, 'content') && contentItem.text) {
-                return getNewTextElement({ el, text: contentItem.text, maxLine: 6 })
+                return createSlideTextElement(el, { content: contentItem.text }, contentTemplate)
               }
             }
             else {
@@ -733,33 +810,33 @@ export default () => {
                 const index = sortedTitleItemIds.findIndex(id => id === el.id)
                 const contentItem = items[index]
                 if (contentItem && contentItem.title) {
-                  return getNewTextElement({ el, text: contentItem.title, longestText: longestTitle, maxLine: 1 })
+                  return createSlideTextElement(el, { title: contentItem.title, longestText: longestTitle })
                 }
               }
               if (checkTextType(el, 'item')) {
                 const index = sortedTextItemIds.findIndex(id => id === el.id)
                 const contentItem = items[index]
                 if (contentItem && contentItem.text) {
-                  return getNewTextElement({ el, text: contentItem.text, longestText, maxLine: 4 })
+                  return createSlideTextElement(el, { content: contentItem.text, longestText })
                 }
               }
               if (checkTextType(el, 'itemNumber')) {
                 const index = sortedNumberItemIds.findIndex(id => id === el.id)
                 const offset = item.offset || 0
-                return getNewTextElement({ el, text: index + offset + 1 + '', maxLine: 1, digitPadding: true })
+                return createSlideTextElement(el, { content: index + offset + 1 + '', digitPadding: true })
               }
             }
             if (checkTextType(el, 'title') && data.title) {
-              return getNewTextElement({ el, text: data.title, maxLine: 1 })
+              return createSlideTextElement(el, { title: data.title })
             }
             if (checkTextType(el, 'subtitle') && 'subtitle' in data && data.subtitle) {
-              return getNewTextElement({ el, text: String(data.subtitle), maxLine: 1 })
+              return createSlideTextElement(el, { subtitle: String(data.subtitle) })
             }
             if (checkTextType(el, 'header') && data.header) {
-              return getNewTextElement({ el, text: data.header, maxLine: 4 })
+              return createSlideTextElement(el, { header: data.header })
             }
             if (checkTextType(el, 'footer') && data.footer) {
-              return getNewTextElement({ el, text: data.footer, maxLine: 2 })
+              return createSlideTextElement(el, { footer: data.footer })
             }
             return el
           }))
@@ -780,12 +857,12 @@ export default () => {
 
           // 处理结束页的文本内容
           if (checkTextType(el, 'content') && item.data && item.data.content) {
-            return getNewTextElement({ el, text: item.data.content, maxLine: 8 })
+            return createSlideTextElement(el, { content: item.data.content })
           }
 
           // 处理结束页的标题
           if (checkTextType(el, 'title') && item.data && item.data.title) {
-            return getNewTextElement({ el, text: item.data.title, maxLine: 2 })
+            return createSlideTextElement(el, { title: item.data.title })
           }
 
           return el
