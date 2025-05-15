@@ -19,5 +19,10 @@
     "name": "模版004", 
     "id": "template004", 
     "cover": "img/template004.jpg"
+  },
+  {
+    "name": "模版005", 
+    "id": "template005", 
+    "cover": "img/template005.jpg"
   }
 ]

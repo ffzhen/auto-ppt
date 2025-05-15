@@ -187,6 +187,7 @@ export interface PPTTextElement extends PPTBaseElement {
   vertical?: boolean
   textType?: TextType
   maxLine?: number
+  autoVerticalCenter?: boolean
 }
 
 
@@ -314,6 +315,7 @@ export interface ShapeText {
   align: ShapeTextAlign
   type?: TextType
   maxLine?: number
+  autoVerticalCenter?: boolean
 }
 
 /**

@@ -121,19 +121,77 @@ export default () => {
     fontFamily,
     width,
     maxLine,
+    fixContainer,
+    height
   }: {
     text: string
     fontSize: number
     fontFamily: string
     width: number
     maxLine: number
+    fixContainer?: boolean
+    height?: number
   }) => {
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')!
-
-    let newFontSize = fontSize
     const minFontSize = 10
-
+    const maxFontSize = 350 // 设置最大字体大小上限
+    console.log('fixContainer', fixContainer, height)
+    if (fixContainer && height) {
+      if (!text) return fontSize
+      // 提取纯文本
+      let plainText = text
+      if (/<[a-z][\s\S]*>/i.test(text)) {
+        const div = document.createElement('div')
+        div.innerHTML = text
+        plainText = div.textContent || div.innerText || ''
+      }
+      const lineHeightRatio = 1.2
+      let testFontSize = fontSize
+      let bestFitFontSize = fontSize
+      let lastFits = false
+      // 检查初始字号是否已经超出高度
+      context.font = `${testFontSize}px ${fontFamily}`
+      let textWidth = context.measureText(plainText).width
+      let lines = Math.max(1, Math.ceil(textWidth / width))
+      let totalTextHeight = testFontSize * lineHeightRatio * lines
+      console.log('totalTextHeight', totalTextHeight)
+      if (totalTextHeight > height) {
+        // 递减字号直到不超出高度
+        while (testFontSize > minFontSize) {
+          testFontSize -= 2
+          context.font = `${testFontSize}px ${fontFamily}`
+          textWidth = context.measureText(plainText).width
+          lines = Math.max(1, Math.ceil(textWidth / width))
+          totalTextHeight = testFontSize * lineHeightRatio * lines
+          if (totalTextHeight <= height) {
+            return testFontSize
+          }
+        }
+        return minFontSize
+      }
+      // 正常递增字号直到接近高度但不超出
+      while (testFontSize <= maxFontSize) {
+        context.font = `${testFontSize}px ${fontFamily}`
+        textWidth = context.measureText(plainText).width
+        lines = Math.max(1, Math.ceil(textWidth / width))
+        totalTextHeight = testFontSize * lineHeightRatio * lines
+        if (totalTextHeight > height) {
+          if (lastFits) return bestFitFontSize
+          testFontSize -= 2
+          if (testFontSize < minFontSize) return minFontSize
+          continue
+        }
+        bestFitFontSize = testFontSize
+        lastFits = true
+        testFontSize += 2
+      }
+      return bestFitFontSize
+    }
+    
+    // 原有逻辑：找到满足maxLine要求的最大字体大小
+    let newFontSize = fontSize
+    
     while (newFontSize >= minFontSize) {
       context.font = `${newFontSize}px ${fontFamily}`
       const textWidth = context.measureText(text).width
@@ -151,18 +209,23 @@ export default () => {
   const getFontInfo = (htmlString: string) => {
     const fontSizeRegex = /font-size:\s*(\d+.?\d+)\s*px/i
     const fontFamilyRegex = /font-family:\s*['"]?([^'";]+)['"]?\s*(?=;|>|$)/i
+    // 增强的颜色正则表达式，可以匹配RGB、RGBA、HEX和颜色名称
+    const colorRegex = /color:\s*((?:rgb|rgba)\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(?:,\s*[\d.]+\s*)?\)|#[0-9a-f]{3,8}|[a-z]+)/i
 
     const defaultInfo = {
       fontSize: 16,
       fontFamily: 'Microsoft Yahei',
+      color: ''
     }
 
     const fontSizeMatch = htmlString.match(fontSizeRegex)
     const fontFamilyMatch = htmlString.match(fontFamilyRegex)
+    const colorMatch = htmlString.match(colorRegex)
 
     return {
       fontSize: fontSizeMatch ? (+fontSizeMatch[1].trim()) : defaultInfo.fontSize,
       fontFamily: fontFamilyMatch ? fontFamilyMatch[1].trim() : defaultInfo.fontFamily,
+      color: colorMatch ? colorMatch[1].trim() : defaultInfo.color
     }
   }
 
@@ -183,6 +246,7 @@ export default () => {
   }): PPTTextElement | PPTShapeElement => {
     const padding = 10
     const width = el.width - padding * 2 - 10
+    const height = el.height - padding * 2 - 10
 
     let content = el.type === 'text' ? el.content : el.text!.content
     
@@ -195,13 +259,23 @@ export default () => {
     const containsHtmlTags = /<[^>]*>/g.test(text)
 
     const fontInfo = getFontInfo(content)
+    
+    // 获取是否固定容器大小
+    const fixContainer = el.type === 'text' 
+      ? el.fixContainer 
+      : el.text?.fixContainer
+
     const size = getAdaptedFontsize({
       text: longestText || text,
       fontSize: fontInfo.fontSize,
       fontFamily: fontInfo.fontFamily,
       width,
       maxLine: effectiveMaxLine,
+      fixContainer,
+      height
     })
+
+    // fixContainer属性将由getAdaptedFontsize函数处理字体大小适配
 
     const parser = new DOMParser()
     const doc = parser.parseFromString(content, 'text/html')
@@ -219,24 +293,20 @@ export default () => {
           fontSize: number;
           fontFamily: string;
           color: string;
-          textAlign: string;
-          fontWeight: string;
-          fontStyle: string;
+          
         } = {
-          fontSize: fontInfo.fontSize,
+          fontSize: size,
           fontFamily: fontInfo.fontFamily,
-          color: '',
-          textAlign: '',
-          fontWeight: '',
-          fontStyle: '',
+          color: fontInfo.color,
+          
         }
 
         // 从模板中提取样式
         const styleRegex: Record<string, RegExp> = {
           color: /color:\s*([^;]+)/,
-          textAlign: /text-align:\s*([^;]+)/,
           fontWeight: /font-weight:\s*([^;]+)/,
           fontStyle: /font-style:\s*([^;]+)/,
+          fontFamily: /font-family:\s*([^;]+)/
         }
 
         const templateBodyElement = doc.body.firstElementChild
@@ -257,26 +327,73 @@ export default () => {
           // 将富文本内容插入到模板元素中
           templateBodyElement.innerHTML = textDoc.body.innerHTML
 
-          // 处理字体大小
-          const elementsWithFontSize = templateBodyElement.querySelectorAll('[style*="font-size"]')
-          if (elementsWithFontSize.length > 0) {
-            const style = elementsWithFontSize[0].getAttribute('style') || ''
-            const fontSizeMatch = style.match(/font-size:\s*([^;]+)/)
-            if (fontSizeMatch && fontSizeMatch[1]) {
-              const extractedSize = fontSizeMatch[1].trim()
-              let pStyle = templateBodyElement.getAttribute('style') || ''
-              if (!pStyle.includes('font-size')) {
-                pStyle += `; font-size: ${extractedSize}`
-                templateBodyElement.setAttribute('style', pStyle.replace(/^;\s*/, ''))
-              }
-            }
-          } else {
-            let pStyle = templateBodyElement.getAttribute('style') || ''
-            if (!pStyle.includes('font-size')) {
-              pStyle += `; font-size: ${size}px`
-              templateBodyElement.setAttribute('style', pStyle.replace(/^;\s*/, ''))
+          // 处理样式
+          const elementsToStyle = templateBodyElement.querySelectorAll('*')
+          
+          // 从富文本中提取可能存在的颜色信息
+          let richTextColor = null
+          const richTextElements = textDoc.querySelectorAll('[style*="color"]')
+          if (richTextElements.length > 0) {
+            const style = richTextElements[0].getAttribute('style') || ''
+            const colorMatch = style.match(/color:\s*([^;]+)/)
+            if (colorMatch && colorMatch[1]) {
+              richTextColor = colorMatch[1].trim()
             }
           }
+          
+          // 首先处理模板元素本身的样式
+          let templateStyle = templateBodyElement.getAttribute('style') || ''
+          
+          // 确保模板元素拥有基本样式
+          if (!templateStyle.includes('color:')) {
+            // 优先使用富文本的颜色，如果没有则使用模板颜色
+            if (richTextColor) {
+              templateStyle += `; color: ${richTextColor}`
+            } 
+            else if (templateStyles.color) {
+              templateStyle += `; color: ${templateStyles.color}`
+            }
+          }
+          
+          if (templateStyles.fontFamily && !templateStyle.includes('font-family:')) {
+            templateStyle += `; font-family: ${templateStyles.fontFamily}`
+          }
+          if (!templateStyle.includes('font-size:')) {
+            templateStyle += `; font-size: ${size}px`
+          }
+          
+          // 应用清理后的样式
+          templateBodyElement.setAttribute('style', templateStyle.replace(/^;\s*/, ''))
+          
+          // 处理所有子元素
+          elementsToStyle.forEach(element => {
+            if (element === templateBodyElement) return
+            
+            const elementStyle = element.getAttribute('style') || ''
+            let newStyle = elementStyle
+            
+            // 只为没有对应样式的元素添加模板样式
+            if (!elementStyle.includes('color:')) {
+              // 优先使用富文本的颜色，如果没有则使用模板颜色
+              if (richTextColor) {
+                newStyle += `; color: ${richTextColor}`
+              } 
+              else if (templateStyles.color) {
+                newStyle += `; color: ${templateStyles.color}`
+              }
+            }
+            
+            if (templateStyles.fontFamily && !elementStyle.includes('font-family:')) {
+              newStyle += `; font-family: ${templateStyles.fontFamily}`
+            }
+            if (!elementStyle.includes('font-size:')) {
+              // 如果元素没有字体大小，使用计算的自适应大小
+              newStyle += `; font-size: ${size}px`
+            }
+            
+            // 应用清理后的样式
+            element.setAttribute('style', newStyle.replace(/^;\s*/, ''))
+          })
         } else {
           // 如果无法解析，退回到简单替换
           // 替换所有文本节点，而不仅仅是第一个
@@ -802,7 +919,7 @@ export default () => {
             if (items.length === 1) {
               const contentItem = items[0]
               if (checkTextType(el, 'content') && contentItem.text) {
-                return createSlideTextElement(el, { content: contentItem.text }, contentTemplate)
+                return createSlideTextElement(el, { content: contentItem.text })
               }
             }
             else {

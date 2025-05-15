@@ -7,6 +7,7 @@ body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  
 }
 
 ::-webkit-scrollbar {
@@ -18,4 +19,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background-color: #e1e1e1;
   border-radius: 3px;
+}
+span {
+  text-underline-offset: 0.2em;
 }

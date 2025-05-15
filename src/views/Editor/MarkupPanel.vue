@@ -2,7 +2,7 @@
   <MoveablePanel 
     class="notes-panel" 
     :width="300" 
-    :height="180" 
+    :height="220" 
     title="幻灯片类型标注" 
     :left="-270" 
     :top="90"
@@ -45,6 +45,32 @@
           >
             重置
           </button>
+        </div>
+      </div>
+      <div class="row" v-if="handleElement && (handleElement.type === 'text' || (handleElement.type === 'shape' && handleElement.text)) && textType">
+        <div style="width: 40%;">自动垂直居中：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              :checked="autoVerticalCenter" 
+              @change="toggleAutoVerticalCenter"
+            />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="row" v-if="handleElement && (handleElement.type === 'text' || (handleElement.type === 'shape' && handleElement.text)) && textType">
+        <div style="width: 40%;">固定容器大小：</div>
+        <div style="width: 60%; display: flex; align-items: center;">
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              :checked="fixContainer" 
+              @change="toggleFixContainer"
+            />
+            <span class="toggle-slider"></span>
+          </label>
         </div>
       </div>
       <div class="row" v-else-if="handleElement && handleElement.type === 'image'">
@@ -369,6 +395,134 @@ watch(() => mainStore.showMarkupPanel, (isVisible) => {
     }, 100)
   }
 }, { immediate: true })
+
+// 添加自动垂直居中属性的computed
+const autoVerticalCenter = computed(() => {
+  if (handleElementId.value && currentSlide.value) {
+    const slideIndex = slidesStore.slideIndex
+    if (slideIndex < 0 || !slidesStore.slides[slideIndex]) return false
+    
+    const freshElement = slidesStore.slides[slideIndex].elements.find(el => el.id === handleElementId.value)
+    
+    if (freshElement) {
+      if (freshElement.type === 'text') {
+        return !!freshElement.autoVerticalCenter
+      }
+      if (freshElement.type === 'shape' && freshElement.text) {
+        return !!freshElement.text.autoVerticalCenter
+      }
+    }
+  }
+  return false
+})
+
+// 添加切换自动垂直居中的方法
+const toggleAutoVerticalCenter = () => {
+  if (!handleElement.value) return
+  
+  // 获取当前幻灯片索引和元素索引
+  const slideIndex = slidesStore.slideIndex
+  const elementIndex = slidesStore.slides[slideIndex].elements.findIndex(el => el.id === handleElementId.value)
+  
+  if (elementIndex === -1) {
+    console.error('Element not found:', handleElementId.value)
+    return
+  }
+  
+  // 切换值
+  const newValue = !autoVerticalCenter.value
+  
+  // 直接修改store中的数据
+  if (handleElement.value.type === 'text') {
+    // 创建元素的深拷贝并更新autoVerticalCenter
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    element.autoVerticalCenter = newValue
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  if (handleElement.value.type === 'shape' && handleElement.value.text) {
+    // 创建元素的深拷贝
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    if (!element.text) element.text = {}
+    element.text.autoVerticalCenter = newValue
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  // 强制立即保存
+  slidesStore.saveDataToStorage()
+}
+
+// 添加固定容器大小(fixContainer)的开关UI组件和相关处理逻辑
+const fixContainer = computed(() => {
+  if (handleElementId.value && currentSlide.value) {
+    const slideIndex = slidesStore.slideIndex
+    if (slideIndex < 0 || !slidesStore.slides[slideIndex]) return false
+    
+    const freshElement = slidesStore.slides[slideIndex].elements.find(el => el.id === handleElementId.value)
+    
+    if (freshElement) {
+      if (freshElement.type === 'text') {
+        return !!freshElement.fixContainer
+      }
+      if (freshElement.type === 'shape' && freshElement.text) {
+        return !!freshElement.text.fixContainer
+      }
+    }
+  }
+  return false
+})
+
+// 添加切换固定容器大小(fixContainer)的方法
+const toggleFixContainer = () => {
+  if (!handleElement.value) return
+  
+  // 获取当前幻灯片索引和元素索引
+  const slideIndex = slidesStore.slideIndex
+  const elementIndex = slidesStore.slides[slideIndex].elements.findIndex(el => el.id === handleElementId.value)
+  
+  if (elementIndex === -1) {
+    console.error('Element not found:', handleElementId.value)
+    return
+  }
+  
+  // 切换值
+  const newValue = !fixContainer.value
+  
+  // 直接修改store中的数据
+  if (handleElement.value.type === 'text') {
+    // 创建元素的深拷贝并更新fixContainer
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    element.fixContainer = newValue
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  if (handleElement.value.type === 'shape' && handleElement.value.text) {
+    // 创建元素的深拷贝
+    const element = JSON.parse(JSON.stringify(slidesStore.slides[slideIndex].elements[elementIndex]))
+    if (!element.text) element.text = {}
+    element.text.fixContainer = newValue
+    
+    // 替换元素
+    const elements = [...slidesStore.slides[slideIndex].elements]
+    elements[elementIndex] = element
+    slidesStore.slides[slideIndex].elements = elements
+  }
+  
+  // 强制立即保存
+  slidesStore.saveDataToStorage()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -429,6 +583,56 @@ watch(() => mainStore.showMarkupPanel, (isVisible) => {
   &:hover {
     background-color: #e6f7ff;
     border-color: #1890ff;
+  }
+}
+
+/* 添加开关样式 */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+    &:checked + .toggle-slider {
+      background-color: #1890ff;
+      
+      &:before {
+        transform: translateX(20px);
+      }
+    }
+    
+    &:focus + .toggle-slider {
+      box-shadow: 0 0 1px #1890ff;
+    }
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+    
+    &:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
   }
 }
 </style>
