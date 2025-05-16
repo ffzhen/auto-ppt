@@ -62,7 +62,8 @@ class IndexedDBService {
         }))
       }
       return JSON.stringify(cleanData)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to serialize data:', error)
       throw error
     }
@@ -71,7 +72,8 @@ class IndexedDBService {
   private deserializeData(serialized: string): DBData {
     try {
       return JSON.parse(serialized)
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to deserialize data:', error)
       throw error
     }
@@ -93,7 +95,8 @@ class IndexedDBService {
         }
 
         request.onsuccess = () => resolve()
-      } catch (error) {
+      }
+      catch (error) {
         reject(error)
       }
     })
@@ -121,7 +124,8 @@ class IndexedDBService {
           }
           const data = this.deserializeData(result)
           resolve(data)
-        } catch (error) {
+        }
+        catch (error) {
           console.error('Failed to deserialize data:', error)
           reject(error)
         }

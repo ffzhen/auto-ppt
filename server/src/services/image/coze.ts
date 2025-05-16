@@ -65,7 +65,8 @@ export async function generateImageWithCoze(params: {
         if (parsedData.output ) {
           imageUrl = parsedData.output
         }
-      } catch (parseError) {
+      }
+      catch (parseError) {
         console.error('解析Coze API响应数据失败:', parseError)
       }
     }
@@ -92,7 +93,8 @@ export async function generateImageWithCoze(params: {
       image_url: imageUrl,
       workflow_id
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Coze工作流图像生成错误:', error)
     throw error
   }

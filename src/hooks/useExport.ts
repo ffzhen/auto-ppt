@@ -119,7 +119,8 @@ export default () => {
       exporting.value = false
       if (failCount > 0) {
         message.warning(`导出完成，成功${successCount}张，失败${failCount}张`)
-      } else {
+      }
+      else {
         message.success(`已导出${successCount}张图片`)
       }
     })
@@ -146,9 +147,11 @@ export default () => {
 
   // 格式化颜色值为 透明度 + HexString，供pptxgenjs使用
   const formatColor = (_color: string) => {
-    if (!_color) return {
-      alpha: 0,
-      color: '#000000',
+    if (!_color) {
+      return {
+        alpha: 0,
+        color: '#000000',
+      }
     }
 
     const c = tinycolor(_color)
@@ -934,7 +937,7 @@ export default () => {
     const toImage = format === 'png' ? toPng : toJpeg
     const config: ExportImageConfig = {
       quality,
-      width: 1600,  // 增大宽度分辨率到1920
+      width: 1600, // 增大宽度分辨率到1920
     }
     
     if (ignoreWebfont) config.fontEmbedCSS = ''
@@ -945,7 +948,8 @@ export default () => {
     if (slideElements && slideElements.length > 0) {
       // 如果传入了幻灯片元素数组，优先使用它
       elements = slideElements
-    } else {
+    }
+    else {
       // 否则使用缩略图
       const thumbnails = domRef.querySelectorAll('.thumbnail-slide')
       elements = Array.from(thumbnails).map(item => item as HTMLElement)

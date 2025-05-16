@@ -498,9 +498,9 @@ const hexToRgba = (hex: string, opacity: number) => {
   hex = hex.replace('#', '')
   
   // Parse the hex values
-  let r = parseInt(hex.substring(0, 2), 16)
-  let g = parseInt(hex.substring(2, 4), 16)
-  let b = parseInt(hex.substring(4, 6), 16)
+  const r = parseInt(hex.substring(0, 2), 16)
+  const g = parseInt(hex.substring(2, 4), 16)
+  const b = parseInt(hex.substring(4, 6), 16)
   
   // Return rgba
   return `rgba(${r}, ${g}, ${b}, ${1 - opacity})`
@@ -534,7 +534,8 @@ const adjustBrightness = (color: string, brightness: number) => {
     newR = Math.min(255, r + (255 - r) * factor)
     newG = Math.min(255, g + (255 - g) * factor)
     newB = Math.min(255, b + (255 - b) * factor)
-  } else {
+  }
+  else {
     // Add black (decrease values toward 0)
     const absFactor = Math.abs(factor)
     newR = Math.max(0, r - r * absFactor)

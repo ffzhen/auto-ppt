@@ -1,39 +1,39 @@
-import { Router } from 'express';
-import { PresentationController } from '../controllers/presentations';
+import { Router } from 'express'
+import { PresentationController } from '../controllers/presentations'
 
-const router = Router();
+const router = Router()
 
 // Get all presentations
-router.get('/', PresentationController.getAllPresentations);
+router.get('/', PresentationController.getAllPresentations)
 
 // Create a new presentation
-router.post('/', PresentationController.createPresentation);
+router.post('/', PresentationController.createPresentation)
 
 // Get a presentation by ID
-router.get('/:id', PresentationController.getPresentationById);
+router.get('/:id', PresentationController.getPresentationById)
 
 // Update a presentation
-router.put('/:id', PresentationController.updatePresentation);
+router.put('/:id', PresentationController.updatePresentation)
 
 // Delete a presentation
-router.delete('/:id', PresentationController.deletePresentation);
+router.delete('/:id', PresentationController.deletePresentation)
 
 // Clone a presentation
-router.post('/:id/clone', PresentationController.clonePresentation);
+router.post('/:id/clone', PresentationController.clonePresentation)
 
 // Export a presentation
-router.get('/:id/export/:format', PresentationController.exportPresentation);
+router.get('/:id/export/:format', PresentationController.exportPresentation)
 
 // Create export file and get link
-router.get('/:id/export-link/:format', PresentationController.createExportFileAndGetLink);
+router.get('/:id/export-link/:format', PresentationController.createExportFileAndGetLink)
 
 // Download exported file
-router.get('/download/:filename', PresentationController.downloadExportedFile);
+router.get('/download/:filename', PresentationController.downloadExportedFile)
 
 // Render presentation without saving (server-side rendering)
-router.post('/render/:format', PresentationController.renderPresentation);
+router.post('/render/:format', PresentationController.renderPresentation)
 
 // Export images
-router.post('/render/images', PresentationController.exportImages);
+router.post('/render/images', PresentationController.exportImages)
 
-export default router; 
+export default router 

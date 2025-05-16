@@ -110,6 +110,7 @@ import { useMainStore, useSlidesStore } from '@/store'
 import { useProjectStore } from '@/store/projects'
 import useGlobalHotkey from '@/hooks/useGlobalHotkey'
 import usePasteEvent from '@/hooks/usePasteEvent'
+import useSlideHandler from '@/hooks/useSlideHandler'
 import api from '@/services'
 
 import EditorHeader from './EditorHeader/index.vue'
@@ -136,6 +137,7 @@ const route = useRoute()
 const mainStore = useMainStore()
 const slidesStore = useSlidesStore()
 const projectStore = useProjectStore()
+const { resetSlides, isEmptySlide } = useSlideHandler()
 const { dialogForExport, showSelectPanel, showSearchPanel, showNotesPanel, showMarkupPanel, showAIPPTDialog } = storeToRefs(mainStore)
 const { currentSlide } = storeToRefs(slidesStore)
 const closeExportDialog = () => mainStore.setDialogForExport('')
@@ -175,25 +177,17 @@ onMounted(async () => {
           }
         } 
         else {
-          // If no slides in project, get from mock data
-          console.log('[Editor] Project has no slides, loading from mock data')
-          const slides = await api.getMockData('slides')
-          slidesStore.setSlides(slides, projectId)
-          
-          // Save slides to project
-          project.slides = slides
-          await projectStore.updateProject(project)
-          console.log('[Editor] Updated project with new slides')
+          // 如果项目没有幻灯片，重置为一个空白幻灯片
+          console.log('[Editor] Project has no slides, resetting to empty slide')
+          resetSlides()
         }
       }
       
       console.log('[Editor] Slides loaded successfully')
     } 
     else {
-      console.warn('[Editor] No project ID provided')
-      // If no project ID, use default mock data
-      const slides = await api.getMockData('slides')
-      slidesStore.setSlides(slides)
+      console.log('[Editor] No project ID provided, initializing with empty slide')
+      resetSlides()
     }
   } 
   catch (error) {

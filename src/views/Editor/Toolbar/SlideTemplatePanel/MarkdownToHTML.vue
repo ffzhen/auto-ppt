@@ -186,7 +186,8 @@ const generateHTML = async () => {
               })
               htmlFragments.value.push(sanitizedHtml)
             }
-          } catch (htmlError) {
+          }
+          catch (htmlError) {
             console.error('直接提取 HTML 内容失败', htmlError)
           }
         }

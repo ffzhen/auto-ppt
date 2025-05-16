@@ -91,9 +91,11 @@ async function generateImage() {
   
   try {
     result.value = await api.generateVolcengineImage(params)
-  } catch (e) {
+  }
+  catch (e) {
     error.value = e instanceof Error ? e.message : '生成图片失败，请重试'
-  } finally {
+  }
+  finally {
     isGenerating.value = false
   }
 }

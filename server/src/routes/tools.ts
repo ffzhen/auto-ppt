@@ -1,20 +1,20 @@
-import { Router } from 'express';
-import { ToolsController } from '../controllers/tools';
-import { Request, Response } from 'express'
+import { Router } from 'express'
+import { ToolsController } from '../controllers/tools'
+import type { Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
 import { generateOutlineFromContent, generateSlidesFromOutline, getStreamHandler } from '../services/ai'
 
-const router = Router();
+const router = Router()
 
 // AI PPT大纲生成
-router.post('/aippt_outline', ToolsController.generateAIPPTOutline);
+router.post('/aippt_outline', ToolsController.generateAIPPTOutline)
 
 // AI PPT生成
-router.post('/aippt', ToolsController.generateAIPPT);
+router.post('/aippt', ToolsController.generateAIPPT)
 
 // Markdown 转 HTML
-router.post('/markdown2html', ToolsController.generateMarkdownToHTML);
+router.post('/markdown2html', ToolsController.generateMarkdownToHTML)
 
 router.post('/aippt_stream', async (req: Request, res: Response) => {
   try {
@@ -50,10 +50,11 @@ router.post('/aippt_stream', async (req: Request, res: Response) => {
     }))
     
     streamHandler.end()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('生成PPT出错：', error)
     res.status(500).json({ error: '生成PPT失败' })
   }
 })
 
-export default router; 
+export default router 

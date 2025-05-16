@@ -201,7 +201,8 @@ const applyTemplate = (template: Template) => {
       }
     })
     addHistorySnapshot()
-  } else if (template.id === 'business') {
+  }
+  else if (template.id === 'business') {
     slidesStore.updateSlide({ 
       background: {
         type: 'solid',
@@ -209,7 +210,8 @@ const applyTemplate = (template: Template) => {
       }
     })
     addHistorySnapshot()
-  } else if (template.id === 'colorful') {
+  }
+  else if (template.id === 'colorful') {
     slidesStore.updateSlide({ 
       background: {
         type: 'solid',
@@ -270,9 +272,11 @@ const confirmOutline = async () => {
     // 根据选择的模板ID获取对应的系统模板
     if (selectedTemplateId.value === 'xiaohongshu') {
       templateSlides = await api.getFileData('custom_template').then(ret => ret.slides)
-    } else if (selectedTemplateId.value === 'business') {
+    }
+    else if (selectedTemplateId.value === 'business') {
       templateSlides = await api.getFileData('template_2').then(ret => ret.slides)
-    } else if (selectedTemplateId.value === 'colorful') {
+    }
+    else if (selectedTemplateId.value === 'colorful') {
       templateSlides = await api.getFileData('template_3').then(ret => ret.slides)
     }
     

@@ -2,8 +2,7 @@
   <div class="markdown-to-ppt">
     <div class="header">
       <span class="title">Markdown 转 卡片</span>
-      <span class="subtitle" v-if="step === 'template'">从下方挑选合适的模板，开始生成精美PPT</span>
-      <span class="subtitle" v-else-if="step === 'outline'">确认下方内容大纲（点击编辑内容），开始选择模板</span>
+      <span class="subtitle" v-if="step === 'template'">从下方挑选合适的模板，我们将基于您的内容生成精美卡片</span>
       <span class="subtitle" v-else>在下方输入Markdown内容，系统将自动生成大纲</span>
     </div>
     
@@ -46,24 +45,22 @@
       </div>
     </template>
     
-    
     <!-- 步骤 2: 选择模板 -->
     <div class="select-template" v-if="step === 'template'">
-      <div class="templates">
-        <div 
-          class="template" 
-          :class="{ 'selected': selectedTemplateId === template.id }" 
-          v-for="template in templates" 
-          :key="template.id" 
-          @click="selectedTemplateId = template.id"
-        >
-          <img :src="template.cover" :alt="template.name">
-        </div>
-      </div>
-      <div class="btns">
-        <Button class="btn" type="primary" @click="generatePPT()">生成卡片</Button>
-        <Button class="btn" @click="step = 'input'">返回大纲</Button>
-      </div>
+      <TemplateSelector 
+        v-model="selectedTemplateId" 
+        :templates="templatePreviews" 
+        displayMode="advanced"
+      >
+        <template #actions>
+          <Button class="btn back" @click="step = 'input'">
+            <i class="el-icon-arrow-left"></i> 返回编辑
+          </Button>
+          <Button class="btn generate" type="primary" @click="generatePPT()">
+            <i class="el-icon-magic-stick"></i> 生成卡片
+          </Button>
+        </template>
+      </TemplateSelector>
     </div>
     
     <FullscreenSpin :loading="loading" tip="AI生成中，请耐心等待 ..." />
@@ -78,6 +75,7 @@ import Button from '@/components/Button.vue'
 import Select from '@/components/Select.vue'
 import TextArea from '@/components/TextArea.vue'
 import FullscreenSpin from '@/components/FullscreenSpin.vue'
+import TemplateSelector from '@/components/TemplateSelector.vue'
 import message from '@/utils/message'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
 import useAIPPT from '@/hooks/useAIPPT'
@@ -94,7 +92,7 @@ const { templates } = storeToRefs(slidesStore)
 const { addHistorySnapshot } = useHistorySnapshot()
 const { AIPPT } = useAIPPT()
 
-// 三步流程状态管理
+// 步骤状态管理
 const step = ref<'input' | 'template'>('input')
 const markdownContent = ref('')
 
@@ -102,7 +100,21 @@ const inputRef = ref<InstanceType<typeof TextArea>>()
 const loading = ref(false)
 const language = ref<'zh' | 'en'>('zh')
 const model = ref('ep-20250411144626-zx55l')
-const selectedTemplateId = ref(templates.value[0].id)
+const selectedTemplateId = ref(templates.value[0]?.id || '')
+
+// 模板预览数据
+const templatePreviews = ref<{ 
+  id: string; 
+  name: string; 
+}[]>([])
+
+// 初始化模板预览数据
+const initTemplatePreviews = () => {
+  templatePreviews.value = templates.value.map(template => ({
+    id: template.id,
+    name: template.name
+  }))
+}
 
 onMounted(() => {
   setTimeout(() => {
@@ -110,13 +122,13 @@ onMounted(() => {
       inputRef.value.focus()
     }
   }, 500)
+  
+  // 初始化模板预览数据
+  initTemplatePreviews()
 })
-
-
 
 // 生成 PPT
 const generatePPT = async () => {
-  
   // 检查模板是否可用
   if (!templates.value || templates.value.length === 0) {
     message.error('无可用模板，请先添加模板')
@@ -136,11 +148,11 @@ const generatePPT = async () => {
 
     // 检查模板是否包含必要的幻灯片类型
     const coverSlides = templateSlides.filter(slide => slide.type === 'cover')
-    // const contentSlides = templateSlides.filter(slide => slide.type === 'content')
     
-    if (coverSlides.length === 0 ) {
+    if (coverSlides.length === 0) {
       throw new Error('模板缺少必要的幻灯片类型（封面）')
     }
+    
     // 调用 AI 服务生成 PPT
     const stream = await api.AIPPT(
       markdownContent.value, 
@@ -152,16 +164,10 @@ const generatePPT = async () => {
     const reader = stream.body.getReader()
     const decoder = new TextDecoder('utf-8')
     
-    // // 清空当前幻灯片
-    // const slideCount = slidesStore.slides.length
-    // for (let i = slideCount - 1; i >= 0; i--) {
-    //   slidesStore.deleteSlide(slidesStore.slides[i].id)
-    // }
-   
     const readStream = () => {
       reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
         if (done) {
-          emit('closed') // 关闭对话框
+          emit('closed')
           loading.value = false
           markdownContent.value = ''
           step.value = 'input'
@@ -178,7 +184,8 @@ const generatePPT = async () => {
           // 确保幻灯片类型正确并且具有必要的数据结构
           if (slide && typeof slide === 'object' && 'type' in slide) {
             AIPPT(templateSlides, [slide])
-          } else {
+          } 
+          else {
             console.error('收到的数据不是有效的幻灯片格式', slide)
           }
         }
@@ -283,76 +290,56 @@ const generatePPT = async () => {
   }
 }
 
-.preview {
-  pre {
-    max-height: 450px;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: #f1f1f1;
-    overflow: auto;
-    border-radius: 4px;
-    font-family: monospace;
-  }
-  
-  .outline-view {
-    max-height: 450px;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: #f1f1f1;
-    overflow: auto;
-    border-radius: 4px;
-  }
-  
-  .btns {
+.select-template {
+  .btn {
+    margin: 0 8px;
+    min-width: 120px;
     display: flex;
-    justify-content: center;
     align-items: center;
-
-    .btn {
-      width: 120px;
-      margin: 0 5px;
+    justify-content: center;
+    
+    i {
+      margin-right: 5px;
+    }
+    
+    &.back {
+      border-color: #dcdfe6;
+      color: #606266;
+      
+      &:hover {
+        color: #409EFF;
+        border-color: #c6e2ff;
+        background-color: #ecf5ff;
+      }
+    }
+    
+    &.generate {
+      font-weight: 500;
+      padding-left: 20px;
+      padding-right: 20px;
+      transition: all 0.3s;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+      }
     }
   }
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .select-template {
-  .templates {
-    display: flex;
-    margin-bottom: 10px;
-    @include flex-grid-layout();
-  
-    .template {
-      border: 2px solid $borderColor;
-      border-radius: $borderRadius;
-      width: 304px;
-      height: 267px;
-      margin-bottom: 12px;
-
-      &:not(:nth-child(2n)) {
-        margin-right: 12px;
-      }
-
-      &.selected {
-        border-color: $themeColor;
-      }
-  
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  
-  .btns {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .btn {
-      width: 120px;
-      margin: 0 5px;
-    }
-  }
+  animation: slideIn 0.3s ease-out;
 }
 
 ::-webkit-scrollbar {

@@ -211,10 +211,12 @@ const generatePPT = async () => {
           
           if (slide && typeof slide === 'object' && 'type' in slide) {
             AIPPT(templateSlides, [slide])
-          } else {
+          }
+          else {
             console.error('收到的数据不是有效的幻灯片格式', slide)
           }
-        } catch (err) {
+        }
+        catch (err) {
           console.error('解析 AI 返回的幻灯片数据失败', err)
         }
         
@@ -223,7 +225,8 @@ const generatePPT = async () => {
     }
     
     readStream()
-  } catch (error) {
+  }
+  catch (error) {
     console.error('AI 生成 PPT 失败', error)
     message.error(error instanceof Error ? error.message : 'AI 生成 PPT 失败，请重试')
     loading.value = false

@@ -17,7 +17,7 @@ export const SERVER_URL = (import.meta.env.MODE === 'development')
   ? 'http://localhost:3002/api' 
   : '/api'
 
-  // export const SERVER_URL = 'https://server.pptist.cn'
+// export const SERVER_URL = 'https://server.pptist.cn'
 
 // 添加开发环境下的直接API地址
 export const DEV_API_URL = 'http://localhost:3002/api'

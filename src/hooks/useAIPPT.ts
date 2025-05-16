@@ -122,7 +122,8 @@ export default () => {
     width,
     maxLine,
     fixContainer,
-    height
+    height,
+    lineHeight = 1.2
   }: {
     text: string
     fontSize: number
@@ -131,14 +132,82 @@ export default () => {
     maxLine: number
     fixContainer?: boolean
     height?: number
+    lineHeight?: number
   }) => {
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')!
     const minFontSize = 10
     const maxFontSize = 350 // 设置最大字体大小上限
     console.log('fixContainer', fixContainer, height)
+    
+    // 创建一个用于准确测量文本高度的辅助函数
+    const measureTextHeight = (text: string, fontSize: number, fontFamily: string, containerWidth: number, lineHeight: number) => {
+      // 创建一个隐藏的div用于测量
+      const measureEl = document.createElement('div')
+      measureEl.style.position = 'absolute'
+      measureEl.style.visibility = 'hidden'
+      measureEl.style.left = '-9999px'
+      measureEl.style.top = '-9999px'
+      measureEl.style.width = `${containerWidth}px`
+      measureEl.style.fontSize = `${fontSize}px`
+      measureEl.style.fontFamily = fontFamily
+      measureEl.style.lineHeight = lineHeight.toString()
+      measureEl.style.margin = '0'
+      measureEl.style.padding = '0'
+      
+      // 检查文本是否为HTML
+      if (/<[a-z][\s\S]*>/i.test(text)) {
+        measureEl.innerHTML = text
+      }
+      else {
+        measureEl.textContent = text
+      }
+      
+      // 将元素添加到DOM中进行测量
+      document.body.appendChild(measureEl)
+      const height = measureEl.offsetHeight
+      document.body.removeChild(measureEl)
+      
+      return height
+    }
+    
+    // 创建一个用于计算文本行数的辅助函数
+    const calculateTextLines = (text: string, fontSize: number, fontFamily: string, containerWidth: number, lineHeight: number) => {
+      const measureEl = document.createElement('div')
+      measureEl.style.position = 'absolute'
+      measureEl.style.visibility = 'hidden'
+      measureEl.style.left = '-9999px'
+      measureEl.style.top = '-9999px'
+      measureEl.style.width = `${containerWidth}px`
+      measureEl.style.fontSize = `${fontSize}px`
+      measureEl.style.fontFamily = fontFamily
+      measureEl.style.lineHeight = lineHeight.toString()
+      measureEl.style.margin = '0'
+      measureEl.style.padding = '0'
+      
+      if (/<[a-z][\s\S]*>/i.test(text)) {
+        measureEl.innerHTML = text
+      } 
+      else {
+        measureEl.textContent = text
+      }
+      
+      document.body.appendChild(measureEl)
+      
+      // 获取元素的实际高度和计算行高
+      const totalHeight = measureEl.offsetHeight
+      const lineHeightPx = fontSize * lineHeight
+      
+      // 估算行数
+      const lines = Math.round(totalHeight / lineHeightPx)
+      
+      document.body.removeChild(measureEl)
+      return Math.max(1, lines) // 至少返回1行
+    }
+    
     if (fixContainer && height) {
       if (!text) return fontSize
+      
       // 提取纯文本
       let plainText = text
       if (/<[a-z][\s\S]*>/i.test(text)) {
@@ -146,36 +215,30 @@ export default () => {
         div.innerHTML = text
         plainText = div.textContent || div.innerText || ''
       }
-      const lineHeightRatio = 1.2
+      
       let testFontSize = fontSize
       let bestFitFontSize = fontSize
       let lastFits = false
+      
       // 检查初始字号是否已经超出高度
-      context.font = `${testFontSize}px ${fontFamily}`
-      let textWidth = context.measureText(plainText).width
-      let lines = Math.max(1, Math.ceil(textWidth / width))
-      let totalTextHeight = testFontSize * lineHeightRatio * lines
+      let totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
+      
       console.log('totalTextHeight', totalTextHeight)
       if (totalTextHeight > height) {
         // 递减字号直到不超出高度
         while (testFontSize > minFontSize) {
           testFontSize -= 2
-          context.font = `${testFontSize}px ${fontFamily}`
-          textWidth = context.measureText(plainText).width
-          lines = Math.max(1, Math.ceil(textWidth / width))
-          totalTextHeight = testFontSize * lineHeightRatio * lines
+          totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
           if (totalTextHeight <= height) {
             return testFontSize
           }
         }
         return minFontSize
       }
+      
       // 正常递增字号直到接近高度但不超出
       while (testFontSize <= maxFontSize) {
-        context.font = `${testFontSize}px ${fontFamily}`
-        textWidth = context.measureText(plainText).width
-        lines = Math.max(1, Math.ceil(textWidth / width))
-        totalTextHeight = testFontSize * lineHeightRatio * lines
+        totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
         if (totalTextHeight > height) {
           if (lastFits) return bestFitFontSize
           testFontSize -= 2
@@ -189,20 +252,19 @@ export default () => {
       return bestFitFontSize
     }
     
-    // 原有逻辑：找到满足maxLine要求的最大字体大小
+    // 原有逻辑修改：找到满足maxLine要求的最大字体大小，使用DOM方式计算行数
     let newFontSize = fontSize
     
     while (newFontSize >= minFontSize) {
-      context.font = `${newFontSize}px ${fontFamily}`
-      const textWidth = context.measureText(text).width
-      const line = Math.ceil(textWidth / width)
-
-      if (line <= maxLine) return newFontSize
-
+      // 使用DOM方法计算行数
+      const lines = calculateTextLines(text, newFontSize, fontFamily, width, lineHeight)
+      
+      if (lines <= maxLine) return newFontSize
+      
       const step = newFontSize <= 22 ? 1 : 2
       newFontSize = newFontSize - step
     }
-
+    
     return minFontSize
   }
 
@@ -264,6 +326,11 @@ export default () => {
     const fixContainer = el.type === 'text' 
       ? el.fixContainer 
       : el.text?.fixContainer
+      
+    // 获取元素的lineHeight值
+    const lineHeight = el.type === 'text'
+      ? (el.lineHeight || 1.2)
+      : 1.2 // 对于shape元素，text没有lineHeight属性，使用默认值
 
     const size = getAdaptedFontsize({
       text: longestText || text,
@@ -272,7 +339,8 @@ export default () => {
       width,
       maxLine: effectiveMaxLine,
       fixContainer,
-      height
+      height,
+      lineHeight
     })
 
     // fixContainer属性将由getAdaptedFontsize函数处理字体大小适配
@@ -283,7 +351,8 @@ export default () => {
       // 如果类型是html，直接替换内容
       doc.body.innerHTML = text
       content = doc.body.innerHTML
-    } else {
+    }
+    else {
       if (containsHtmlTags) {
         // 如果传入的text包含HTML标签
         const textDoc = parser.parseFromString(text, 'text/html')
@@ -330,29 +399,13 @@ export default () => {
           // 处理样式
           const elementsToStyle = templateBodyElement.querySelectorAll('*')
           
-          // 从富文本中提取可能存在的颜色信息
-          let richTextColor = null
-          const richTextElements = textDoc.querySelectorAll('[style*="color"]')
-          if (richTextElements.length > 0) {
-            const style = richTextElements[0].getAttribute('style') || ''
-            const colorMatch = style.match(/color:\s*([^;]+)/)
-            if (colorMatch && colorMatch[1]) {
-              richTextColor = colorMatch[1].trim()
-            }
-          }
-          
           // 首先处理模板元素本身的样式
           let templateStyle = templateBodyElement.getAttribute('style') || ''
           
           // 确保模板元素拥有基本样式
-          if (!templateStyle.includes('color:')) {
-            // 优先使用富文本的颜色，如果没有则使用模板颜色
-            if (richTextColor) {
-              templateStyle += `; color: ${richTextColor}`
-            } 
-            else if (templateStyles.color) {
-              templateStyle += `; color: ${templateStyles.color}`
-            }
+          if (!templateStyle.includes('color:') && templateStyles.color) {
+            // 只使用模板颜色，不使用富文本中提取的颜色
+            templateStyle += `; color: ${templateStyles.color}`
           }
           
           if (templateStyles.fontFamily && !templateStyle.includes('font-family:')) {
@@ -373,14 +426,9 @@ export default () => {
             let newStyle = elementStyle
             
             // 只为没有对应样式的元素添加模板样式
-            if (!elementStyle.includes('color:')) {
-              // 优先使用富文本的颜色，如果没有则使用模板颜色
-              if (richTextColor) {
-                newStyle += `; color: ${richTextColor}`
-              } 
-              else if (templateStyles.color) {
-                newStyle += `; color: ${templateStyles.color}`
-              }
+            // 不应用从富文本中提取的颜色，保留原始样式或使用模板颜色
+            if (!elementStyle.includes('color:') && templateStyles.color) {
+              newStyle += `; color: ${templateStyles.color}`
             }
             
             if (templateStyles.fontFamily && !elementStyle.includes('font-family:')) {
@@ -394,7 +442,8 @@ export default () => {
             // 应用清理后的样式
             element.setAttribute('style', newStyle.replace(/^;\s*/, ''))
           })
-        } else {
+        }
+        else {
           // 如果无法解析，退回到简单替换
           // 替换所有文本节点，而不仅仅是第一个
           const treeWalker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT)
@@ -451,10 +500,10 @@ export default () => {
       content = doc.body.innerHTML.replace(/font-size:\s*(\d+.?\d+)(px)?/g, `font-size: ${size}px`)
     }
     console.log('返回元素', el.type === 'text' ?
-      { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } :
+      { ...el, content } :
       { ...el, text: { ...el.text!, content } })
     return el.type === 'text' ?
-      { ...el, content, lineHeight: size < 15 ? 1.2 : el.lineHeight } :
+      { ...el, content } :
       { ...el, text: { ...el.text!, content } }
   }
 
@@ -607,7 +656,8 @@ export default () => {
           
           // 更新幻灯片中的图片元素
           updateSlideImage(placeholderElement.id, res.image_url)
-        } catch (error) {
+        }
+        catch (error) {
           console.error('AI图像生成失败:', error)
           // 如果AI生成失败，回退到本地图片
           const localElement = getLocalImageElement()
@@ -1001,7 +1051,8 @@ export default () => {
       if (asyncGeneratedCoverImage.value) {
         console.log('所有幻灯片渲染完成，开始同步背景图片')
         synchronizeBackgroundImages()
-      } else {
+      }
+      else {
         // 设置监听器等待封面图片生成完成
         console.log('等待封面图片生成...')
         const syncInterval = setInterval(() => {

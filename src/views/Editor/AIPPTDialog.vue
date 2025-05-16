@@ -46,20 +46,16 @@
       </div>
     </div>
     <div class="select-template" v-if="step === 'template'">
-      <div class="templates">
-        <div class="template" 
-          :class="{ 'selected': selectedTemplate === template.id }" 
-          v-for="template in templates" 
-          :key="template.id" 
-          @click="selectedTemplate = template.id"
-        >
-          <img :src="template.cover" :alt="template.name">
-        </div>
-      </div>
-      <div class="btns">
-        <Button class="btn" type="primary" @click="createPPT()">生成</Button>
-        <Button class="btn" @click="step = 'outline'">返回大纲</Button>
-      </div>
+      <TemplateSelector 
+        v-model="selectedTemplate" 
+        :templates="templates" 
+        displayMode="advanced"
+      >
+        <template #actions>
+          <Button class="btn" type="primary" @click="createPPT()">生成</Button>
+          <Button class="btn" @click="step = 'outline'">返回大纲</Button>
+        </template>
+      </TemplateSelector>
     </div>
 
     <FullscreenSpin :loading="loading" tip="AI生成中，请耐心等待 ..." />
@@ -80,6 +76,7 @@ import Button from '@/components/Button.vue'
 import Select from '@/components/Select.vue'
 import FullscreenSpin from '@/components/FullscreenSpin.vue'
 import OutlineEditor from '@/components/OutlineEditor.vue'
+import TemplateSelector from '@/components/TemplateSelector.vue'
 
 const mainStore = useMainStore()
 const { templates } = storeToRefs(useSlidesStore())
@@ -155,7 +152,7 @@ const createOutline = async () => {
 const createPPT = async () => {
   loading.value = true
 
-  const stream = await api.AIPPT(outline.value, language.value, 'ep-20250411144626-zx55l',selectedTemplate.value)
+  const stream = await api.AIPPT(outline.value, language.value, 'ep-20250411144626-zx55l', selectedTemplate.value)
   const templateSlides: Slide[] = await api.getFileData(selectedTemplate.value).then(ret => ret.slides)
   const reader: ReadableStreamDefaultReader = stream.body.getReader()
   const decoder = new TextDecoder('utf-8')
@@ -235,41 +232,9 @@ const createPPT = async () => {
   }
 }
 .select-template {
-  .templates {
-    display: flex;
-    margin-bottom: 10px;
-    @include flex-grid-layout();
-  
-    .template {
-      border: 2px solid $borderColor;
-      border-radius: $borderRadius;
-      width: 304px;
-      height: 267px;
-      margin-bottom: 12px;
-
-      &:not(:nth-child(2n)) {
-        margin-right: 12px;
-      }
-
-      &.selected {
-        border-color: $themeColor;
-      }
-  
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  .btns {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .btn {
-      width: 120px;
-      margin: 0 5px;
-    }
+  .btn {
+    width: 120px;
+    margin: 0 5px;
   }
 }
 .configs {

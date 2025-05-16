@@ -231,7 +231,8 @@ const updateCurrentProject = async () => {
       savedStatus.value = 'saved'
       lastSavedTime.value = new Date()
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to update project:', error)
     // Still set to saved to avoid stuck in saving state
     savedStatus.value = 'saved'
@@ -275,7 +276,8 @@ const createNewProject = async () => {
       // 在导航完成后，重置标记
       isCreatingNewProject.value = false
     }, 500)
-  } catch (error) {
+  }
+  catch (error) {
     isCreatingNewProject.value = false
     console.error('Failed to create new project:', error)
     alert('创建项目失败，请重试')
@@ -302,12 +304,14 @@ watch(() => [...slides.value], () => {
         console.log('[EditorHeader] Auto-save successful')
         savedStatus.value = 'saved'
         lastSavedTime.value = new Date()
-      } else {
+      }
+      else {
         console.log('[EditorHeader] No project ID found, using default save mechanism')
         // Fallback to updateCurrentProject when no project ID is available
         await updateCurrentProject()
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('[EditorHeader] Auto-save failed:', error)
       savedStatus.value = 'saved' // Prevent UI being stuck in saving state
     }
@@ -337,12 +341,14 @@ watch(() => theme.value, () => {
         console.log('[EditorHeader] Auto-save successful')
         savedStatus.value = 'saved'
         lastSavedTime.value = new Date()
-      } else {
+      }
+      else {
         console.log('[EditorHeader] No project ID found, using default save mechanism')
         // Fallback to updateCurrentProject when no project ID is available
         await updateCurrentProject()
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('[EditorHeader] Auto-save failed:', error)
       savedStatus.value = 'saved' // Prevent UI being stuck in saving state
     }
@@ -361,7 +367,8 @@ watch(() => currentProjectId.value, async (newId) => {
         slidesStore.setTitle(project.title, newId)
         titleValue.value = project.title
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to update title on project ID change:', error)
     }
   }

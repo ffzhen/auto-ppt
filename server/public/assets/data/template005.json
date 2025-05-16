@@ -28,11 +28,11 @@
   },
   "slides": [
     {
-      "id": "SnvR3_Vjwq",
+      "id": "YXYtRY2RJj",
       "elements": [
         {
           "type": "shape",
-          "id": "mxA892ybc7",
+          "id": "DMvPawSFos",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -80,7 +80,7 @@
         },
         {
           "type": "shape",
-          "id": "OII6RLgE_9",
+          "id": "nTePGGNI2H",
           "width": 1455.5064041994751,
           "height": 1528.206309458305,
           "left": 189.7638845144357,
@@ -110,7 +110,7 @@
         },
         {
           "type": "shape",
-          "id": "GYklisHjyt",
+          "id": "ItuBpTSO4o",
           "width": 649.1874960629922,
           "height": 649.1874960629922,
           "left": 987.8361154855643,
@@ -141,7 +141,7 @@
         },
         {
           "type": "text",
-          "id": "ayf0SrcGwK",
+          "id": "ZvKpbqgyVs",
           "left": 189.7638845144357,
           "top": 213.55450692124106,
           "width": 1367.1883083532218,
@@ -166,11 +166,11 @@
       "type": "cover"
     },
     {
-      "id": "207RDv3gwq",
+      "id": "uap0IX4Nm-",
       "elements": [
         {
           "type": "shape",
-          "id": "IU7H676ROQ",
+          "id": "qzv282v7hY",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -218,7 +218,7 @@
         },
         {
           "type": "shape",
-          "id": "6TxP_sXFMp",
+          "id": "L16fZVdDhg",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -247,15 +247,15 @@
         },
         {
           "type": "text",
-          "id": "GWYfpBX1gw",
+          "id": "Lq73HYm0-h",
           "width": 1228.9333333333332,
-          "height": 1663.15625,
-          "left": 213.53333333333327,
-          "top": 345.3224375533428,
+          "height": 456.28125,
+          "left": 201.8229409705648,
+          "top": 1255.8054437585934,
           "rotate": 0,
           "defaultFontName": "",
           "defaultColor": "#333",
-          "content": "<p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p>",
+          "content": "<p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p>",
           "lineHeight": 1.15,
           "outline": {
             "color": "#000000",
@@ -264,12 +264,12 @@
           },
           "fill": "",
           "vertical": false,
-          "textType": "content",
-          "maxLine": 20
+          "textType": "item",
+          "maxLine": 5
         },
         {
           "type": "text",
-          "id": "5-cN-44TdV",
+          "id": "pJrDzzezE8",
           "width": 1260.2939527738263,
           "height": 93,
           "left": 158.86666666666665,
@@ -288,6 +288,50 @@
           "vertical": false,
           "textType": "title",
           "maxLine": 1
+        },
+        {
+          "type": "text",
+          "id": "esV9Wq0MfE",
+          "width": 1228.9333333333332,
+          "height": 456.28125,
+          "left": 211.5381889763782,
+          "top": 809.100141610622,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "maxLine": 5
+        },
+        {
+          "type": "text",
+          "id": "Gw23Mx-GCT",
+          "width": 1228.9333333333332,
+          "height": 432.890625,
+          "left": 223.53333333333327,
+          "top": 355.3224375533428,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\"><span style=\"font-size: 66px;\"><span style=\"font-family: Arial;\"><span style=\"color: rgb(0, 0, 0);\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了</span></span></span></p><p style=\"\"><br class=\"ProseMirror-trailingBreak\"></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "maxLine": 5
         }
       ],
       "background": {
@@ -298,11 +342,11 @@
       "type": "content"
     },
     {
-      "id": "irMVKhL7Gt",
+      "id": "43QCv6tgtJ",
       "elements": [
         {
           "type": "shape",
-          "id": "BvKq39HS_9",
+          "id": "K9sZLNJJ-0",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -350,7 +394,314 @@
         },
         {
           "type": "shape",
-          "id": "lsRwKqaxAS",
+          "id": "1mce0kZjIu",
+          "width": 1480.3999999999999,
+          "height": 2020.0666666666666,
+          "left": 87.79999999999998,
+          "top": 96.6,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 0 0 L 200 0 L 200 200 L 0 200 Z",
+          "fill": "#FFFFFF",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "Csc4HzoYpu",
+          "width": 1037.6830103366524,
+          "height": 109.5,
+          "left": 168.53333333333333,
+          "top": 1956.318374964438,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 88px;\"><span style=\"font-family: 黑体;\"><span style=\"color: #f9974c;\">开始</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "-OYNMVAXP-",
+          "width": 200.46666666666664,
+          "height": 165.86666666666665,
+          "left": 1303.8666666666666,
+          "top": 1938.3333333333333,
+          "viewBox": [
+            200,
+            200
+          ],
+          "path": "M 200 100 L 100 0 L 100 50 L 0 50 L 0 150 L 100 150 L 100 200 L 200 100 Z",
+          "fill": "#f9974c",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#254061",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false
+        },
+        {
+          "type": "text",
+          "id": "J93fjC9Gkh",
+          "width": 132.45170829777143,
+          "height": 64.203125,
+          "left": 1340.6,
+          "top": 1990.5999999999997,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: left;\"><span style=\"color: #FFFFFF;font-size: 42.7px;font-family: Arial;\">翻页</span></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false
+        },
+        {
+          "type": "shape",
+          "id": "EsSunxJBYO",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 155.26666666666662,
+          "top": 536.8708225699384,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#f9974c",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "kTbmSBvoBn"
+        },
+        {
+          "type": "text",
+          "id": "bCLIWgizwh",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.9333333333333,
+          "top": 555.0708225699383,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\" class=\"\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "kTbmSBvoBn"
+        },
+        {
+          "type": "text",
+          "id": "dQHkszOjZl",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.9333333333334,
+          "top": 693.2626507349452,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"ProseMirror-selectednode\" draggable=\"true\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学了有同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "kTbmSBvoBn"
+        },
+        {
+          "type": "shape",
+          "id": "XpOtOpjrtj",
+          "width": 435.06666666666666,
+          "height": 129.39999999999998,
+          "left": 155.2666666666665,
+          "top": 1057.6962460565826,
+          "viewBox": [
+            435.06666666666666,
+            129.39999999999998
+          ],
+          "path": "M 16.174999999999997 0 L 418.89166666666665 0 Q 435.06666666666666 0 435.06666666666666 16.174999999999997 L 435.06666666666666 113.22499999999998 Q 435.06666666666666 129.39999999999998 418.89166666666665 129.39999999999998 L 16.174999999999997 129.39999999999998 Q 0 129.39999999999998 0 113.22499999999998 L 0 16.174999999999997 Q 0 0 16.174999999999997 0 Z",
+          "fill": "#f9974c",
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#F79646",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "middle"
+          },
+          "flipH": false,
+          "flipV": false,
+          "pathFormula": "roundRect",
+          "keypoints": [
+            0.125
+          ],
+          "groupId": "YnZG2rabDW"
+        },
+        {
+          "type": "text",
+          "id": "5MBrrJw8Wj",
+          "width": 351.73333333333335,
+          "height": 93,
+          "left": 196.9333333333332,
+          "top": 1075.8962460565826,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"text-align: center;\"><strong><span style=\"font-size: 72px;\"><span style=\"font-family: 黑体;\"><span style=\"color: rgb(255, 255, 255);\">学习法</span></span></span></strong></p>",
+          "lineHeight": 1,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "itemTitle",
+          "groupId": "YnZG2rabDW"
+        },
+        {
+          "type": "text",
+          "id": "b13BWsC6R4",
+          "width": 1335.7999999999997,
+          "height": 228.515625,
+          "left": 164.93333333333328,
+          "top": 1214.0880742215895,
+          "rotate": 0,
+          "defaultFontName": "",
+          "defaultColor": "#333",
+          "content": "<p style=\"\" class=\"\"><span style=\"font-size: 58.7px;\"><span style=\"font-family: Arial;\">有同学说能不能出内卷学习法，要偷偷卷的那种，云云特别理解这种心情，所以立马就出了有同学同学说说</span></span></p>",
+          "lineHeight": 1.15,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "fill": "",
+          "vertical": false,
+          "textType": "item",
+          "groupId": "YnZG2rabDW"
+        }
+      ],
+      "background": {
+        "type": "solid",
+        "color": "#f9974c"
+      },
+      "remark": "",
+      "type": "content"
+    },
+    {
+      "id": "agSV6pTxbS",
+      "elements": [
+        {
+          "type": "shape",
+          "id": "irrVQx8w5a",
+          "width": 1652.0097112860894,
+          "height": 2208,
+          "left": 0,
+          "top": 0,
+          "viewBox": [
+            1242.0000000000002,
+            1660.0000000000002
+          ],
+          "path": " M0,0 L1242.0000000000002,0 L1242.0000000000002,1660.0000000000002 L0,1660.0000000000002 L0,0z",
+          "fill": "",
+          "gradient": {
+            "type": "linear",
+            "colors": [
+              {
+                "pos": 0,
+                "color": "#f79646ff"
+              },
+              {
+                "pos": 50,
+                "color": "#fde5d1ff"
+              },
+              {
+                "pos": 100,
+                "color": "#f57c18ff"
+              }
+            ],
+            "rotate": 90
+          },
+          "fixedRatio": false,
+          "rotate": 0,
+          "outline": {
+            "color": "#000000",
+            "width": 0,
+            "style": "solid"
+          },
+          "text": {
+            "content": "",
+            "defaultFontName": "",
+            "defaultColor": "#333",
+            "align": "top"
+          },
+          "flipH": false,
+          "flipV": false,
+          "special": true
+        },
+        {
+          "type": "shape",
+          "id": "B2GvuYJo4s",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -379,7 +730,7 @@
         },
         {
           "type": "shape",
-          "id": "iFBaKJD-We",
+          "id": "cxyumofya4",
           "width": 984.5999999999999,
           "height": 129.39999999999998,
           "left": 158.86666666666665,
@@ -412,7 +763,7 @@
         },
         {
           "type": "shape",
-          "id": "mVV2iQt__g",
+          "id": "k7FtoLB2UP",
           "width": 1345.4666666666665,
           "height": 218.9333333333333,
           "left": 158.86666666666665,
@@ -441,7 +792,7 @@
         },
         {
           "type": "line",
-          "id": "Wjhf-BxDDF",
+          "id": "tdxqH94CSz",
           "width": 5.33,
           "left": 174.33333333333331,
           "top": 373.26666666666665,
@@ -462,7 +813,7 @@
         },
         {
           "type": "text",
-          "id": "-ErL4z4Tsy",
+          "id": "tzXuJ202Ef",
           "width": 1228.9333333333332,
           "height": 298.03125,
           "left": 237.19999999999996,
@@ -484,7 +835,7 @@
         },
         {
           "type": "text",
-          "id": "yg62DUDHIf",
+          "id": "ZTAFnX0uFL",
           "width": 984.5999999999999,
           "height": 93,
           "left": 158.86666666666665,
@@ -506,7 +857,7 @@
         },
         {
           "type": "text",
-          "id": "49VgznebJo",
+          "id": "rz7kkviQEz",
           "width": 1330,
           "height": 141.40625,
           "left": 166.59999999999997,
@@ -528,7 +879,7 @@
         },
         {
           "type": "text",
-          "id": "uSgONp1n-O",
+          "id": "0xzv8r7rqi",
           "width": 828,
           "height": 80.703125,
           "left": 237.19999999999996,
@@ -546,12 +897,12 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "S3PgWWlCHU",
+          "groupId": "DJhmaYycnu",
           "maxLine": 1
         },
         {
           "type": "text",
-          "id": "YibPSqZS3F",
+          "id": "GigkCO8Ssv",
           "width": 1238.1333333333332,
           "height": 141.40625,
           "left": 237.19999999999996,
@@ -569,12 +920,12 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "S3PgWWlCHU",
+          "groupId": "DJhmaYycnu",
           "maxLine": 3
         },
         {
           "type": "text",
-          "id": "sFlLdTVq2Q",
+          "id": "Pu8G3dwOlK",
           "width": 828,
           "height": 80.203125,
           "left": 237.19999999999996,
@@ -592,12 +943,12 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "6PpJicMB-A",
+          "groupId": "dhOBMG3v93",
           "maxLine": 1
         },
         {
           "type": "text",
-          "id": "FYn6OA6rYk",
+          "id": "eVsFXAFrp9",
           "width": 1222,
           "height": 141.40625,
           "left": 237.19999999999996,
@@ -615,12 +966,12 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "6PpJicMB-A",
+          "groupId": "dhOBMG3v93",
           "maxLine": 3
         },
         {
           "type": "text",
-          "id": "GqsMWKgkU8",
+          "id": "tl3TIwyX9y",
           "width": 1200,
           "height": 80.703125,
           "left": 237.19999999999996,
@@ -638,12 +989,12 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "lKzk_sMT-w",
+          "groupId": "b4JeyDUuDr",
           "maxLine": 3
         },
         {
           "type": "text",
-          "id": "ah-h7RSPT0",
+          "id": "i9Z55Ao5mZ",
           "width": 828,
           "height": 80.203125,
           "left": 237.19999999999996,
@@ -661,7 +1012,7 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "lKzk_sMT-w"
+          "groupId": "b4JeyDUuDr"
         }
       ],
       "background": {
@@ -672,11 +1023,11 @@
       "type": "content"
     },
     {
-      "id": "B9kdisnh6c",
+      "id": "REkyYOqNaL",
       "elements": [
         {
           "type": "shape",
-          "id": "qGxadRQEWF",
+          "id": "ICvWNBbxXZ",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -724,7 +1075,7 @@
         },
         {
           "type": "shape",
-          "id": "rbrNGw3L_L",
+          "id": "Th6uFJSMU2",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -753,7 +1104,7 @@
         },
         {
           "type": "text",
-          "id": "2jSlHDZU8Q",
+          "id": "KPaEdAnER0",
           "width": 1037.6830103366524,
           "height": 109.5,
           "left": 168.53333333333333,
@@ -773,7 +1124,7 @@
         },
         {
           "type": "shape",
-          "id": "ZWiKdMaIdA",
+          "id": "FUMnO9g_Eh",
           "width": 200.46666666666664,
           "height": 165.86666666666665,
           "left": 1303.8666666666666,
@@ -802,7 +1153,7 @@
         },
         {
           "type": "text",
-          "id": "kaqZjevwp0",
+          "id": "abFYiVjvIU",
           "width": 132.45170829777143,
           "height": 64.203125,
           "left": 1340.6,
@@ -822,7 +1173,7 @@
         },
         {
           "type": "shape",
-          "id": "cJMZoaeTel",
+          "id": "m5HAIYJH-7",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 144.79727605500233,
@@ -846,11 +1197,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "b62Mek4HhI"
+          "groupId": "S6iofoyaO0"
         },
         {
           "type": "text",
-          "id": "Wj3gJtx6dc",
+          "id": "kJBgEQstJ0",
           "width": 351.73333333333335,
           "height": 93,
           "left": 186.463942721669,
@@ -868,11 +1219,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "b62Mek4HhI"
+          "groupId": "S6iofoyaO0"
         },
         {
           "type": "text",
-          "id": "q6G3hNo9-t",
+          "id": "KjR6sCRbP7",
           "width": 1335.7999999999997,
           "height": 228.515625,
           "left": 154.4639427216691,
@@ -890,11 +1241,11 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "b62Mek4HhI"
+          "groupId": "S6iofoyaO0"
         },
         {
           "type": "shape",
-          "id": "Meg97xJ9Nn",
+          "id": "Ykv2XG-QLW",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 145.39727605500232,
@@ -918,11 +1269,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "i7gBOR4wID"
+          "groupId": "jnTpBP85Ug"
         },
         {
           "type": "text",
-          "id": "xbzoBoDT4r",
+          "id": "A21ECZhLiW",
           "width": 351.73333333333335,
           "height": 93,
           "left": 173.10475523944993,
@@ -940,11 +1291,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "i7gBOR4wID"
+          "groupId": "jnTpBP85Ug"
         },
         {
           "type": "text",
-          "id": "DU7Dd-or3A",
+          "id": "dFAeIyT1bj",
           "width": 1346.6666666666665,
           "height": 228.515625,
           "left": 144.79727605500233,
@@ -962,11 +1313,11 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "i7gBOR4wID"
+          "groupId": "jnTpBP85Ug"
         },
         {
           "type": "shape",
-          "id": "wxCWG810t1",
+          "id": "touwdQyrBU",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 144.79727605500233,
@@ -999,7 +1350,7 @@
         },
         {
           "type": "text",
-          "id": "8dybPBEFRc",
+          "id": "q8vZO712Ao",
           "width": 351.73333333333335,
           "height": 93,
           "left": 165.52516149834042,
@@ -1020,7 +1371,7 @@
         },
         {
           "type": "text",
-          "id": "yOtahUBHmK",
+          "id": "3oLVmnVCM9",
           "width": 1338.3999999999999,
           "height": 228.515625,
           "left": 158.79999999999993,
@@ -1041,7 +1392,7 @@
         },
         {
           "type": "shape",
-          "id": "zaYlhMHA_P",
+          "id": "TAPTGpvLO2",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 144.79727605500233,
@@ -1065,11 +1416,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "nTHBUf7Ikq"
+          "groupId": "kyL8zNWWJq"
         },
         {
           "type": "text",
-          "id": "mUp_JrIlvu",
+          "id": "8t_rVyQwPi",
           "width": 351.73333333333335,
           "height": 93,
           "left": 186.463942721669,
@@ -1087,11 +1438,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "nTHBUf7Ikq"
+          "groupId": "kyL8zNWWJq"
         },
         {
           "type": "text",
-          "id": "knmQojQMY_",
+          "id": "KFizqPlpYG",
           "width": 1335.7999999999997,
           "height": 228.515625,
           "left": 154.4639427216691,
@@ -1109,7 +1460,7 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "nTHBUf7Ikq",
+          "groupId": "kyL8zNWWJq",
           "maxLine": 4
         }
       ],
@@ -1121,11 +1472,11 @@
       "type": "content"
     },
     {
-      "id": "CpoQS99GRm",
+      "id": "5IOwgu5Dq2",
       "elements": [
         {
           "type": "shape",
-          "id": "m1dayei64O",
+          "id": "gqeTNYexUh",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -1173,7 +1524,7 @@
         },
         {
           "type": "shape",
-          "id": "qskAl5LALM",
+          "id": "-y0AMi8EQ7",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -1202,7 +1553,7 @@
         },
         {
           "type": "text",
-          "id": "pFUN-r9LpZ",
+          "id": "YVLxFEAF1-",
           "width": 1037.6830103366524,
           "height": 109.5,
           "left": 168.53333333333333,
@@ -1222,7 +1573,7 @@
         },
         {
           "type": "shape",
-          "id": "A2pPPIPgUk",
+          "id": "7qrPSwohCo",
           "width": 200.46666666666664,
           "height": 165.86666666666665,
           "left": 1303.8666666666666,
@@ -1245,7 +1596,7 @@
         },
         {
           "type": "text",
-          "id": "LzF1OAOk_j",
+          "id": "NLHnYbTnr1",
           "width": 132.45170829777143,
           "height": 64.203125,
           "left": 1340.6,
@@ -1265,7 +1616,7 @@
         },
         {
           "type": "shape",
-          "id": "fIjTnI-J5H",
+          "id": "S7JBxb_t1C",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 154.6666666666666,
@@ -1289,11 +1640,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "Yd7o3v33PH"
+          "groupId": "WjmVVaaja2"
         },
         {
           "type": "text",
-          "id": "d417x5a422",
+          "id": "YHN5AZj6VM",
           "width": 351.73333333333335,
           "height": 93,
           "left": 196.3333333333333,
@@ -1311,11 +1662,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "Yd7o3v33PH"
+          "groupId": "WjmVVaaja2"
         },
         {
           "type": "text",
-          "id": "l7IlrfS8SL",
+          "id": "eIt3pybPBK",
           "width": 1335.7999999999997,
           "height": 228.515625,
           "left": 164.33333333333337,
@@ -1333,11 +1684,11 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "Yd7o3v33PH"
+          "groupId": "WjmVVaaja2"
         },
         {
           "type": "shape",
-          "id": "3QJTRN-oXR",
+          "id": "ahUYCijj07",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 155.2666666666666,
@@ -1361,11 +1712,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "7TRGfzXyH_"
+          "groupId": "QfmTLQLF_P"
         },
         {
           "type": "text",
-          "id": "I_n_cAwLol",
+          "id": "w9ybi6gLJv",
           "width": 351.73333333333335,
           "height": 93,
           "left": 182.9741458511142,
@@ -1383,11 +1734,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "7TRGfzXyH_"
+          "groupId": "QfmTLQLF_P"
         },
         {
           "type": "text",
-          "id": "G009MOXpiP",
+          "id": "wh29RycOD5",
           "width": 1346.6666666666665,
           "height": 228.515625,
           "left": 154.6666666666666,
@@ -1405,11 +1756,11 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "7TRGfzXyH_"
+          "groupId": "QfmTLQLF_P"
         },
         {
           "type": "shape",
-          "id": "WzZEvBuQdW",
+          "id": "SzA74TAQS1",
           "width": 435.06666666666666,
           "height": 129.39999999999998,
           "left": 154.6666666666666,
@@ -1433,11 +1784,11 @@
           "keypoints": [
             0.125
           ],
-          "groupId": "EKsJ812lGk"
+          "groupId": "dP_9Qk--lc"
         },
         {
           "type": "text",
-          "id": "LZ85jI7IOO",
+          "id": "flHX1VTL1z",
           "width": 351.73333333333335,
           "height": 93,
           "left": 196.3333333333333,
@@ -1455,11 +1806,11 @@
           "fill": "",
           "vertical": false,
           "textType": "itemTitle",
-          "groupId": "EKsJ812lGk"
+          "groupId": "dP_9Qk--lc"
         },
         {
           "type": "text",
-          "id": "zzPnfKw6Jt",
+          "id": "G-WaPvFkJk",
           "width": 1335.7999999999997,
           "height": 228.515625,
           "left": 164.33333333333337,
@@ -1477,7 +1828,7 @@
           "fill": "",
           "vertical": false,
           "textType": "item",
-          "groupId": "EKsJ812lGk",
+          "groupId": "dP_9Qk--lc",
           "maxLine": 4
         }
       ],
@@ -1489,11 +1840,11 @@
       "type": "content"
     },
     {
-      "id": "n9weXpvVpf",
+      "id": "LIPVczbfGE",
       "elements": [
         {
           "type": "shape",
-          "id": "ODjFp1Ppw3",
+          "id": "2OygS0qXxj",
           "width": 1652.0097112860894,
           "height": 2208,
           "left": 0,
@@ -1541,7 +1892,7 @@
         },
         {
           "type": "shape",
-          "id": "DMbtXh4eRn",
+          "id": "uaNEZoYAzS",
           "width": 1480.3999999999999,
           "height": 2020.0666666666666,
           "left": 87.79999999999998,
@@ -1570,7 +1921,7 @@
         },
         {
           "type": "text",
-          "id": "y1HOU2Ogt_",
+          "id": "DOBBLEpn11",
           "width": 146.41089577999048,
           "height": 64.203125,
           "left": 1340.6,
@@ -1590,7 +1941,7 @@
         },
         {
           "type": "text",
-          "id": "uH33WUS0pR",
+          "id": "VLmEkzn0ux",
           "width": 1280.1333333333332,
           "height": 492.5,
           "left": 187.9333333333333,

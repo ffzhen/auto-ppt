@@ -34,5 +34,24 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  optimizeDeps: {
+    include: [
+      'monaco-editor/esm/vs/language/json/json.worker',
+      'monaco-editor/esm/vs/editor/editor.worker',
+      'monaco-editor-vue3'
+    ],
+    exclude: []
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          jsonWorker: ['monaco-editor/esm/vs/language/json/json.worker'],
+          editorWorker: ['monaco-editor/esm/vs/editor/editor.worker'],
+          monaco: ['monaco-editor', 'monaco-editor-vue3']
+        }
+      }
+    }
   }
 })

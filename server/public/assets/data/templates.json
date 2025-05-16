@@ -1,18 +1,18 @@
 [
   { 
-    "name": "虚拟资料卡片", 
-    "id": "doc_template", 
+    "name": "模版001", 
+    "id": "template001", 
     "cover": "img/虚拟.jpg",
     "description": "虚拟资料卡片"
   },
   {
-    "name": "高净值风格", 
-    "id": "blue_template", 
+    "name": "模版002", 
+    "id": "template002", 
     "cover": "img/blue.jpg"
   },
   {
-    "name": "养生风格1", 
-    "id": "ys_template", 
+    "name": "模版003", 
+    "id": "template003", 
     "cover": "img/ys1.jpg"
   },
   {
@@ -24,5 +24,11 @@
     "name": "模版005", 
     "id": "template005", 
     "cover": "img/template005.jpg"
+  },
+  {
+    "name": "模版006", 
+    "id": "template006", 
+    "cover": "img/template006.jpg",
+    "description": "现代简约风格模板"
   }
 ]

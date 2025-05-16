@@ -120,7 +120,8 @@ export const useSlidesStore = defineStore('slides', {
           this.theme = data.theme
           this.slides = data.slides
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Failed to load data from IndexedDB:', error)
         message.error('加载数据失败，请刷新页面重试')
       }
@@ -158,7 +159,8 @@ export const useSlidesStore = defineStore('slides', {
             slides: this.slides,
           })
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Failed to save data:', error)
         message.error('保存数据失败，请确保有足够的存储空间')
       }
@@ -248,16 +250,17 @@ export const useSlidesStore = defineStore('slides', {
     // 获取模板数据
     async getTemplateData(templateId: string, retryCount = 3): Promise<any> {
       try {
-        return await api.getMockData(`template_${templateId}`);
-      } catch (error) {
+        return await api.getMockData(`template_${templateId}`)
+      }
+      catch (error) {
         if (retryCount > 0) {
-          console.warn(`加载模板${templateId}数据失败，剩余重试次数: ${retryCount - 1}`);
+          console.warn(`加载模板${templateId}数据失败，剩余重试次数: ${retryCount - 1}`)
           // 延迟1秒后重试
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          return this.getTemplateData(templateId, retryCount - 1);
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return this.getTemplateData(templateId, retryCount - 1)
         }
-        console.error(`加载模板${templateId}数据失败:`, error);
-        return null;
+        console.error(`加载模板${templateId}数据失败:`, error)
+        return null
       }
     },
   

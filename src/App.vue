@@ -62,16 +62,16 @@ onMounted(async () => {
     await slidesStore.initFromStorage()
     console.log('[App] Slides data loaded')
     
-    // 如果没有数据，则从服务器加载
-    if (slidesStore.slides.length === 0) {
-      console.log('[App] No slides data found, loading from server')
-      const slides = await api.getMockData('slides')
-      slidesStore.setSlides(slides)
-      console.log('[App] Loaded slides data from server')
-    } 
-    else {
-      console.log('[App] Using existing slides data')
-    }
+    // // 如果没有数据，则从服务器加载
+    // if (slidesStore.slides.length === 0) {
+    //   console.log('[App] No slides data found, loading from server')
+    //   const slides = await api.getMockData('slides')
+    //   slidesStore.setSlides(slides)
+    //   console.log('[App] Loaded slides data from server')
+    // } 
+    // else {
+    //   console.log('[App] Using existing slides data')
+    // }
     
     // 加载模板
     console.log('[App] Loading templates')

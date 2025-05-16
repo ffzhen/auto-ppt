@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express'
 
 // Slide types based on the client types
 export interface SlideTheme {

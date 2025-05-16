@@ -40,7 +40,7 @@ const { theme } = storeToRefs(slidesStore)
 const themeColors = ref<string[]>([])
 
 onMounted(() => {
-  let colors = theme.value.themeColors
+  const colors = theme.value.themeColors
 
   while (colors.length < 6) {
     colors.push('#00000000')

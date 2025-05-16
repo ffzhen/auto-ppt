@@ -1,16 +1,16 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import puppeteer from 'puppeteer';
-import { v4 as uuidv4 } from 'uuid';
-import PptxGenJS from 'pptxgenjs';
-import { PresentationData } from '../types';
-import JSZip from 'jszip';
+import * as fs from 'fs'
+import * as path from 'path'
+import puppeteer from 'puppeteer'
+import { v4 as uuidv4 } from 'uuid'
+import PptxGenJS from 'pptxgenjs'
+import type { PresentationData } from '../types'
+import JSZip from 'jszip'
 import type { Slide } from '../types/slides'
 
 // Create temp directory if it doesn't exist
-const TEMP_DIR = path.join(__dirname, '../../temp');
+const TEMP_DIR = path.join(__dirname, '../../temp')
 if (!fs.existsSync(TEMP_DIR)) {
-  fs.mkdirSync(TEMP_DIR, { recursive: true });
+  fs.mkdirSync(TEMP_DIR, { recursive: true })
 }
 
 // Using a more flexible slide type definition to avoid type errors
@@ -56,18 +56,18 @@ export const RenderService = {
    * Generate HTML representation of a presentation
    */
   generatePresentationHTML(presentation: PresentationData): string {
-    const { title, slides, theme } = presentation;
+    const { title, slides, theme } = presentation
     
     // Generate HTML for each slide
     const slidesHTML = slides.map((slide) => {
-      return this.generateSlideHTML(slide as unknown as Slide, theme);
-    }).join('\n');
+      return this.generateSlideHTML(slide as unknown as Slide, theme)
+    }).join('\n')
     
     // Get dimensions from the first slide or use defaults
-    const firstSlide = slides[0] || {};
-    const slideWidth = (firstSlide as any).size?.width || 600;
-    const slideHeight = (firstSlide as any).size?.height || 800;
-    const slideBackground = (firstSlide as any).background?.color || theme.backgroundColor || '#FFFFFF';
+    const firstSlide = slides[0] || {}
+    const slideWidth = (firstSlide as any).size?.width || 600
+    const slideHeight = (firstSlide as any).size?.height || 800
+    const slideBackground = (firstSlide as any).background?.color || theme.backgroundColor || '#FFFFFF'
     
     // Create complete HTML document
     return `
@@ -97,7 +97,7 @@ export const RenderService = {
       ${slidesHTML}
     </body>
     </html>
-    `;
+    `
   },
   
   /**
@@ -119,7 +119,7 @@ export const RenderService = {
             ">
               ${element.content || ''}
             </div>
-          `;
+          `
         case 'image':
           return `
             <div class="slide-element image-element" style="
@@ -134,11 +134,11 @@ export const RenderService = {
                 style="width: 100%; height: 100%; object-fit: ${element.clip ? 'cover' : 'contain'};" 
                 alt="Slide image">
             </div>
-          `;
+          `
         case 'shape':
-          let shapeContent = '';
+          let shapeContent = ''
           if (element.text && element.text.content) {
-            shapeContent = element.text.content;
+            shapeContent = element.text.content
           }
           
           return `
@@ -154,44 +154,44 @@ export const RenderService = {
             ">
               ${shapeContent}
             </div>
-          `;
+          `
         default:
-          return '';
+          return ''
       }
-    }).join('\n');
+    }).join('\n')
     
     // Create slide container
     return `
       <div class="slide-container" style="background-color: ${slide.background?.color || theme.backgroundColor || '#FFFFFF'}">
         ${elementsHTML}
       </div>
-    `;
+    `
   },
   
   /**
    * Render presentation as PDF
    */
   async renderAsPDF(presentation: PresentationData): Promise<Buffer> {
-    const html = this.generatePresentationHTML(presentation);
-    const tempHtmlPath = path.join(TEMP_DIR, `${uuidv4()}.html`);
+    const html = this.generatePresentationHTML(presentation)
+    const tempHtmlPath = path.join(TEMP_DIR, `${uuidv4()}.html`)
     
     // Write HTML to temporary file
-    fs.writeFileSync(tempHtmlPath, html);
+    fs.writeFileSync(tempHtmlPath, html)
     
     try {
       // Launch Puppeteer
-      const browser = await puppeteer.launch({ headless: 'new' });
-      const page = await browser.newPage();
+      const browser = await puppeteer.launch({ headless: 'new' })
+      const page = await browser.newPage()
       
       // Load the HTML file
-      await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' });
+      await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' })
       
       // Set the page size to match slide dimensions
-      const slide = presentation.slides[0] || {};
-      const width = (slide as any).size?.width || 600;
-      const height = (slide as any).size?.height || 800;
+      const slide = presentation.slides[0] || {}
+      const width = (slide as any).size?.width || 600
+      const height = (slide as any).size?.height || 800
       
-      await page.setViewport({ width, height });
+      await page.setViewport({ width, height })
       
       // Generate PDF
       const pdfBuffer = await page.pdf({
@@ -199,19 +199,21 @@ export const RenderService = {
         height: `${height}px`,
         printBackground: true,
         margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      });
+      })
       
-      await browser.close();
+      await browser.close()
       
-      return pdfBuffer;
-    } catch (error) {
-      console.error('Error rendering PDF:', error);
+      return pdfBuffer
+    }
+    catch (error) {
+      console.error('Error rendering PDF:', error)
       // Fallback to mock implementation if rendering fails
-      return Buffer.from(`Mock PDF export of presentation: ${presentation.title}, ${presentation.slides.length} slides`);
-    } finally {
+      return Buffer.from(`Mock PDF export of presentation: ${presentation.title}, ${presentation.slides.length} slides`)
+    }
+    finally {
       // Clean up temp file
       if (fs.existsSync(tempHtmlPath)) {
-        fs.unlinkSync(tempHtmlPath);
+        fs.unlinkSync(tempHtmlPath)
       }
     }
   },
@@ -220,41 +222,41 @@ export const RenderService = {
    * Render presentation as images (one per slide)
    */
   async renderAsImages(presentation: PresentationData): Promise<Buffer[]> {
-    const html = this.generatePresentationHTML(presentation);
-    const tempHtmlPath = path.join(TEMP_DIR, `${uuidv4()}.html`);
+    const html = this.generatePresentationHTML(presentation)
+    const tempHtmlPath = path.join(TEMP_DIR, `${uuidv4()}.html`)
     
     // Write HTML to temporary file
-    fs.writeFileSync(tempHtmlPath, html);
+    fs.writeFileSync(tempHtmlPath, html)
     
     try {
       // Launch Puppeteer
-      const browser = await puppeteer.launch({ headless: 'new' });
-      const page = await browser.newPage();
+      const browser = await puppeteer.launch({ headless: 'new' })
+      const page = await browser.newPage()
       
       // Load the HTML file
-      await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' });
+      await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' })
       
       // Set the page size to match slide dimensions
-      const slide = presentation.slides[0] || {};
-      const width = (slide as any).size?.width || 600;
-      const height = (slide as any).size?.height || 800;
+      const slide = presentation.slides[0] || {}
+      const width = (slide as any).size?.width || 600
+      const height = (slide as any).size?.height || 800
       
-      await page.setViewport({ width, height });
+      await page.setViewport({ width, height })
       
       // Get all slide containers
-      const slideCount = presentation.slides.length;
-      const images: Buffer[] = [];
+      const slideCount = presentation.slides.length
+      const images: Buffer[] = []
       
       // Take screenshot of each slide
       for (let i = 0; i < slideCount; i++) {
         // Navigate to specific slide
         await page.evaluate((index: number) => {
-          const slides = document.querySelectorAll('.slide-container');
-          const slide = slides[index];
+          const slides = document.querySelectorAll('.slide-container')
+          const slide = slides[index]
           if (slide) {
-            slide.scrollIntoView();
+            slide.scrollIntoView()
           }
-        }, i);
+        }, i)
         
         // Take screenshot
         const screenshot = await page.screenshot({
@@ -266,26 +268,28 @@ export const RenderService = {
             width,
             height
           }
-        });
+        })
         
-        images.push(screenshot);
+        images.push(screenshot)
       }
       
-      await browser.close();
+      await browser.close()
       
-      return images;
-    } catch (error) {
-      console.error('Error rendering images:', error);
+      return images
+    }
+    catch (error) {
+      console.error('Error rendering images:', error)
       // Generate mock images if rendering fails
-      const mockImages: Buffer[] = [];
+      const mockImages: Buffer[] = []
       for (let i = 0; i < presentation.slides.length; i++) {
-        mockImages.push(Buffer.from(`Mock image for slide ${i + 1}`));
+        mockImages.push(Buffer.from(`Mock image for slide ${i + 1}`))
       }
-      return mockImages;
-    } finally {
+      return mockImages
+    }
+    finally {
       // Clean up temp file
       if (fs.existsSync(tempHtmlPath)) {
-        fs.unlinkSync(tempHtmlPath);
+        fs.unlinkSync(tempHtmlPath)
       }
     }
   },
@@ -296,32 +300,32 @@ export const RenderService = {
   async renderAsPPTX(presentation: PresentationData): Promise<Buffer> {
     try {
       // Create new PPTX
-      const pptx = new PptxGenJS();
+      const pptx = new PptxGenJS()
       
       // Set presentation properties
-      pptx.layout = 'LAYOUT_CUSTOM';
+      pptx.layout = 'LAYOUT_CUSTOM'
       
       // Get slide dimensions
-      const firstSlide = presentation.slides[0] || {};
-      const slideWidth = (firstSlide as any).size?.width || 600;
-      const slideHeight = (firstSlide as any).size?.height || 800;
+      const firstSlide = presentation.slides[0] || {}
+      const slideWidth = (firstSlide as any).size?.width || 600
+      const slideHeight = (firstSlide as any).size?.height || 800
       
       // Convert px to inches (1 inch = 96px)
       pptx.defineLayout({
         name: 'CUSTOM',
         width: slideWidth / 96,
         height: slideHeight / 96
-      });
+      })
       
       // Process each slide
       for (const slide of presentation.slides) {
         // Create new slide
-        const pptxSlide = pptx.addSlide();
+        const pptxSlide = pptx.addSlide()
         
         // Set background
         if ((slide as any).background) {
           if ((slide as any).background.type === 'solid' && (slide as any).background.color) {
-            pptxSlide.background = { color: (slide as any).background.color };
+            pptxSlide.background = { color: (slide as any).background.color }
           }
           // We could handle image backgrounds here if needed
         }
@@ -338,9 +342,9 @@ export const RenderService = {
                   h: element.height / 96,
                   rotate: element.rotate || 0,
                   isTextBox: true,
-                });
+                })
               }
-              break;
+              break
             
             case 'image':
               if (element.src) {
@@ -354,10 +358,11 @@ export const RenderService = {
                       w: element.width / 96,
                       h: element.height / 96,
                       sizing: { type: 'cover' },
-                    });
-                  } else if (element.src.startsWith('data:')) {
+                    })
+                  }
+                  else if (element.src.startsWith('data:')) {
                     // For base64 images
-                    const imgData = element.src.split(',')[1];
+                    const imgData = element.src.split(',')[1]
                     pptxSlide.addImage({
                       data: imgData,
                       x: element.left / 96,
@@ -365,13 +370,14 @@ export const RenderService = {
                       w: element.width / 96,
                       h: element.height / 96,
                       sizing: { type: 'cover' },
-                    });
+                    })
                   }
-                } catch (error) {
-                  console.error('Error adding image to PPTX:', error);
+                }
+                catch (error) {
+                  console.error('Error adding image to PPTX:', error)
                 }
               }
-              break;
+              break
             
             case 'shape':
               // Add shape
@@ -386,8 +392,9 @@ export const RenderService = {
                   fill: element.fill || 'transparent',
                   shape: 'rect', // Default shape
                   // We could map different shape types here
-                });
-              } else {
+                })
+              }
+              else {
                 pptxSlide.addShape('rect', {
                   x: element.left / 96,
                   y: element.top / 96,
@@ -395,20 +402,21 @@ export const RenderService = {
                   h: element.height / 96,
                   rotate: element.rotate || 0,
                   fill: element.fill || 'transparent',
-                });
+                })
               }
-              break;
+              break
           }
         }
       }
       
       // Generate PPTX as Buffer
-      const pptxData = await pptx.write('arraybuffer');
-      return Buffer.from(pptxData);
-    } catch (error) {
-      console.error('Error rendering PPTX:', error);
+      const pptxData = await pptx.write('arraybuffer')
+      return Buffer.from(pptxData)
+    }
+    catch (error) {
+      console.error('Error rendering PPTX:', error)
       // Fallback to mock implementation if rendering fails
-      return Buffer.from(`Mock PPTX export of presentation: ${presentation.title}, ${presentation.slides.length} slides`);
+      return Buffer.from(`Mock PPTX export of presentation: ${presentation.title}, ${presentation.slides.length} slides`)
     }
   },
   
@@ -417,19 +425,20 @@ export const RenderService = {
    */
   async packImagesIntoZip(images: Buffer[]): Promise<Buffer> {
     try {
-      const zip = new JSZip();
+      const zip = new JSZip()
       
       // Add each image to the ZIP
       images.forEach((imageBuffer, index) => {
-        zip.file(`slide_${index + 1}.png`, imageBuffer);
-      });
+        zip.file(`slide_${index + 1}.png`, imageBuffer)
+      })
       
       // Generate ZIP file
-      return await zip.generateAsync({ type: 'nodebuffer' });
-    } catch (error) {
-      console.error('Error creating ZIP file:', error);
+      return await zip.generateAsync({ type: 'nodebuffer' })
+    }
+    catch (error) {
+      console.error('Error creating ZIP file:', error)
       // Fallback to simple concatenation if ZIP creation fails
-      return Buffer.concat(images);
+      return Buffer.concat(images)
     }
   },
   
@@ -440,10 +449,10 @@ export const RenderService = {
   cleanHtmlForPptx(html: string): string {
     // This is a basic implementation
     // For a production app, you'd need more sophisticated HTML parsing
-    let cleaned = html.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '\n');
-    cleaned = cleaned.replace(/<br\s*\/?>/g, '\n');
-    cleaned = cleaned.replace(/<[^>]*>/g, ''); // Remove all remaining HTML tags
-    return cleaned;
+    let cleaned = html.replace(/<p[^>]*>/g, '').replace(/<\/p>/g, '\n')
+    cleaned = cleaned.replace(/<br\s*\/?>/g, '\n')
+    cleaned = cleaned.replace(/<[^>]*>/g, '') // Remove all remaining HTML tags
+    return cleaned
   },
 
   /**
@@ -518,7 +527,8 @@ export const RenderService = {
       }
 
       return images
-    } finally {
+    }
+    finally {
       await browser.close()
     }
   },
@@ -553,4 +563,4 @@ export const RenderService = {
       }
     }).join('')
   }
-}; 
+} 

@@ -75,10 +75,12 @@ export default defineComponent({
           !useLink.value
         )
         message.success(`导出${format.toUpperCase()}成功！`)
-      } catch (error) {
+      }
+      catch (error) {
         console.error('导出失败:', error)
         message.error(`导出${format.toUpperCase()}失败！`)
-      } finally {
+      }
+      finally {
         loading.value = false
       }
     }
