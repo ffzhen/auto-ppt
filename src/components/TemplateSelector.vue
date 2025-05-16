@@ -52,7 +52,7 @@
       </div>
     </div>
     
-    <div class="template-actions">
+    <div class="template-actions flex justify-end">
       <slot name="actions"></slot>
     </div>
   </div>

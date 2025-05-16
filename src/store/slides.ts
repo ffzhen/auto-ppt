@@ -218,7 +218,7 @@ export const useSlidesStore = defineStore('slides', {
             // Process templates
             const templatesWithCovers = templates.map((template: SlideTemplate) => ({
               ...template,
-              cover: getTemplateCover(template.cover)
+              // cover: getTemplateCover(template.cover)
             }))
             console.log('[SlidesStore] Templates processed with covers')
             

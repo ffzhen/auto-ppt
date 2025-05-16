@@ -362,12 +362,12 @@ export default () => {
           fontSize: number;
           fontFamily: string;
           color: string;
-          
+          fontWeight?: string;
+          fontStyle?: string;
         } = {
           fontSize: size,
           fontFamily: fontInfo.fontFamily,
-          color: fontInfo.color,
-          
+          color: fontInfo.color
         }
 
         // 从模板中提取样式
@@ -388,6 +388,12 @@ export default () => {
                 (templateStyles as any)[key] = match[1]
               }
             }
+          }
+          
+          // 检查模板元素是否有粗体特性（例如是否是strong标签或者包含strong标签）
+          if (templateBodyElement.tagName.toLowerCase() === 'strong' || 
+              templateBodyElement.querySelector('strong')) {
+            templateStyles.fontWeight = 'bold'
           }
         }
 
@@ -411,8 +417,19 @@ export default () => {
           if (templateStyles.fontFamily && !templateStyle.includes('font-family:')) {
             templateStyle += `; font-family: ${templateStyles.fontFamily}`
           }
+          
           if (!templateStyle.includes('font-size:')) {
             templateStyle += `; font-size: ${size}px`
+          }
+          
+          // 保留粗体样式
+          if (templateStyles.fontWeight && !templateStyle.includes('font-weight:')) {
+            templateStyle += `; font-weight: ${templateStyles.fontWeight}`
+          }
+          
+          // 保留斜体样式
+          if (templateStyles.fontStyle && !templateStyle.includes('font-style:')) {
+            templateStyle += `; font-style: ${templateStyles.fontStyle}`
           }
           
           // 应用清理后的样式
@@ -434,13 +451,48 @@ export default () => {
             if (templateStyles.fontFamily && !elementStyle.includes('font-family:')) {
               newStyle += `; font-family: ${templateStyles.fontFamily}`
             }
+            
             if (!elementStyle.includes('font-size:')) {
               // 如果元素没有字体大小，使用计算的自适应大小
               newStyle += `; font-size: ${size}px`
             }
             
+            // 保留粗体样式
+            // 检查元素是否为strong或b标签，如果是或者模板有粗体样式，则添加粗体
+            const shouldBeBold = element.tagName.toLowerCase() === 'strong' || 
+                                 element.tagName.toLowerCase() === 'b' || 
+                                 (templateStyles.fontWeight === 'bold')
+                                 
+            if (shouldBeBold && !elementStyle.includes('font-weight:')) {
+              newStyle += `; font-weight: bold`
+            } 
+            else if (templateStyles.fontWeight && !elementStyle.includes('font-weight:')) {
+              newStyle += `; font-weight: ${templateStyles.fontWeight}`
+            }
+            
+            // 保留斜体样式
+            const shouldBeItalic = element.tagName.toLowerCase() === 'em' || 
+                                 element.tagName.toLowerCase() === 'i'
+                                  
+            if (shouldBeItalic && !elementStyle.includes('font-style:')) {
+              newStyle += `; font-style: italic`
+            } 
+            else if (templateStyles.fontStyle && !elementStyle.includes('font-style:')) {
+              newStyle += `; font-style: ${templateStyles.fontStyle}`
+            }
+            
             // 应用清理后的样式
             element.setAttribute('style', newStyle.replace(/^;\s*/, ''))
+          })
+          
+          // 特殊处理：保留strong标签的粗体效果
+          const strongElements = templateBodyElement.querySelectorAll('strong, b')
+          strongElements.forEach(element => {
+            let elementStyle = element.getAttribute('style') || ''
+            if (!elementStyle.includes('font-weight:')) {
+              elementStyle += '; font-weight: bold'
+              element.setAttribute('style', elementStyle.replace(/^;\s*/, ''))
+            }
           })
         }
         else {

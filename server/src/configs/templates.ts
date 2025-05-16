@@ -3,6 +3,9 @@ interface TemplatePrompt {
   isStream: boolean
 }
 
+// Import template007 prompt function
+import { getTemplate007Prompt } from './template007'
+
 // 生成文档模板的提示词
 function getTemplate001Prompt({ isStream }: TemplatePrompt): string {
   console.log('getDocTemplatePrompt')
@@ -326,7 +329,7 @@ function getTemplate005Prompt({ isStream }: TemplatePrompt): string {
 {
   "type": "cover",
   "data": {
-    "title": "主标题（10-30字），自动添加eomji和重点内容下划线，有人味，像和朋友分享的语气，吸引人点进去，例如：“想找一个炒股厉害的男生带我回本”",
+    "title": "主标题（10-30字），自动添加eomji和重点内容下划线，有人味，像和朋友分享的语气，吸引人点进去，例如："想找一个炒股厉害的男生带我回本"",
   }
 }
 
@@ -490,6 +493,8 @@ export function getTemplatePrompt(templateId: string, isStream: boolean = false)
       return getTemplate005Prompt({ isStream })
     case 'template006':
       return getTemplate006Prompt({ isStream })
+    case 'template007':
+      return getTemplate007Prompt({ isStream })
     default:
       return getTemplate001Prompt({ isStream }) // 默认使用文档模板
   }

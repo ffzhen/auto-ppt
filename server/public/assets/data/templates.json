@@ -2,33 +2,27 @@
   { 
     "name": "模版001", 
     "id": "template001", 
-    "cover": "img/虚拟.jpg",
     "description": "虚拟资料卡片"
   },
   {
     "name": "模版002", 
-    "id": "template002", 
-    "cover": "img/blue.jpg"
+    "id": "template002"
   },
   {
     "name": "模版003", 
-    "id": "template003", 
-    "cover": "img/ys1.jpg"
-  },
-  {
-    "name": "模版004", 
-    "id": "template004", 
-    "cover": "img/template004.jpg"
+    "id": "template003"
   },
   {
     "name": "模版005", 
-    "id": "template005", 
-    "cover": "img/template005.jpg"
+    "id": "template005"
   },
   {
     "name": "模版006", 
     "id": "template006", 
-    "cover": "img/template006.jpg",
     "description": "现代简约风格模板"
+  },
+  {
+    "name": "模版007", 
+    "id": "template007"
   }
 ]
