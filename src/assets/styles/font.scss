@@ -1,9 +1,37 @@
-$fonts: 'SourceHanSans', 'SourceHanSerif', 'FangZhengHeiTi', 'FangZhengKaiTi', 'FangZhengShuSong', 'FangZhengFangSong', 'AlibabaPuHuiTi', 'ZhuQueFangSong', 'LXGWWenKai', 'WenDingPLKaiTi', 'DeYiHei', 'MiSans', 'CangerXiaowanzi', 'YousheTitleBlack', 'FengguangMingrui', 'ShetuModernSquare', 'ZcoolHappy', 'ZizhiQuXiMai', 'SucaiJishiKangkang', 'SucaiJishiCoolSquare', 'TuniuRounded', 'RuiziZhenyan';
+$fonts: (
+  'sanjixingkaijianCu': 'ttf',
+  'SourceHanSerif': 'woff2',
+  'FangZhengHeiTi': 'woff2',
+  'FangZhengKaiTi': 'woff2',
+  'FangZhengShuSong': 'woff2',
+  'FangZhengFangSong': 'woff2',
+  'AlibabaPuHuiTi': 'woff2',
+  'ZhuQueFangSong': 'woff2',
+  'LXGWWenKai': 'woff2',
+  'WenDingPLKaiTi': 'woff2',
+  'DeYiHei': 'woff2',
+  'MiSans': 'woff2',
+  'CangerXiaowanzi': 'woff2',
+  'YousheTitleBlack': 'woff2',
+  'FengguangMingrui': 'woff2',
+  'ShetuModernSquare': 'woff2',
+  'ZcoolHappy': 'woff2',
+  'ZizhiQuXiMai': 'woff2',
+  'SucaiJishiKangkang': 'woff2',
+  'SucaiJishiCoolSquare': 'woff2',
+  'TuniuRounded': 'woff2',
+  'RuiziZhenyan': 'woff2'
+);
 
-@each $font in $fonts {
+@each $font, $format in $fonts {
   @font-face {
     font-display: swap;
     font-family: $font;
-    src: url('https://asset.pptist.cn/font/#{$font}.woff2') format('woff2');
+    @if $format == 'woff2' {
+      src: url('https://assets.jidianx.cn/fonts/#{$font}.woff2') format('woff2');
+    }
+    @else if $format == 'ttf' {
+      src: url('https://assets.jidianx.cn/fonts/#{$font}.ttf') format('truetype');
+    }
   }
 }
