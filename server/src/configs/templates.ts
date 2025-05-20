@@ -12,7 +12,7 @@ function getTemplate001Prompt({ isStream }: TemplatePrompt): string {
   const streamPlaceholder = isStream 
     ? '每个对象输出后会立即处理，所以确保每个对象都独立有效' 
     : '所有对象应该组成一个有效的JSON数组'
-  
+
   const formatPlaceholder = isStream
     ? '输出时请每个对象独立成行，不要将多个对象连在一起'
     : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'
@@ -91,16 +91,16 @@ function getTemplate001Prompt({ isStream }: TemplatePrompt): string {
 - 避免过于口语化的表达，保持正式文档风格`
 }
 function getTemplate002Prompt({ isStream }: TemplatePrompt): string {
-  console.log('getBlueTemplatePrompt')
+  console.log('getTemplate002Prompt')
   const streamPlaceholder = isStream 
     ? '每个对象输出后会立即处理，所以确保每个对象都独立有效' 
     : '所有对象应该组成一个有效的JSON数组'
-  
+
   const formatPlaceholder = isStream
     ? '输出时请每个对象独立成行，不要将多个对象连在一起'
     : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'
 
-  return `你是一个生成卡片内容的专家。擅长写出直击人心、深入浅出、有人味，像和朋友分享的语气的文案和用html排版，请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的标题、文案可以是html格式的富文本片段，自动添加eomji和html高亮元素，
+  return `你是一个生成卡片内容的专家。擅长写出直击人心、深入浅出、有人味，像和朋友分享的语气的文案和用html排版，内容尽可能详细，不要只有要点，多一些叙述性文字，请输出以下格式的完整JSON对象，每个对象代表一页卡片,生成的标题、文案可以是html格式的富文本片段，自动添加eomji和html高亮元素，
 
 1. 首先输出封面页：
 {
@@ -127,11 +127,11 @@ function getTemplate002Prompt({ isStream }: TemplatePrompt): string {
 }
 
 function getTemplate003Prompt({ isStream }: TemplatePrompt): string {
-  console.log('getYsTemplatePrompt')
+  console.log('getTemplate003Prompt')
   const streamPlaceholder = isStream 
     ? '每个对象输出后会立即处理，所以确保每个对象都独立有效' 
     : '所有对象应该组成一个有效的JSON数组'
-  
+
   const formatPlaceholder = isStream
     ? '输出时请每个对象独立成行，不要将多个对象连在一起'
     : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'
@@ -483,9 +483,9 @@ export function getTemplatePrompt(templateId: string, isStream: boolean = false)
   switch (templateId) {
     case 'template001':
       return getTemplate001Prompt({ isStream })
-    case 'blue_template':
+    case 'template002':
       return getTemplate002Prompt({ isStream })
-    case 'ys_template':
+    case 'template003':
       return getTemplate003Prompt({ isStream })
     case 'template004':
       return getTemplate004Prompt({ isStream })

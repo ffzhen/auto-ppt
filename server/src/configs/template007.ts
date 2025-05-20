@@ -28,6 +28,7 @@ export function getTemplate007Prompt({ isStream }: TemplatePrompt): string {
     "type": "content",
     "data": {
       "title": "页面标题(5-10字)",
+      "subtitle": "副标题（5-10字）",
       "header":"引言（60-80字，背景和引言）",
       "footer":"结语（非必选，footer出现时必须有header，20-40字，总结与呼吁）",
       "items": [

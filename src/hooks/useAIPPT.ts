@@ -600,6 +600,13 @@ export default () => {
         maxLine
       })
     }
+    if (data.subtitle) {
+      return getNewTextElement({ 
+        el, 
+        text: data.subtitle, 
+        maxLine
+      })
+    }
     if (data.html) {
       return getNewTextElement({ 
         el, 
@@ -649,6 +656,7 @@ export default () => {
   }
 
   const getNewImgElement = (el: PPTImageElement, data?: any): PPTImageElement => {
+    debugger
     // 原有本地图片处理逻辑
     const getLocalImageElement = () => {
       const img = getUseableImage(el)
@@ -1048,6 +1056,7 @@ export default () => {
             if (checkTextType(el, 'title') && data.title) {
               return createSlideTextElement(el, { title: data.title })
             }
+            debugger
             if (checkTextType(el, 'subtitle') && 'subtitle' in data && data.subtitle) {
               return createSlideTextElement(el, { subtitle: String(data.subtitle) })
             }
