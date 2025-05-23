@@ -2,7 +2,7 @@
   <div class="fullscreen-spin" :class="{ 'mask': mask }" v-if="loading">
     <div class="spin">
       <div class="spinner"></div>
-      <div class="text">{{tip}}</div>
+      <div class="text" v-if="tip">{{tip}}</div>
     </div>
   </div>
 </template>
@@ -51,14 +51,16 @@ withDefaults(defineProps<{
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid $themeColor;
+  border: 3px solid #409EFF;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spinner .8s linear infinite;
 }
 .text {
   margin-top: 20px;
-  color: $themeColor;
+  color: #409EFF;
+  font-size: 14px;
+  font-weight: 500;
 }
 @keyframes spinner {
   0% {

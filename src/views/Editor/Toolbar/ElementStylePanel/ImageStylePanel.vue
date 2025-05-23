@@ -65,17 +65,43 @@
     </FileInput>
     <Button class="full-width-btn" @click="resetImage()"><IconUndo class="btn-icon" /> 重置样式</Button>
     <Button class="full-width-btn" @click="setBackgroundImage()"><IconTheme class="btn-icon" /> 设为背景</Button>
+    <Button class="full-width-btn" @click="showRegenerateModal()"><IconMagic class="btn-icon" /> 重新生成图片</Button>
   </div>
+
+  <Modal
+    v-model:visible="regenerateModalVisible"
+    title="重新生成图片"
+    :confirm-loading="isRegenerating"
+    @ok="regenerateImage"
+  >
+    <div class="regenerate-input-wrapper">
+      <div class="input-label">生成提示词:</div>
+      <textarea
+        v-model="regeneratePrompt"
+        class="regenerate-textarea"
+        placeholder="请输入详细的图片描述，如：现代简约风格的商务办公场景，明亮的办公室环境"
+        rows="4"
+      />
+      <div class="modal-footer flex justify-end gap-2 mt-4">
+      <Button @click="regenerateModalVisible = false">取消</Button>
+      <Button type="primary" :loading="isRegenerating" @click="regenerateImage">重新生成</Button>
+    </div>
+    </div>
+  </Modal>
+  
+  <FullscreenSpin :loading="isRegenerating" tip="AI生成图片中，请耐心等待 ..." />
 </template>
 
 <script lang="ts" setup>
-import { type Ref, ref } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMainStore, useSlidesStore } from '@/store'
 import type { PPTImageElement, SlideBackground } from '@/types/slides'
 import { CLIPPATHS } from '@/configs/imageClip'
 import { getImageDataURL, getImageSize } from '@/utils/image'
 import useHistorySnapshot from '@/hooks/useHistorySnapshot'
+import api from '@/services'
+import message from '@/utils/message'
 
 import ElementOutline from '../common/ElementOutline.vue'
 import ElementShadow from '../common/ElementShadow.vue'
@@ -88,6 +114,8 @@ import Button from '@/components/Button.vue'
 import ButtonGroup from '@/components/ButtonGroup.vue'
 import Popover from '@/components/Popover.vue'
 import NumberInput from '@/components/NumberInput.vue'
+import Modal from '@/components/Modal.vue'
+import FullscreenSpin from '@/components/FullscreenSpin.vue'
 
 const shapeClipPathOptions = CLIPPATHS
 const ratioClipOptions = [
@@ -131,6 +159,29 @@ const { currentSlide } = storeToRefs(slidesStore)
 const handleImageElement = handleElement as Ref<PPTImageElement>
 
 const clipPanelVisible = ref(false)
+const regenerateModalVisible = ref(false)
+const isRegenerating = ref(false)
+
+// 初始化重新生成提示词，基于当前图片元素的generatePrompt
+const regeneratePrompt = ref(handleImageElement.value.generatePrompt || '')
+const workflow_id = ref(handleImageElement.value.workflow_id || '')
+
+// 监听图片元素变化，自动更新提示词
+watch(
+  () => handleImageElement.value.generatePrompt,
+  (newPrompt) => {
+    regeneratePrompt.value = newPrompt || ''
+  },
+  { immediate: true }
+)
+// 监听图片元素变化，自动更新提示词
+watch(
+  () => handleImageElement.value.workflow_id,
+  (newId) => {
+    workflow_id.value = newId || ''
+  },
+  { immediate: true }
+)
 
 const { addHistorySnapshot } = useHistorySnapshot()
 
@@ -292,6 +343,85 @@ const setBackgroundImage = () => {
   slidesStore.updateSlide({ background })
   addHistorySnapshot()
 }
+
+// 重新生成图片
+const showRegenerateModal = () => {
+  regenerateModalVisible.value = true
+}
+
+const regenerateImage = async () => {
+  if (!regeneratePrompt.value.trim()) {
+    message.error('请输入生成提示词')
+    return
+  }
+
+  // 关闭模态框，显示全屏加载状态
+  regenerateModalVisible.value = false
+  isRegenerating.value = true
+  
+  try {
+    // 从元素中获取workflow_id，如果不存在则使用默认值
+    const api_token = 'pat_TJMUrXzSSsr2YwFVENZBIe2eAAqxH8d87Jugf4sikAntAOtOYKKNJ6AFWUOvDLAk'
+    
+    const result = await api.generateVolcengineImage({
+      prompt: regeneratePrompt.value.trim(),
+      workflow_id: workflow_id.value,
+      api_token
+    })
+    debugger
+    if (!result.image_url) {
+      throw new Error('生成的图片URL为空')
+    }
+
+    // 更新图片，同时保存workflow_id
+    updateImage({
+      src: result.image_url,
+      generatePrompt: regeneratePrompt.value.trim(),
+      workflow_id: workflow_id.value // 保存使用的workflow_id到元素中
+    })
+
+    // 如果当前幻灯片是封面背景图片到其他幻灯片
+    if (currentSlide.value.type === 'cover') {
+      // 同步背景图片到其他幻灯片
+      const updatedSlides = slidesStore.slides.map(slide => {
+        // 跳过封面幻灯片
+        if (slide.type === 'cover') return slide
+        
+        // 查找具有background imageType的图片元素
+        const updatedElements = slide.elements.map(el => {
+          if (el.type === 'image' && (el as PPTImageElement).imageType === 'background') {
+            return {
+              ...el,
+              src: result.image_url,
+              isPlaceholder: false,
+              generatePrompt: regeneratePrompt.value.trim(),
+              workflow_id: workflow_id.value // 使用当前的workflow_id
+            }
+          }
+          return el
+        })
+        
+        return {
+          ...slide,
+          elements: updatedElements
+        }
+      })
+      
+      // 更新store中的所有幻灯片
+      slidesStore.setSlides(updatedSlides)
+    }
+
+    message.success('图片重新生成成功')
+  } 
+  catch (error) {
+    console.error('重新生成图片失败:', error)
+    const errorMessage = error instanceof Error ? error.message : '未知错误'
+    message.error(`重新生成图片失败: ${errorMessage}`)
+  } 
+  finally {
+    isRegenerating.value = false
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -353,5 +483,37 @@ const setBackgroundImage = () => {
 }
 .popover-btn {
   padding: 0 3px;
+}
+
+.regenerate-input-wrapper {
+  margin: 16px 0;
+}
+
+.input-label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.regenerate-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  
+  &:focus {
+    outline: none;
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+  }
+  
+  &::placeholder {
+    color: #c0c4cc;
+  }
 }
 </style>

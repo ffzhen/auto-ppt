@@ -771,7 +771,6 @@ Requirements:
     // 创建一个解析处理器
     const jsonParserHandler: StreamHandler = {
       write: (chunk: string) => {
-        console.log(`[AIPPT Stream] 收到数据块: ${chunk.length}字节`)
         debugLog += chunk
         
         // 逐字符分析，查找完整JSON对象

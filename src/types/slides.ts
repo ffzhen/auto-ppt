@@ -277,6 +277,14 @@ export type ImageType = 'pageFigure' | 'itemFigure' | 'background'
  * colorMask?: 颜色蒙版
  * 
  * imageType?: 图片类型
+ * 
+ * isPlaceholder?: 是否为占位图片
+ * 
+ * originalImageType?: 原始图片类型（用于重新生成）
+ * 
+ * originalData?: 原始数据（用于重新生成）
+ * 
+ * generatePrompt?: 生成图片的提示词（用于重新生成）
  */
 export interface PPTImageElement extends PPTBaseElement {
   type: 'image'
@@ -291,6 +299,11 @@ export interface PPTImageElement extends PPTBaseElement {
   radius?: number
   colorMask?: string
   imageType?: ImageType
+  isPlaceholder?: boolean
+  originalImageType?: ImageType
+  originalData?: any
+  generatePrompt?: string
+  workflow_id?: string
 }
 
 export type ShapeTextAlign = 'top' | 'middle' | 'bottom' 
@@ -685,12 +698,18 @@ export interface SlideBackgroundImage {
  * image?: 图片背景
  * 
  * gradientType?: 渐变背景
+ * 
+ * contentImageAsync?: 是否需要同步背景图片到其他幻灯片
+ * 
+ * workflow_id?: 工作流ID，用于重新生成图片
  */
 export interface SlideBackground {
   type: SlideBackgroundType
   color?: string
   image?: SlideBackgroundImage
   gradient?: Gradient
+  contentImageAsync?: boolean
+  workflow_id?: string
 }
 
 

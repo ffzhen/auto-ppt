@@ -24,6 +24,7 @@
         <div class="image-content" :style="{ clipPath: clipShape.style }">
           <img 
             :src="elementInfo.src" 
+            
             :draggable="false" 
             :style="{
               top: imgPosition.top,
@@ -33,6 +34,7 @@
               filter: filter,
             }" 
             alt=""
+            data-placeholder="elementInfo.isPlaceholder"
           />
           <div class="color-mask"
             v-if="elementInfo.colorMask"

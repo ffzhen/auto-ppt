@@ -35,7 +35,7 @@
             <Button 
               class="generate-btn" 
               type="primary" 
-              @click="step = 'template'"
+              @click="goToTemplateStep"
               :disabled="!markdownContent || loading"
             >
               选择模版
@@ -63,7 +63,7 @@
       </TemplateSelector>
     </div>
     
-    <FullscreenSpin :loading="loading" tip="AI生成中，请耐心等待 ..." />
+    <FullscreenSpin :loading="loading ||isImageGenerating" tip="AI生成中，请耐心等待 ..." />
   </div>
 </template>
 
@@ -90,7 +90,7 @@ const emit = defineEmits<{
 const slidesStore = useSlidesStore()
 const { templates } = storeToRefs(slidesStore)
 const { addHistorySnapshot } = useHistorySnapshot()
-const { AIPPT } = useAIPPT()
+const { AIPPT, isImageGenerating } = useAIPPT()
 
 // 步骤状态管理
 const step = ref<'input' | 'template'>('input')
@@ -126,6 +126,16 @@ onMounted(() => {
   // 初始化模板预览数据
   initTemplatePreviews()
 })
+
+// 从输入步骤转到模板选择步骤
+const goToTemplateStep = () => {
+  // 显示短暂的加载状态，确保UI更新
+  loading.value = true
+  setTimeout(() => {
+    step.value = 'template'
+    loading.value = false
+  }, 300)
+}
 
 // 生成 PPT
 const generatePPT = async () => {
@@ -167,11 +177,26 @@ const generatePPT = async () => {
     const readStream = () => {
       reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
         if (done) {
-          emit('closed')
-          loading.value = false
-          markdownContent.value = ''
-          step.value = 'input'
-          addHistorySnapshot()
+          // 检查图片是否正在生成中，如果是则等待完成后再关闭
+          if (isImageGenerating.value) {
+            const checkInterval = setInterval(() => {
+              if (!isImageGenerating.value) {
+                clearInterval(checkInterval)
+                emit('closed')
+                loading.value = false
+                markdownContent.value = ''
+                step.value = 'input'
+                addHistorySnapshot()
+              }
+            }, 300)
+          } 
+          else {
+            emit('closed')
+            loading.value = false
+            markdownContent.value = ''
+            step.value = 'input'
+            addHistorySnapshot()
+          }
           return
         }
         

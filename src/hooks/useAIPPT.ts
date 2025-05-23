@@ -22,6 +22,8 @@ export default () => {
   const imgPool = ref<ImgPoolItem[]>([])
   // 存储异步生成的封面图片URL，用于后续同步
   const asyncGeneratedCoverImage = ref<string | null>(null)
+  // 图片生成加载状态
+  const isImageGenerating = ref(false)
 
   const checkTextType = (el: PPTElement, type: TextType) => {
     return (el.type === 'text' && el.textType === type) || (el.type === 'shape' && el.text && el.text.type === type)
@@ -656,7 +658,6 @@ export default () => {
   }
 
   const getNewImgElement = (el: PPTImageElement, data?: any): PPTImageElement => {
-    debugger
     // 原有本地图片处理逻辑
     const getLocalImageElement = () => {
       const img = getUseableImage(el)
@@ -688,6 +689,9 @@ export default () => {
     
     // 如果有传入data且包含图像生成配置，则进行AI图像生成
     if (data && el.imageType && data[el.imageType as string] && data[el.imageType as string].imageRenderType === 'doubao') {
+      // 设置全局加载状态
+      isImageGenerating.value = true
+      
       // 创建一个临时的加载中元素
       const loadingImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgMkM2LjUgMiAyIDYuNSAyIDEyQzIgMTcuNSA2LjUgMjIgMTIgMjJDMTcuNSAyMiAyMiAxNy41IDIyIDEyQzIyIDYuNSAxNy41IDIgMTIgMk0xMiA0QzE2LjQgNCAyMCA3LjYgMjAgMTJDMjAgMTYuNCAxNi40IDIwIDEyIDIwQzcuNiAyMCA0IDE2LjQgNCAxMkM0IDcuNiA3LjYgNCAxMiA0TTEyIDEwLjVDMTEuMiAxMC41IDEwLjUgMTEuMiAxMC41IDEyQzEwLjUgMTIuOCAxMS4yIDEzLjUgMTIgMTMuNUMxMi44IDEzLjUgMTMuNSAxMi44IDEzLjUgMTJDMTMuNSAxMS4yIDEyLjggMTAuNSAxMiAxMC41TTcuNSA5QzYuNyA5IDYgOS43IDYgMTAuNUM2IDExLjMgNi43IDEyIDcuNSAxMkM4LjMgMTIgOSAxMS4zIDkgMTAuNUM5IDkuNyA4LjMgOSA3LjUgOU0xNi41IDlDMTUuNyA5IDE1IDkuNyAxNSAxMC41QzE1IDExLjMgMTUuNyAxMiAxNi41IDEyQzE3LjMgMTIgMTggMTEuMyAxOCAxMC41QzE4IDkuNyAxNy4zIDkgMTYuNSA5WiIgZmlsbD0iI2NjY2NjYyIvPjwvc3ZnPg=='
       
@@ -705,23 +709,31 @@ export default () => {
         try {
           console.log('开始AI图像生成请求...', data[el.imageType as string].params)
           
+          // 构建生成提示词
+          const generatePrompt = data.title + data.text
+          const workflow_id = data[el.imageType as string].workflow_id
+          
           // 发起AI图像生成请求
           const res = await api.generateVolcengineImage({
-            prompt: data.title + data.text,
-            workflow_id: data[el.imageType as string].workflow_id,
+            prompt: generatePrompt,
+            workflow_id: workflow_id,
             api_token: 'pat_TJMUrXzSSsr2YwFVENZBIe2eAAqxH8d87Jugf4sikAntAOtOYKKNJ6AFWUOvDLAk'
           })
           
           console.log('AI图像生成完成:', res)
           
           // 更新幻灯片中的图片元素
-          updateSlideImage(placeholderElement.id, res.image_url)
+          updateSlideImage(placeholderElement.id, res.image_url, undefined, generatePrompt, workflow_id)
         }
         catch (error) {
           console.error('AI图像生成失败:', error)
           // 如果AI生成失败，回退到本地图片
           const localElement = getLocalImageElement()
           updateSlideImage(placeholderElement.id, localElement.src, localElement.clip)
+        }
+        finally {
+          // 无论成功失败都关闭加载状态
+          isImageGenerating.value = false
         }
       }, 0)
       
@@ -733,7 +745,7 @@ export default () => {
   }
 
   // 更新幻灯片中的图片元素
-  const updateSlideImage = (elementId: string, src: string, clip?: any) => {
+  const updateSlideImage = (elementId: string, src: string, clip?: any, generatePrompt?: string, workflow_id?: string) => {
     // 查找包含该元素的幻灯片
     const slideIndex = slidesStore.slides.findIndex(slide => 
       slide.elements.some(el => el.id === elementId)
@@ -754,7 +766,9 @@ export default () => {
             ...el,
             src,
             isPlaceholder: false, // 移除占位标记
-            clip: clip || (el as PPTImageElement).clip
+            clip: clip || (el as PPTImageElement).clip,
+            generatePrompt: generatePrompt || (el as PPTImageElement).generatePrompt, // 保存生成提示词
+            workflow_id: workflow_id || (el as PPTImageElement).workflow_id // 保存workflow_id
           }
         }
         return el
@@ -793,7 +807,9 @@ export default () => {
           return {
             ...el,
             src: asyncGeneratedCoverImage.value as string, // 添加类型断言
-            isPlaceholder: false
+            isPlaceholder: false,
+            generatePrompt: (el as PPTImageElement).generatePrompt, // 保持原有的生成提示词
+            workflow_id: (el as PPTImageElement).workflow_id // 保持原有的workflow_id
           }
         }
         return el
@@ -1137,5 +1153,6 @@ export default () => {
     AIPPT,
     getMdContent,
     getJSONContent,
+    isImageGenerating, // 导出加载状态
   }
 }
