@@ -1,6 +1,7 @@
 export const FONTS = [
   { label: '默认字体', value: '' },
   { label: '三极行楷简体', value: 'sanjixingkaijianCu' },
+  { label: '仓迹高德国妙黑', value: 'canjiGaoDeGuoMiaoHei' },
   { label: '思源黑体', value: 'SourceHanSans' },
   { label: '思源宋体', value: 'SourceHanSerif' },
   { label: '方正黑体', value: 'FangZhengHeiTi' },
@@ -23,4 +24,7 @@ export const FONTS = [
   { label: '素材集市酷方体', value: 'SucaiJishiCoolSquare' },
   { label: '途牛类圆体', value: 'TuniuRounded' },
   { label: '锐字真言体', value: 'RuiziZhenyan' },
+  { label: '汇文明朝', value: 'Huiwen_mingchao' },
+  { label: '江西拙楷', value: 'jiangxizhuokai' },
+  { label: '演示秋鸿楷', value: 'yanshiqiuhongkai' },
 ]

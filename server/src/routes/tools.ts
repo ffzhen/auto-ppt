@@ -3,7 +3,7 @@ import { ToolsController } from '../controllers/tools'
 import type { Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
-import { generateOutlineFromContent, generateSlidesFromOutline, getStreamHandler } from '../services/ai'
+import { AIService } from '../services/ai'
 
 const router = Router()
 
@@ -29,25 +29,19 @@ router.post('/aippt_stream', async (req: Request, res: Response) => {
     res.setHeader('Cache-Control', 'no-cache')
     res.setHeader('Connection', 'keep-alive')
 
-    const streamHandler = getStreamHandler(res)
+    const streamHandler = AIService.getStreamHandler(res)
 
     // 第一步：生成大纲
-    const outline = await generateOutlineFromContent(content, language, model, streamHandler)
+    await AIService.generateOutlineStream(content, language, model, streamHandler)
     
     // 发送大纲完成标记
     streamHandler.write(JSON.stringify({
       type: 'outline_complete',
-      data: outline
+      data: 'outline_complete'
     }))
 
     // 第二步：根据大纲生成幻灯片
-    await generateSlidesFromOutline(outline, content, language, model, streamHandler)
-    
-    // 发送完成标记
-    streamHandler.write(JSON.stringify({
-      type: 'complete',
-      data: '生成完成'
-    }))
+    await AIService.generatePPTStream(content, language, model, streamHandler)
     
     streamHandler.end()
   }

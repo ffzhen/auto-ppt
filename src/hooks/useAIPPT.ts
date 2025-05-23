@@ -707,8 +707,8 @@ export default () => {
           
           // 发起AI图像生成请求
           const res = await api.generateVolcengineImage({
-            prompt: data[el.imageType as string].params.text_prompt,
-            workflow_id: '7497907182836858915',
+            prompt: data.title + data.text,
+            workflow_id: data[el.imageType as string].workflow_id,
             api_token: 'pat_TJMUrXzSSsr2YwFVENZBIe2eAAqxH8d87Jugf4sikAntAOtOYKKNJ6AFWUOvDLAk'
           })
           

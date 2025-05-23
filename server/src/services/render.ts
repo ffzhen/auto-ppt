@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import PptxGenJS from 'pptxgenjs'
 import type { PresentationData } from '../types'
 import JSZip from 'jszip'
-import type { Slide } from '../types/slides'
+// import type { Slide } from '../types/slides'
 
 // Create temp directory if it doesn't exist
 const TEMP_DIR = path.join(__dirname, '../../temp')
@@ -45,8 +45,9 @@ interface Slide {
     [key: string]: any;
   };
   size?: {
-    width: number;
-    height: number;
+    type?: string;
+    width?: number;
+    height?: number;
   };
   [key: string]: any;
 }
@@ -357,7 +358,8 @@ export const RenderService = {
                       y: element.top / 96,
                       w: element.width / 96,
                       h: element.height / 96,
-                      sizing: { type: 'cover' },
+                      sizing: { type: 'cover', w: '100%', 
+                        h: '100%' },
                     })
                   }
                   else if (element.src.startsWith('data:')) {
@@ -369,7 +371,8 @@ export const RenderService = {
                       y: element.top / 96,
                       w: element.width / 96,
                       h: element.height / 96,
-                      sizing: { type: 'cover' },
+                      sizing: { type: 'cover', w: '100%', 
+                        h: '100%'  },
                     })
                   }
                 }
@@ -410,8 +413,8 @@ export const RenderService = {
       }
       
       // Generate PPTX as Buffer
-      const pptxData = await pptx.write('arraybuffer')
-      return Buffer.from(pptxData)
+      const pptxData = await pptx.write('arraybuffer'as any)
+      return Buffer.from(pptxData as any)
     }
     catch (error) {
       console.error('Error rendering PPTX:', error)

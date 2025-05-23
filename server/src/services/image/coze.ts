@@ -53,6 +53,7 @@ export async function generateImageWithCoze(params: {
     
     // 解析响应数据
     const result = await response.json()
+    console.log('Coze API response result:', result)
     
     // 尝试从工作流返回中提取图片URL
     let imageUrl = null

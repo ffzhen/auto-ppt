@@ -27,7 +27,7 @@ export default () => {
   const { addHistorySnapshot } = useHistorySnapshot()
 
   // 重置幻灯片
-  const resetSlides = () => {
+  function resetSlides() {
     const emptySlide: Slide = {
       id: nanoid(10),
       elements: [],

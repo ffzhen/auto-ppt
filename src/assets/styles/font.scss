@@ -1,5 +1,7 @@
 $fonts: (
   'sanjixingkaijianCu': 'ttf',
+  'canjiGaoDeGuoMiaoHei': 'otf',
+  'SourceHanSans': 'woff2',
   'SourceHanSerif': 'woff2',
   'FangZhengHeiTi': 'woff2',
   'FangZhengKaiTi': 'woff2',
@@ -20,18 +22,33 @@ $fonts: (
   'SucaiJishiKangkang': 'woff2',
   'SucaiJishiCoolSquare': 'woff2',
   'TuniuRounded': 'woff2',
-  'RuiziZhenyan': 'woff2'
+  'RuiziZhenyan': 'woff2',
+  'Huiwen_mingchao': 'woff2',
+  'jiangxizhuokai': 'ttf',
+  'yanshiqiuhongkai': 'ttf'
 );
 
-@each $font, $format in $fonts {
+// 字体加载基础URL
+$font-base-url: 'https://assets.jidianx.cn/fonts/';
+
+// 格式映射
+$format-map: (
+  'woff2': 'woff2',
+  'woff': 'woff',
+  'ttf': 'truetype',
+  'otf': 'opentype'
+);
+
+// 优化后的字体面mixin
+@mixin font-face($font-name, $format: 'woff2') {
   @font-face {
     font-display: swap;
-    font-family: $font;
-    @if $format == 'woff2' {
-      src: url('https://assets.jidianx.cn/fonts/#{$font}.woff2') format('woff2');
-    }
-    @else if $format == 'ttf' {
-      src: url('https://assets.jidianx.cn/fonts/#{$font}.ttf') format('truetype');
-    }
+    font-family: $font-name;
+    src: url('#{$font-base-url}#{$font-name}.#{$format}') format('#{map-get($format-map, $format)}');
   }
+}
+
+// 生成所有字体
+@each $font-name, $format in $fonts {
+  @include font-face($font-name, $format);
 }

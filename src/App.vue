@@ -14,6 +14,7 @@ import { isPC } from '@/utils/common'
 import type { Slide } from '@/types/slides'
 import message from './utils/message'
 import api from '@/services'
+import useSlideHandler from '@/hooks/useSlideHandler'
 
 import Editor from './views/Editor/index.vue'
 import Screen from './views/Screen/index.vue'
@@ -118,6 +119,11 @@ onMounted(async () => {
     // Complete initialization
     console.log('[App] Initialization completed')
     isInitializing.value = false
+
+    if (slides.value.length === 0) {
+      const slideHandler = useSlideHandler()
+      slideHandler.resetSlides()
+    }
   }
 
   await deleteDiscardedDB()

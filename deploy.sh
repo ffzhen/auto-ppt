@@ -151,16 +151,23 @@ deploy_frontend() {
 deploy_backend() {
   echo "===== 开始后端部署 ====="
   
+  # 0. 在本地构建后端
+  echo "0. 在本地构建后端..."
+  cd server
+  npm install
+  npm run build
+  cd ..
+  
+  # 检查构建是否成功
+  if [ $? -ne 0 ]; then
+    echo "本地构建失败，请检查错误信息"
+    return 1
+  fi
+  
   # 1. 压缩server目录
   echo "1. 压缩server目录为server.zip..."
   rm -f server.zip  # 删除可能存在的旧文件
   zip -r server.zip server/
-  
-  # 检查压缩是否成功
-  if [ $? -ne 0 ]; then
-    echo "压缩失败，请检查错误信息"
-    return 1
-  fi
   
   # 2. 上传到服务器
   echo "2. 上传server.zip到服务器..."
