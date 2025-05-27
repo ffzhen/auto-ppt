@@ -368,7 +368,6 @@ const regenerateImage = async () => {
       workflow_id: workflow_id.value,
       api_token
     })
-    debugger
     if (!result.image_url) {
       throw new Error('生成的图片URL为空')
     }

@@ -80,7 +80,7 @@ import TemplateSelector from '@/components/TemplateSelector.vue'
 
 const mainStore = useMainStore()
 const { templates } = storeToRefs(useSlidesStore())
-const { AIPPT } = useAIPPT()
+const { AIPPT, isImageGenerating } = useAIPPT()
 
 const language = ref<'zh' | 'en'>('zh')
 const keyword = ref('')
@@ -157,11 +157,23 @@ const createPPT = async () => {
   const reader: ReadableStreamDefaultReader = stream.body.getReader()
   const decoder = new TextDecoder('utf-8')
   
-  const readStream = () => {
-    reader.read().then(({ done, value }) => {
+  const readStream = (): void => {
+    reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
       if (done) {
-        loading.value = false
-        mainStore.setAIPPTDialogState(false)
+        // 检查图片是否正在生成中，如果是则等待完成后再关闭
+        if (isImageGenerating.value) {
+          const checkInterval = setInterval(() => {
+            if (!isImageGenerating.value) {
+              clearInterval(checkInterval)
+              loading.value = false
+              mainStore.setAIPPTDialogState(false)
+            }
+          }, 300)
+        } 
+        else {
+          loading.value = false
+          mainStore.setAIPPTDialogState(false)
+        }
         return
       }
   

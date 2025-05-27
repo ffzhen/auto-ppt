@@ -118,7 +118,7 @@ const emit = defineEmits<{
 const slidesStore = useSlidesStore()
 const { templates } = storeToRefs(slidesStore)
 const { addHistorySnapshot } = useHistorySnapshot()
-const { AIPPT } = useAIPPT()
+const { AIPPT, isImageGenerating } = useAIPPT()
 
 // 状态管理
 const step = ref<'input' | 'template'>('input')
@@ -192,16 +192,33 @@ const generatePPT = async () => {
     const reader = stream.body.getReader()
     const decoder = new TextDecoder('utf-8')
     
-    function readStream() {
-      reader.read().then(({ done, value }) => {
+    const readStream = (): void => {
+      reader.read().then(({ done, value }: ReadableStreamReadResult<Uint8Array>) => {
         if (done) {
-          emit('closed')
-          loading.value = false
-          title.value = ''
-          content.value = ''
-          step.value = 'input'
-          addHistorySnapshot()
-          message.success('演示文稿已成功生成')
+          // 检查图片是否正在生成中，如果是则等待完成后再关闭
+          if (isImageGenerating.value) {
+            const checkInterval = setInterval(() => {
+              if (!isImageGenerating.value) {
+                clearInterval(checkInterval)
+                emit('closed')
+                loading.value = false
+                title.value = ''
+                content.value = ''
+                step.value = 'input'
+                addHistorySnapshot()
+                message.success('演示文稿已成功生成')
+              }
+            }, 300)
+          } 
+          else {
+            emit('closed')
+            loading.value = false
+            title.value = ''
+            content.value = ''
+            step.value = 'input'
+            addHistorySnapshot()
+            message.success('演示文稿已成功生成')
+          }
           return
         }
         

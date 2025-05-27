@@ -1072,7 +1072,6 @@ export default () => {
             if (checkTextType(el, 'title') && data.title) {
               return createSlideTextElement(el, { title: data.title })
             }
-            debugger
             if (checkTextType(el, 'subtitle') && 'subtitle' in data && data.subtitle) {
               return createSlideTextElement(el, { subtitle: String(data.subtitle) })
             }

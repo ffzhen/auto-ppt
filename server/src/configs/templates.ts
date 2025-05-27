@@ -143,8 +143,8 @@ function getTemplate003Prompt({ isStream }: TemplatePrompt): string {
   "type": "cover",
   "data": {
     "html": "主标题（建议7-14字，养生健康主题），可以再带换行和重点内容字号放大，颜色为白色，普通字号为120px，放大字号为166px，font-family: canjiGaoDeGuoMiaoHei;，例如<p style="text-align: center;"><span style="font-size: 120px;"><span style="font-family: canjiGaoDeGuoMiaoHei;"><span style="color: rgb(255, 255, 255);">中医建议：</span></span></span><span style="font-size: 232px;"><span style="font-family: canjiGaoDeGuoMiaoHei;"><span style="color: rgb(255, 255, 255);">小暑养生</span></span></span></p>",
-    "title": "主标题（由完整标题拆分得到的前半部分）",
-    "text": "副标题（由完整标题拆分得到的后半部分）",
+    "title": "主标题（由完整标题拆分得到的前半部分），不超过6个字",
+    "text": "副标题（由完整标题拆分得到的后半部分）不超过8个字",
     "background": {
       "imageRenderType": "doubao",
       "contentImageAsync": true,
@@ -152,7 +152,7 @@ function getTemplate003Prompt({ isStream }: TemplatePrompt): string {
     }
   }
 }
-  2. 内容页：每页一个主题，每页的主题标题保持一致，每页内容2个分论点说明，主副标题由完整标题拆分得到，例如："6个超简单的夏日中药香囊配方"拆分得到"6个超简单的"和"夏日中药香囊配方"
+  2. 内容页：每页一个主题，每页的主题标题保持一致，主副标题由完整标题拆分得到，例如："6个超简单的夏日中药香囊配方"拆分得到"6个超简单的"和"夏日中药香囊配方"
 {例如
   {
   "type": "content",
@@ -184,13 +184,30 @@ function getTemplate003Prompt({ isStream }: TemplatePrompt): string {
     ]
   }
 }
+  3. 最后输出结束页：
+{
+  "type": "end",
+  "data": {
+    "content": "结束内容（70-90字）",
+    "title": "xxx"
+  }
+}
 重要说明：
 - ${streamPlaceholder}
 - 标题要体现养生健康的理念，可以使用"调理""平衡""修养""滋补"等关键词
 - 背景图片提示词要突出健康、自然、平和的氛围
 - 所有输出必须是有效的JSON格式，不要包含额外的注释或说明文字
 - ${formatPlaceholder}
-- 确保生成的内容符合现代养生理念，既要有传统智慧又要符合科学常识`
+- 确保生成的内容符合现代养生理念，既要有传统智慧又要符合科学常识
+- 确保原文的完整性，不要有内容省略和丢失
+- - 不要出现敏感词，敏感词替换规则如下：
+阳:☀，阝
+阴:⚫️
+肝郁气滞：月干🐟️💨滞
+医生：👨‍⚕️
+病：疒
+
+`
 }
 function getTemplate004Prompt({ isStream }: TemplatePrompt): string {
   console.log('getTemplate004Prompt')
@@ -542,7 +559,7 @@ function getTemplate008Prompt({ isStream }: TemplatePrompt): string {
   "type": "cover",
   "data": {
     "title": "主标题（由完整标题拆分得到的前半部分）4-8字",
-    "text": "副标题（由完整标题拆分得到的后半部分）4-8字",
+    "text": "副标题（由完整标题拆分得到的后半部分，直戳用户痛点）4-8字",
     "background": {
       "imageRenderType": "doubao",
       "contentImageAsync": true,
@@ -571,11 +588,19 @@ function getTemplate008Prompt({ isStream }: TemplatePrompt): string {
 
 重要说明：
 - ${streamPlaceholder}
-- 标题要体现养生健康的理念，可以使用"调理""平衡""修养""滋补"等关键词
-- 背景图片提示词要突出健康、自然、平和的氛围
+- 标题要体现养生健康的理念
+- 背景图片提示词要突出健康、自然、平和的氛围，可以与主题的主体相关联
 - 所有输出必须是有效的JSON格式，不要包含额外的注释或说明文字
 - ${formatPlaceholder}
-- 确保生成的内容符合现代养生理念，既要有传统智慧又要符合科学常识`
+- 确保生成的内容符合现代养生理念，既要有传统智慧又要符合科学常识
+- 确保内容的完整性，不要有内容省略和丢失，不要总结
+- 不要出现敏感词，敏感词替换规则如下：
+阳:☀，阝
+阴:⚫️
+肝郁气滞：月干🐟️💨滞
+医生：👨‍⚕️
+病：疒
+`
 }
 
 // 导出获取模板提示词的函数
