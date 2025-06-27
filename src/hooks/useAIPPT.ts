@@ -45,19 +45,22 @@ export default () => {
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return hasHeaderSlot && !hasFooterSlot
         })
-      } else if (!itemData.header && itemData.footer) {
+      }
+      else if (!itemData.header && itemData.footer) {
         filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return !hasHeaderSlot && hasFooterSlot
         })
-      } else if (itemData.header && itemData.footer) {
+      }
+      else if (itemData.header && itemData.footer) {
         filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return hasHeaderSlot && hasFooterSlot
         })
-      } else {
+      }
+      else {
         filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
@@ -72,7 +75,71 @@ export default () => {
       }
     }
 
-    // 2. n === 1 的特殊处理
+    // 2. items 内容匹配筛选（当处理 item 类型时）
+    if (type === 'item' && itemData && itemData.items && Array.isArray(itemData.items)) {
+      const items = itemData.items
+      
+      // 检查items中实际有title和text字段的数量
+      const itemsWithTitle = items.filter((item: any) => item.title)
+      const itemsWithText = items.filter((item: any) => item.text)
+      
+      const hasItemTitles = itemsWithTitle.length > 0
+      const hasItemTexts = itemsWithText.length > 0
+      
+      // 在现有的filteredTemplates基础上，进一步筛选出title和text数量完全匹配的模板
+      const exactMatchTemplates = filteredTemplates.filter(slide => {
+        const itemTitleSlots = slide.elements.filter(el => checkTextType(el, 'itemTitle'))
+        const itemSlots = slide.elements.filter(el => checkTextType(el, 'item'))
+        
+        const itemTitleSlotCount = itemTitleSlots.length
+        const itemSlotCount = itemSlots.length
+        
+        // 检查是否完全匹配：title插槽数量 = 实际有title的items数量，text插槽数量 = 实际有text的items数量
+        if (hasItemTitles && hasItemTexts) {
+          return itemTitleSlotCount === itemsWithTitle.length && itemSlotCount === itemsWithText.length
+        }
+        
+        // 如果只有title，检查title插槽数量是否匹配，且不能有多余的item插槽
+        if (hasItemTitles && !hasItemTexts) {
+          return itemTitleSlotCount === itemsWithTitle.length && itemSlotCount === 0
+        }
+        
+        // 如果只有text，必须没有itemTitle插槽，且text插槽数量匹配
+        if (!hasItemTitles && hasItemTexts) {
+          return itemTitleSlotCount === 0 && itemSlotCount === itemsWithText.length
+        }
+        
+        return false
+      })
+      
+      // 如果找到完全匹配的模板，优先使用；否则继续使用原有的filteredTemplates
+      if (exactMatchTemplates.length > 0) {
+        filteredTemplates = exactMatchTemplates
+        console.log(`找到 ${exactMatchTemplates.length} 个完全匹配的模板 (title: ${itemsWithTitle.length}, text: ${itemsWithText.length})`)
+      } 
+      else {
+        // 如果没有完全匹配的模板，至少要确保不会选择有itemTitle插槽但items中没有title的情况
+        if (!hasItemTitles && hasItemTexts) {
+          const noTitleSlotTemplates = filteredTemplates.filter(slide => {
+            const itemTitleSlots = slide.elements.filter(el => checkTextType(el, 'itemTitle'))
+            return itemTitleSlots.length === 0
+          })
+          
+          if (noTitleSlotTemplates.length > 0) {
+            filteredTemplates = noTitleSlotTemplates
+            console.log(`没有完全匹配的模板，使用无title插槽的模板 (需要 text: ${itemsWithText.length})`)
+          } 
+          else {
+            console.log(`警告：未找到合适的模板，使用原有模板池 (需要 title: ${itemsWithTitle.length}, text: ${itemsWithText.length})`)
+          }
+        } 
+        else {
+          console.log(`未找到完全匹配的模板，使用原有模板池 (需要 title: ${itemsWithTitle.length}, text: ${itemsWithText.length})`)
+        }
+      }
+    }
+
+    // 3. n === 1 的特殊处理
     if (n === 1) {
       const list = filteredTemplates.filter(slide => {
         const items = slide.elements.filter(el => checkTextType(el, type))
@@ -83,7 +150,7 @@ export default () => {
       if (list.length) return list
     }
 
-    // 3. 按 type 数量筛选
+    // 4. 按 type 数量筛选
     let target: Slide | null = null
     const list = filteredTemplates.filter(slide => {
       const len = slide.elements.filter(el => checkTextType(el, type)).length
@@ -98,7 +165,8 @@ export default () => {
         return aLen - bLen
       })
       target = sorted[sorted.length - 1] || null
-    } else {
+    }
+    else {
       target = list.reduce((closest, current) => {
         const currentLen = current.elements.filter(el => checkTextType(el, type)).length
         const closestLen = closest.elements.filter(el => checkTextType(el, type)).length
@@ -111,7 +179,7 @@ export default () => {
       return allTemplates.filter(slide => slide.type === 'content')
     }
 
-    // 4. 返回与 target 匹配的模板
+    // 5. 返回与 target 匹配的模板
     const targetLen = target.elements.filter(el => checkTextType(el, type)).length
     const result = filteredTemplates.filter(slide => {
       const len = slide.elements.filter(el => checkTextType(el, type)).length
@@ -149,7 +217,17 @@ export default () => {
     const context = canvas.getContext('2d')!
     const minFontSize = 10
     const maxFontSize = 350 // 设置最大字体大小上限
-    console.log('fixContainer', fixContainer, height)
+    
+    console.log('🔍 getAdaptedFontsize 参数:', {
+      text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
+      fontSize,
+      fontFamily,
+      width,
+      maxLine,
+      fixContainer,
+      height,
+      lineHeight
+    })
     
     // 创建一个用于准确测量文本高度的辅助函数
     const measureTextHeight = (text: string, fontSize: number, fontFamily: string, containerWidth: number, lineHeight: number) => {
@@ -184,6 +262,11 @@ export default () => {
     
     // 创建一个用于计算文本行数的辅助函数
     const calculateTextLines = (text: string, fontSize: number, fontFamily: string, containerWidth: number, lineHeight: number) => {
+      // 移除br标签，因为实际渲染时br标签不会被渲染
+      const textWithoutBr = text.replace(/<br\s*\/?>/gi, '')
+      
+      console.log(`📝 文本行数计算: 原始="${text.substring(0, 50)}...", 移除BR后="${textWithoutBr.substring(0, 50)}..."`)
+      
       const measureEl = document.createElement('div')
       measureEl.style.position = 'absolute'
       measureEl.style.visibility = 'hidden'
@@ -196,11 +279,12 @@ export default () => {
       measureEl.style.margin = '0'
       measureEl.style.padding = '0'
       
-      if (/<[a-z][\s\S]*>/i.test(text)) {
-        measureEl.innerHTML = text
+      // 使用移除br标签后的文本进行测量
+      if (/<[a-z][\s\S]*>/i.test(textWithoutBr)) {
+        measureEl.innerHTML = textWithoutBr
       } 
       else {
-        measureEl.textContent = text
+        measureEl.textContent = textWithoutBr
       }
       
       document.body.appendChild(measureEl)
@@ -212,11 +296,14 @@ export default () => {
       // 估算行数
       const lines = Math.round(totalHeight / lineHeightPx)
       
+      console.log(`📏 DOM测量结果: totalHeight=${totalHeight}px, lineHeightPx=${lineHeightPx}px, lines=${lines}`)
+      
       document.body.removeChild(measureEl)
       return Math.max(1, lines) // 至少返回1行
     }
     
     if (fixContainer && height) {
+      console.log('📏 使用 fixContainer 模式')
       if (!text) return fontSize
       
       // 提取纯文本
@@ -234,48 +321,68 @@ export default () => {
       // 检查初始字号是否已经超出高度
       let totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
       
-      console.log('totalTextHeight', totalTextHeight)
+      console.log('📐 初始高度检查:', { testFontSize, totalTextHeight, containerHeight: height })
       if (totalTextHeight > height) {
+        console.log('⬇️ 初始字号过大，开始递减')
         // 递减字号直到不超出高度
         while (testFontSize > minFontSize) {
           testFontSize -= 2
           totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
+          console.log(`📉 测试字号 ${testFontSize}, 高度: ${totalTextHeight}`)
           if (totalTextHeight <= height) {
+            console.log(`✅ 找到合适字号: ${testFontSize}`)
             return testFontSize
           }
         }
+        console.log(`⚠️ 达到最小字号: ${minFontSize}`)
         return minFontSize
       }
       
       // 正常递增字号直到接近高度但不超出
+      console.log('⬆️ 开始递增字号')
       while (testFontSize <= maxFontSize) {
         totalTextHeight = measureTextHeight(text, testFontSize, fontFamily, width, lineHeight)
+        console.log(`📈 测试字号 ${testFontSize}, 高度: ${totalTextHeight}`)
         if (totalTextHeight > height) {
-          if (lastFits) return bestFitFontSize
+          if (lastFits) {
+            console.log(`✅ 找到最佳字号: ${bestFitFontSize}`)
+            return bestFitFontSize
+          }
           testFontSize -= 2
-          if (testFontSize < minFontSize) return minFontSize
+          if (testFontSize < minFontSize) {
+            console.log(`⚠️ 达到最小字号: ${minFontSize}`)
+            return minFontSize
+          }
           continue
         }
         bestFitFontSize = testFontSize
         lastFits = true
         testFontSize += 2
       }
+      console.log(`✅ 最终字号: ${bestFitFontSize}`)
       return bestFitFontSize
     }
     
     // 原有逻辑修改：找到满足maxLine要求的最大字体大小，使用DOM方式计算行数
+    console.log('📏 使用 maxLine 模式')
     let newFontSize = fontSize
     
     while (newFontSize >= minFontSize) {
       // 使用DOM方法计算行数
       const lines = calculateTextLines(text, newFontSize, fontFamily, width, lineHeight)
       
-      if (lines <= maxLine) return newFontSize
+      console.log(`📊 字号 ${newFontSize}, 行数: ${lines}, maxLine: ${maxLine}`)
+      
+      if (lines <= maxLine) {
+        console.log(`✅ 找到合适字号: ${newFontSize}`)
+        return newFontSize
+      }
       
       const step = newFontSize <= 22 ? 1 : 2
       newFontSize = newFontSize - step
     }
     
+    console.log(`⚠️ 达到最小字号: ${minFontSize}`)
     return minFontSize
   }
 
@@ -353,6 +460,7 @@ export default () => {
       height,
       lineHeight
     })
+    console.log('size', size)
 
     // fixContainer属性将由getAdaptedFontsize函数处理字体大小适配
 
@@ -526,7 +634,8 @@ export default () => {
             node = treeWalker.nextNode()
           }
         }
-        content = textDoc.body.innerHTML.replace(/font-size:\s*(\d+.?\d+)(px)?/g, `font-size: ${size}px`)
+        // 修复bug：使用合并后的doc.body.innerHTML而不是原始的textDoc.body.innerHTML
+        content = doc.body.innerHTML.replace(/font-size:\s*(\d+.?\d+)(px)?/g, `font-size: ${size}px`)
       } 
       else {
         // 如果text是纯文本，使用原来的逻辑
@@ -638,7 +747,7 @@ export default () => {
       case 'title': return 1
       case 'subtitle': return 1
       case 'content': return 20
-      case 'item': return 4
+      case 'item': return 8
       case 'itemTitle': return 1
       case 'header': return 4
       case 'footer': return 2
@@ -948,26 +1057,110 @@ export default () => {
         // 创建元素的临时数组
         const tempElements: PPTElement[] = []
         
-        // 处理每个元素
-        for (const el of coverTemplate.elements) {
-          if (el.type === 'image' && el.imageType) {
-            const imageElement = await getNewImgElement(el, item.data)
-            tempElements.push(imageElement)
-          } 
-          else if (el.type !== 'text' && el.type !== 'shape') {
-            tempElements.push(el)
+        // 检查是否有items数据需要处理
+        if (item.data.items?.length) {
+          const items = item.data.items
+          
+          // 获取排序后的元素ID列表
+          const sortedTitleItemIds = coverTemplate.elements.filter(el => checkTextType(el, 'itemTitle')).sort((a, b) => {
+            const aIndex = a.left + a.top * 2
+            const bIndex = b.left + b.top * 2
+            return aIndex - bIndex
+          }).map(el => el.id)
+          
+          const sortedTextItemIds = coverTemplate.elements.filter(el => checkTextType(el, 'item')).sort((a, b) => {
+            const aIndex = a.left + a.top * 2
+            const bIndex = b.left + b.top * 2
+            return aIndex - bIndex
+          }).map(el => el.id)
+
+          const sortedNumberItemIds = coverTemplate.elements.filter(el => checkTextType(el, 'itemNumber')).sort((a, b) => {
+            const aIndex = a.left + a.top * 2
+            const bIndex = b.left + b.top * 2
+            return aIndex - bIndex
+          }).map(el => el.id)
+
+          // 计算最长文本用于字体适配
+          const itemTitles = []
+          const itemTexts = []
+          for (const _item of items) {
+            if (_item.title) itemTitles.push(_item.title)
+            if (_item.text) itemTexts.push(_item.text)
           }
-          else if (checkTextType(el, 'title') && item.data.title) {
-            tempElements.push(createSlideTextElement(el, { title: item.data.title }))
+          const longestTitle = itemTitles.reduce((longest, current) => current.length > longest.length ? current : longest, '')
+          const longestText = itemTexts.reduce((longest, current) => current.length > longest.length ? current : longest, '')
+
+          // 处理每个元素
+          for (const el of coverTemplate.elements) {
+            if (el.type === 'image' && el.imageType) {
+              const imageElement = await getNewImgElement(el, item.data)
+              tempElements.push(imageElement)
+            } 
+            else if (el.type !== 'text' && el.type !== 'shape') {
+              tempElements.push(el)
+            }
+            else if (checkTextType(el, 'itemTitle')) {
+              const index = sortedTitleItemIds.findIndex(id => id === el.id)
+              const contentItem = items[index]
+              if (contentItem && contentItem.title) {
+                tempElements.push(createSlideTextElement(el, { title: contentItem.title, longestText: longestTitle }))
+              } else {
+                tempElements.push(el)
+              }
+            }
+            else if (checkTextType(el, 'item')) {
+              const index = sortedTextItemIds.findIndex(id => id === el.id)
+              const contentItem = items[index]
+              if (contentItem && contentItem.text) {
+                tempElements.push(createSlideTextElement(el, { content: contentItem.text, longestText }))
+              } else {
+                tempElements.push(el)
+              }
+            }
+            else if (checkTextType(el, 'itemNumber')) {
+              const index = sortedNumberItemIds.findIndex(id => id === el.id)
+              const offset = item.offset || 0
+              if (index >= 0 && index < items.length) {
+                tempElements.push(createSlideTextElement(el, { content: index + offset + 1 + '', digitPadding: true }))
+              } else {
+                tempElements.push(el)
+              }
+            }
+            else if (checkTextType(el, 'title') && item.data.title) {
+              tempElements.push(createSlideTextElement(el, { title: item.data.title }))
+            }
+            else if (checkTextType(el, 'subtitle') && item.data.text) {
+              tempElements.push(createSlideTextElement(el, { content: item.data.text }))
+            }
+            else if (checkTextType(el, 'html') && item.data.html) {
+              tempElements.push(createSlideTextElement(el, { html: item.data.html }))
+            }
+            else {
+              tempElements.push(el)
+            }
           }
-          else if (checkTextType(el, 'subtitle') && item.data.text) {
-            tempElements.push(createSlideTextElement(el, { content: item.data.text }))
-          }
-          else if (checkTextType(el, 'html') && item.data.html) {
-            tempElements.push(createSlideTextElement(el, { html: item.data.html }))
-          }
-          else {
-            tempElements.push(el)
+        } else {
+          // 原有的处理逻辑（当没有items时）
+          for (const el of coverTemplate.elements) {
+            if (el.type === 'image' && el.imageType) {
+              const imageElement = await getNewImgElement(el, item.data)
+              tempElements.push(imageElement)
+            } 
+            else if (el.type !== 'text' && el.type !== 'shape') {
+              tempElements.push(el)
+            }
+            else if (checkTextType(el, 'title') && item.data.title) {
+              tempElements.push(createSlideTextElement(el, { title: item.data.title }))
+            }
+            else if (checkTextType(el, 'subtitle') && item.data.text) {
+              tempElements.push(createSlideTextElement(el, { content: item.data.text }))
+            }
+            else if (checkTextType(el, 'html') && item.data.html) {
+              tempElements.push(createSlideTextElement(el, { html: item.data.html }))
+            }
+            else {
+              tempElements.push(el)
+            }
           }
         }
         
@@ -1129,32 +1322,47 @@ export default () => {
     if (isEmptySlide.value) slidesStore.setSlides(slides)
     else addSlidesFromData(slides)
     
-    // 等待所有幻灯片渲染完成后再同步背景图片
-    // 使用setTimeout确保幻灯片已经渲染到store中
-    setTimeout(() => {
-      // 如果已经有封面图片，进行背景同步
-      if (asyncGeneratedCoverImage.value) {
-        console.log('所有幻灯片渲染完成，开始同步背景图片')
-        synchronizeBackgroundImages()
-      }
-      else {
-        // 设置监听器等待封面图片生成完成
-        console.log('等待封面图片生成...')
-        const syncInterval = setInterval(() => {
-          if (asyncGeneratedCoverImage.value) {
-            console.log('封面图片已生成，开始同步背景图片')
-            synchronizeBackgroundImages()
+    // 检查是否真的需要等待封面图片生成
+    const hasCoverSlide = AISlides.some(slide => slide.type === 'cover')
+    const needsCoverImageGeneration = hasCoverSlide && 
+      typeof coverSlide?.data === 'object' && 
+      'background' in coverSlide.data && 
+      typeof coverSlide.data.background === 'object' &&
+      coverSlide.data.background !== null &&
+      'contentImageAsync' in coverSlide.data.background && 
+      coverSlide.data.background.contentImageAsync === true
+
+    // 只有在需要封面图片生成时才执行等待逻辑
+    if (needsCoverImageGeneration) {
+      // 等待所有幻灯片渲染完成后再同步背景图片
+      // 使用setTimeout确保幻灯片已经渲染到store中
+      setTimeout(() => {
+        // 如果已经有封面图片，进行背景同步
+        if (asyncGeneratedCoverImage.value) {
+          console.log('所有幻灯片渲染完成，开始同步背景图片')
+          synchronizeBackgroundImages()
+        }
+        else {
+          // 设置监听器等待封面图片生成完成
+          console.log('等待封面图片生成...')
+          const syncInterval = setInterval(() => {
+            if (asyncGeneratedCoverImage.value) {
+              console.log('封面图片已生成，开始同步背景图片')
+              synchronizeBackgroundImages()
+              clearInterval(syncInterval)
+            }
+          }, 500)
+          
+          // 最多等待10秒
+          setTimeout(() => {
             clearInterval(syncInterval)
-          }
-        }, 500)
-        
-        // 最多等待10秒
-        setTimeout(() => {
-          clearInterval(syncInterval)
-          console.log('等待封面图片生成超时')
-        }, 10000)
-      }
-    }, 300) // 给幻灯片渲染留出足够时间
+            console.log('等待封面图片生成超时')
+          }, 10000)
+        }
+      }, 300) // 给幻灯片渲染留出足够时间
+    } else {
+      console.log('无需等待封面图片生成，幻灯片生成完成')
+    }
   }
 
   return {

@@ -611,6 +611,95 @@ function getTemplate008Prompt({ isStream }: TemplatePrompt): string {
 病：疒
 `
 }
+function getTemplate009Prompt({ isStream }: TemplatePrompt): string {
+  console.log('getTemplate009Prompt')
+  const streamPlaceholder = isStream 
+    ? '每个对象输出后会立即处理，所以确保每个对象都独立有效' 
+    : '所有对象应该组成一个有效的JSON数组'
+
+  const formatPlaceholder = isStream
+    ? '输出时请每个对象独立成行，不要将多个对象连在一起'
+    : '请将所有对象放在一个JSON数组中，格式为 [对象1, 对象2, 对象3,...]'
+
+  return `你是一个生成养生风格卡片内容的专家。请输出以下格式的完整JSON对象，每个对象代表一页卡片：
+
+1. 封面页格式有2种，一种是主标题+副标题+第一个content的item的title和text（起到封面提前预览作用），一种是html标题+背景图片，主副标题由完整标题拆分得到，例如："从春到夏减脂排毒黄金时间"拆分得到"从春到夏"和"减脂排毒黄金时间"例如：
+{
+  "type": "cover",
+  "data": {
+    "title": "主标题（由完整标题拆分得到的前半部分）4-8字",
+    "text": "副标题（由完整标题拆分得到的后半部分，直戳用户痛点）4-8字",
+    "items": [
+      {
+        "title": "要点标题1，如：1.手指麻木",
+        "text": "要点内容1（20-40字），如：⚠️ 肝气不畅会影响气血运行，导致手指麻木。也就是说，时间一长，手麻、手指发麻都可能与肝毒有关。"
+      }
+    ]
+  }
+}
+2. 内容页：每页一个主题，每页的主题标题保持一致，有如下几种可能性，主副标题由完整标题拆分得到，例如："6个超简单的夏日中药香囊配方"拆分得到"6个超简单的"和"夏日中药香囊配方"，text小标题和重点内容自动高亮，高亮文字颜色为#2C36EB，
+{
+  "type": "content",
+  "data": {
+    "title": "完整标题拆分得到的前半部分",
+    "subtitle": "完整标题拆分得到的后半部分",
+    "items": [
+      {
+        "title": "要点标题1，如：1.手指麻木，判断上下文确定是否需要序号",
+        "text": "要点内容1（20-40字，开头加上合适的emoji）），⚠️ 肝气不畅会影响气血运行，导致手指麻木。也就是说，时间一长，手麻、手指发麻都可能与肝毒有关。"
+      },
+      {
+        "title": "要点补充标题1，（非必须）",
+        "text": "要点补充内容1（20-40字，开头加上合适的emoji），如：✅ 工作久之，肝不疏通血不畅，每夜需舒筋伸展运动，疏肝平气。仅供参考，如有不适请及时就医。"
+      }
+    ]
+  }
+}
+  {
+  "type": "content",
+  "data": {
+    "title": "完整标题拆分得到的前半部分",
+    "subtitle": "完整标题拆分得到的后半部分",
+    "items": [
+      {
+        "title": "要点标题1，如：党参助健身",
+        "text": "要点内容1（20-40字，开头加上合适的emoji）），🍵 <span style='color: #2C36EB;'>早餐：</span>枸杞30克泡水、黑米核桃粥1碗西芹拌百合1份。<span style='color: #2C36EB;'>中餐：</span>米饭小半碗、海带1份、花草茶1杯。<br><span style='color: #2C36EB;'>晚餐：</span>党参枸杞鸡肉汤1份、花草茶1杯。"
+      },
+      {
+        "text": "要点补充内容1（20-40字，开头加上合适的emoji），如：💪 党参补中益气，调理胃部健康。配合花草茶消脂，在恢复气色的同时持续减重，改善减肥导致的亚健康状态。"
+      }
+    ]
+  }
+}
+  {
+  "type": "content",
+  "data": {
+    "title": "完整标题拆分得到的前半部分",
+    "subtitle": "完整标题拆分得到的后半部分",
+    "content": "内容（40-60字，开头加上合适的emoji），如：🍵 <span style='color: #2C36EB;'>早餐：</span>枸杞30克泡水、黑米核桃粥1碗西芹拌百合1份。<span style='color: #2C36EB;'>中餐：</span>米饭小半碗、海带1份、花草茶1杯。<br><span style='color: #2C36EB;'>晚餐：</span>党参枸杞鸡肉汤1份、花草茶1杯。",
+  }
+}
+
+
+
+重要说明：
+- ${streamPlaceholder}
+- 标题要体现养生健康的理念
+- 背景图片提示词要突出健康、自然、平和的氛围，可以与主题的主体相关联
+- 所有输出必须是有效的JSON格式，不要包含额外的注释或说明文字
+- ${formatPlaceholder}
+- 确保生成的内容符合现代养生理念，既要有传统智慧又要符合科学常识
+- 确保内容的完整性，不要有内容省略和丢失，不要总结
+- 不要出现敏感词，敏感词替换规则如下：
+阳:☀，阝
+阴:⚫️
+肝郁气滞：月干🐟️💨滞
+医生：👨‍⚕️
+病：疒
+-  请逐字输出以下原文，不要省略任何内容，不要遗漏内容，确保所有要点完整输出，特别是原文涉及要点数量时，保证要点数量和原文一致
+`
+}
+
 
 // 导出获取模板提示词的函数
 export function getTemplatePrompt(templateId: string, isStream: boolean = false): string {
@@ -631,6 +720,8 @@ export function getTemplatePrompt(templateId: string, isStream: boolean = false)
       return getTemplate007Prompt({ isStream })
     case 'template008':
       return getTemplate008Prompt({ isStream })
+    case 'template009':
+      return getTemplate009Prompt({ isStream })
     default:
       return getTemplate001Prompt({ isStream }) // 默认使用文档模板
   }
