@@ -1,5 +1,7 @@
 export const FONTS = [
   { label: '默认字体', value: '' },
+  { label: '点字简宋', value: 'DianZiJianSong' },
+  { label: '点字酷黑', value: 'DianZiKuHei' },
   { label: '三极行楷简体', value: 'sanjixingkaijianCu' },
   { label: '仓迹高德国妙黑', value: 'canjiGaoDeGuoMiaoHei' },
   { label: '思源黑体', value: 'SourceHanSans' },

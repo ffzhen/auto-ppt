@@ -14,6 +14,7 @@ fonts=(
   "AlibabaPuHuiTi.woff2"
   "ZhuQueFangSong.woff2"
   "LXGWWenKai.woff2"
+  "DianZiKuHei.woff2"
   "WenDingPLKaiTi.woff2"
   "DeYiHei.woff2"
   "MiSans.woff2"

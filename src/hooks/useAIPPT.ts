@@ -29,92 +29,101 @@ export default () => {
     return (el.type === 'text' && el.textType === type) || (el.type === 'shape' && el.text && el.text.type === type)
   }
 
-  const getUseableTemplates = (templates: Slide[], n: number, type: TextType, itemData?: any) => {
-    // 如果item.data有header或footer，需要筛选出有对应插槽的模板
+  const getUseableTemplates = (
+    allTemplates: Slide[],
+    n: number,
+    type: TextType,
+    itemData?: any
+  ) => {
+    let filteredTemplates = allTemplates
+
+    // 1. header/footer 筛选
     if (itemData) {
-      // 只有header
       if (itemData.header && !itemData.footer) {
-        templates = templates.filter(slide => {
-          // 需要有header插槽，且不要有footer插槽
+        filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return hasHeaderSlot && !hasFooterSlot
         })
-      }
-      // 只有footer
-      else if (!itemData.header && itemData.footer) {
-        templates = templates.filter(slide => {
-          // 需要有footer插槽，且不要有header插槽
+      } else if (!itemData.header && itemData.footer) {
+        filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return !hasHeaderSlot && hasFooterSlot
         })
-      }
-      // 同时有header和footer
-      else if (itemData.header && itemData.footer) {
-        templates = templates.filter(slide => {
-          // 同时有header和footer插槽
+      } else if (itemData.header && itemData.footer) {
+        filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return hasHeaderSlot && hasFooterSlot
         })
-      }
-      // 既没有header也没有footer
-      else {
-        templates = templates.filter(slide => {
-          // 既没有header也没有footer插槽
+      } else {
+        filteredTemplates = allTemplates.filter(slide => {
           const hasHeaderSlot = slide.elements.some(el => checkTextType(el, 'header'))
           const hasFooterSlot = slide.elements.some(el => checkTextType(el, 'footer'))
           return !hasHeaderSlot && !hasFooterSlot
         })
       }
 
-      // 如果筛选后没有合适的模板，使用原始内容模板
-      if (templates.length === 0) {
+      // fallback：如果筛选后没有合适的模板，使用 content 类型模板
+      if (filteredTemplates.length === 0) {
         console.warn('没有找到合适的header/footer插槽模板，将使用标准模板')
-        templates = templates.filter(slide => slide.type === 'content')
+        filteredTemplates = allTemplates.filter(slide => slide.type === 'content')
       }
     }
 
+    // 2. n === 1 的特殊处理
     if (n === 1) {
-      const list = templates.filter(slide => {
+      const list = filteredTemplates.filter(slide => {
         const items = slide.elements.filter(el => checkTextType(el, type))
         const titles = slide.elements.filter(el => checkTextType(el, 'title'))
         const texts = slide.elements.filter(el => checkTextType(el, 'content'))
-
         return !items.length && titles.length === 1 && texts.length === 1
       })
-
       if (list.length) return list
     }
 
+    // 3. 按 type 数量筛选
     let target: Slide | null = null
-
-    const list = templates.filter(slide => {
+    const list = filteredTemplates.filter(slide => {
       const len = slide.elements.filter(el => checkTextType(el, type)).length
       return len >= n
     })
+
     if (list.length === 0) {
-      const sorted = templates.sort((a, b) => {
+      // fallback：找 type 数量最多的模板
+      const sorted = filteredTemplates.slice().sort((a, b) => {
         const aLen = a.elements.filter(el => checkTextType(el, type)).length
         const bLen = b.elements.filter(el => checkTextType(el, type)).length
         return aLen - bLen
       })
-      target = sorted[sorted.length - 1]
-    }
-    else {
+      target = sorted[sorted.length - 1] || null
+    } else {
       target = list.reduce((closest, current) => {
         const currentLen = current.elements.filter(el => checkTextType(el, type)).length
         const closestLen = closest.elements.filter(el => checkTextType(el, type)).length
-        return (currentLen - n) <= (closestLen - n) ? current : closest
+        return Math.abs(currentLen - n) < Math.abs(closestLen - n) ? current : closest
       })
     }
 
-    return templates.filter(slide => {
+    if (!target) {
+      // fallback：content 类型模板
+      return allTemplates.filter(slide => slide.type === 'content')
+    }
+
+    // 4. 返回与 target 匹配的模板
+    const targetLen = target.elements.filter(el => checkTextType(el, type)).length
+    const result = filteredTemplates.filter(slide => {
       const len = slide.elements.filter(el => checkTextType(el, type)).length
-      const targetLen = target!.elements.filter(el => checkTextType(el, type)).length
       return len === targetLen
     })
+
+    // fallback：如果还是没有，返回 content 类型模板
+    if (result.length === 0) {
+      return allTemplates.filter(slide => slide.type === 'content')
+    }
+
+    return result
   }
 
   const getAdaptedFontsize = ({
@@ -880,7 +889,7 @@ export default () => {
     for (const template of _AISlides) {
       if (template.type === 'content') {
         const items = template.data.items || []
-        if (items.length === 5 || items.length === 6) {
+        if (items.length === 6) {
           const items1 = items.slice(0, 3)
           const items2 = items.slice(3)
           AISlides.push({ ...template, data: { ...template.data, items: items1 } })
