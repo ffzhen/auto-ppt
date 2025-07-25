@@ -22,6 +22,24 @@ interface FormatedAnimation {
   autoNext: boolean
 }
 
+// 模板缓存接口
+interface TemplateCache {
+  id: string
+  data: any
+  version: string
+  lastUpdated: number
+}
+
+interface TemplateMeta {
+  id: string
+  name: string
+  description?: string
+  cover: string
+  version: string
+  size: number
+  lastUpdated: number
+}
+
 export interface SlidesState {
   title: string
   theme: SlideTheme
@@ -30,6 +48,8 @@ export interface SlidesState {
   viewportSize: number
   viewportRatio: number
   templates: SlideTemplate[]
+  templateMetas: TemplateMeta[] // 模板元信息
+  templateCache: Map<string, any> // 内存中的模板内容缓存
 }
 
 // 模板资源路径
@@ -61,6 +81,8 @@ export const useSlidesStore = defineStore('slides', {
       viewportSize: 1656,
       viewportRatio: 1.33333,
       templates: [],
+      templateMetas: [],
+      templateCache: new Map(),
     }
   },
 
@@ -193,40 +215,248 @@ export const useSlidesStore = defineStore('slides', {
     setTemplates(templates: SlideTemplate[]) {
       this.templates = templates
     },
+
+    setTemplateMetas(metas: TemplateMeta[]) {
+      this.templateMetas = metas
+    },
+
+    // ================= 模板缓存相关方法 =================
     
-    // 从服务器加载模板
-    async loadTemplatesFromServer(retryCount = 2): Promise<SlideTemplate[]> {
-      console.log('[SlidesStore] Starting to load templates from server...')
+    // 获取缓存数据库名称
+    getTemplateCacheDBName() {
+      return 'pptist-template-cache'
+    },
+
+    // 初始化模板缓存数据库
+    initTemplateCacheDB(): Promise<IDBDatabase> {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(this.getTemplateCacheDBName(), 1)
+        
+        request.onerror = () => reject(request.error)
+        request.onsuccess = () => resolve(request.result)
+        
+        request.onupgradeneeded = (event) => {
+          const db = (event.target as IDBOpenDBRequest).result
+          
+          // 模板元信息存储
+          if (!db.objectStoreNames.contains('template-metas')) {
+            db.createObjectStore('template-metas', { keyPath: 'id' })
+          }
+          
+          // 模板内容存储
+          if (!db.objectStoreNames.contains('template-content')) {
+            db.createObjectStore('template-content', { keyPath: 'id' })
+          }
+        }
+      })
+    },
+
+    // 从缓存加载模板列表
+    async loadTemplateMetasFromCache(): Promise<TemplateMeta[]> {
       try {
-        // Set a timeout for the API call
-        const timeoutPromise = new Promise<SlideTemplate[]>((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Template loading timed out'))
-          }, 5000) // 5 second timeout
+        const db = await this.initTemplateCacheDB()
+        const transaction = db.transaction(['template-metas'], 'readonly')
+        const store = transaction.objectStore('template-metas')
+        
+        return new Promise((resolve, reject) => {
+          const request = store.getAll()
+          request.onsuccess = () => {
+            const metas = request.result as TemplateMeta[]
+            console.log('[TemplateCache] Loaded template metas from cache:', metas.length)
+            resolve(metas)
+          }
+          request.onerror = () => reject(request.error)
+        })
+      } catch (error) {
+        console.error('[TemplateCache] Error loading template metas from cache:', error)
+        return []
+      }
+    },
+
+    // 缓存模板列表
+    async cacheTemplateMetas(metas: TemplateMeta[]): Promise<void> {
+      try {
+        const db = await this.initTemplateCacheDB()
+        const transaction = db.transaction(['template-metas'], 'readwrite')
+        const store = transaction.objectStore('template-metas')
+        
+        // 清空现有数据
+        await new Promise<void>((resolve, reject) => {
+          const clearRequest = store.clear()
+          clearRequest.onsuccess = () => resolve()
+          clearRequest.onerror = () => reject(clearRequest.error)
         })
         
-        // Actual API call
+        // 添加新数据
+        for (const meta of metas) {
+          await new Promise<void>((resolve, reject) => {
+            const addRequest = store.add(meta)
+            addRequest.onsuccess = () => resolve()
+            addRequest.onerror = () => reject(addRequest.error)
+          })
+        }
+        
+        console.log('[TemplateCache] Cached template metas:', metas.length)
+      } catch (error) {
+        console.error('[TemplateCache] Error caching template metas:', error)
+      }
+    },
+
+    // 从缓存获取模板内容
+    async getTemplateFromCache(templateId: string): Promise<any | null> {
+      try {
+        // 先检查内存缓存
+        if (this.templateCache.has(templateId)) {
+          console.log('[TemplateCache] Found template in memory cache:', templateId)
+          return this.templateCache.get(templateId)
+        }
+
+        // 从 IndexedDB 获取
+        const db = await this.initTemplateCacheDB()
+        const transaction = db.transaction(['template-content'], 'readonly')
+        const store = transaction.objectStore('template-content')
+        
+        return new Promise((resolve, reject) => {
+          const request = store.get(templateId)
+          request.onsuccess = () => {
+            const result = request.result as TemplateCache | undefined
+            if (result) {
+              console.log('[TemplateCache] Found template in IndexedDB cache:', templateId)
+              // 加载到内存缓存
+              this.templateCache.set(templateId, result.data)
+              resolve(result.data)
+            } else {
+              console.log('[TemplateCache] Template not found in cache:', templateId)
+              resolve(null)
+            }
+          }
+          request.onerror = () => reject(request.error)
+        })
+      } catch (error) {
+        console.error('[TemplateCache] Error getting template from cache:', error)
+        return null
+      }
+    },
+
+    // 缓存模板内容
+    async cacheTemplateContent(templateId: string, data: any, version: string = '1.0.0'): Promise<void> {
+      try {
+        // 更新内存缓存
+        this.templateCache.set(templateId, data)
+
+        // 更新 IndexedDB 缓存
+        const db = await this.initTemplateCacheDB()
+        const transaction = db.transaction(['template-content'], 'readwrite')
+        const store = transaction.objectStore('template-content')
+        
+        const cacheData: TemplateCache = {
+          id: templateId,
+          data,
+          version,
+          lastUpdated: Date.now()
+        }
+        
+        await new Promise<void>((resolve, reject) => {
+          const request = store.put(cacheData)
+          request.onsuccess = () => {
+            console.log('[TemplateCache] Cached template content:', templateId)
+            resolve()
+          }
+          request.onerror = () => reject(request.error)
+        })
+      } catch (error) {
+        console.error('[TemplateCache] Error caching template content:', error)
+      }
+    },
+
+    // 检查缓存是否过期（24小时）
+    isTemplateCacheExpired(lastUpdated: number): boolean {
+      const now = Date.now()
+      const twentyFourHours = 24 * 60 * 60 * 1000
+      return now - lastUpdated > twentyFourHours
+    },
+
+    // ================= 优化后的模板加载方法 =================
+    
+    // 智能加载模板（先缓存后网络）
+    async loadTemplatesWithCache(): Promise<SlideTemplate[]> {
+      console.log('[SlidesStore] Starting smart template loading...')
+      
+      try {
+        // 1. 先尝试从缓存加载模板列表
+        const cachedMetas = await this.loadTemplateMetasFromCache()
+        
+        if (cachedMetas.length > 0) {
+          // 检查缓存是否过期
+          const oldestCache = Math.min(...cachedMetas.map(m => m.lastUpdated))
+          if (!this.isTemplateCacheExpired(oldestCache)) {
+            console.log('[SlidesStore] Using cached template list')
+            const templates = cachedMetas.map(meta => ({
+              id: meta.id,
+              name: meta.name,
+              description: meta.description,
+              cover: meta.cover
+            }))
+            this.setTemplates(templates)
+            this.setTemplateMetas(cachedMetas)
+            return templates
+          }
+          
+          console.log('[SlidesStore] Template cache expired, refreshing...')
+        }
+        
+        // 2. 缓存不存在或过期，从服务器获取
+        return await this.loadTemplatesFromServer()
+      } catch (error) {
+        console.error('[SlidesStore] Error in smart template loading:', error)
+        // 降级到基本模板列表
+        return []
+      }
+    },
+
+    // 从服务器加载模板列表并缓存
+    async loadTemplatesFromServer(retryCount = 2): Promise<SlideTemplate[]> {
+      console.log('[SlidesStore] Loading templates from server...')
+      try {
+        const timeoutPromise = new Promise<SlideTemplate[]>((_, reject) => {
+          setTimeout(() => reject(new Error('Template loading timed out')), 3000) // 减少到3秒
+        })
+        
         const apiPromise = api.getMockData('templates')
-          .then((templates) => {
+          .then(async (templates) => {
             console.log('[SlidesStore] Templates data received:', templates?.length || 0, 'templates')
             
-            // If templates data is not valid, throw an error
             if (!templates || !Array.isArray(templates) || templates.length === 0) {
               throw new Error('Invalid templates data received')
             }
             
-            // Process templates
-            const templatesWithCovers = templates.map((template: SlideTemplate) => ({
+            // 处理模板数据并创建元信息
+            const now = Date.now()
+            const templateMetas: TemplateMeta[] = templates.map((template: SlideTemplate) => ({
+              id: template.id,
+              name: template.name,
+              description: undefined, // SlideTemplate没有description字段
+              cover: template.cover,
+              version: '1.0.0',
+              size: 0, // 将在后台计算
+              lastUpdated: now
+            }))
+            
+            // 缓存模板元信息
+            await this.cacheTemplateMetas(templateMetas)
+            
+            const processedTemplates = templates.map((template: SlideTemplate) => ({
               ...template,
               // cover: getTemplateCover(template.cover)
             }))
-            console.log('[SlidesStore] Templates processed with covers')
             
-            this.setTemplates(templatesWithCovers)
-            return templatesWithCovers
+            this.setTemplates(processedTemplates)
+            this.setTemplateMetas(templateMetas)
+            
+            console.log('[SlidesStore] Templates processed and cached')
+            return processedTemplates
           })
         
-        // Race between the API call and timeout
         return await Promise.race([apiPromise, timeoutPromise])
       } 
       catch (error) {
@@ -234,34 +464,90 @@ export const useSlidesStore = defineStore('slides', {
         
         if (retryCount > 0) {
           console.warn(`[SlidesStore] Loading templates failed, retrying (${retryCount} left)`)
-          // 延迟1秒后重试
           await new Promise(resolve => setTimeout(resolve, 1000))
           return this.loadTemplatesFromServer(retryCount - 1)
         }
         
         console.error('[SlidesStore] Failed to load templates after all retries')
         message.error('模板加载失败，但您仍然可以使用基本功能')
-        
-        // Return empty array instead of throwing error to allow app to continue
         return []
       }
     },
     
-    // 获取模板数据
+    // 懒加载模板内容（按需加载）
     async getTemplateData(templateId: string, retryCount = 3): Promise<any> {
+      console.log(`[SlidesStore] Getting template data: ${templateId}`)
+      
+      // 1. 先从缓存获取
+      const cachedData = await this.getTemplateFromCache(templateId)
+      if (cachedData) {
+        console.log(`[SlidesStore] Template data loaded from cache: ${templateId}`)
+        return cachedData
+      }
+      
+      // 2. 从服务器加载并缓存
       try {
-        return await api.getMockData(`template_${templateId}`)
+        console.log(`[SlidesStore] Loading template data from server: ${templateId}`)
+        const data = await api.getMockData(`template_${templateId}`)
+        
+        if (data) {
+          // 异步缓存，不阻塞返回
+          this.cacheTemplateContent(templateId, data).catch(err => {
+            console.error(`Failed to cache template ${templateId}:`, err)
+          })
+          
+          console.log(`[SlidesStore] Template data loaded from server: ${templateId}`)
+          return data
+        }
+        
+        throw new Error('Empty template data received')
       }
       catch (error) {
         if (retryCount > 0) {
           console.warn(`加载模板${templateId}数据失败，剩余重试次数: ${retryCount - 1}`)
-          // 延迟1秒后重试
           await new Promise(resolve => setTimeout(resolve, 1000))
           return this.getTemplateData(templateId, retryCount - 1)
         }
         console.error(`加载模板${templateId}数据失败:`, error)
         return null
       }
+    },
+
+    // 预加载热门模板（后台任务）
+    async preloadPopularTemplates() {
+      console.log('[SlidesStore] Starting to preload popular templates...')
+      
+      // 定义热门模板ID（可以从配置或统计数据获取）
+      const popularTemplateIds = ['template001', 'template002', 'template005', 'template006']
+      
+      // 限制并发数，避免过多网络请求
+      const concurrentLimit = 2
+      
+      for (let i = 0; i < popularTemplateIds.length; i += concurrentLimit) {
+        const batch = popularTemplateIds.slice(i, i + concurrentLimit)
+        
+        const promises = batch.map(async (templateId) => {
+          try {
+            // 检查是否已经缓存
+            const cached = await this.getTemplateFromCache(templateId)
+            if (!cached) {
+              console.log(`[SlidesStore] Preloading template: ${templateId}`)
+              await this.getTemplateData(templateId)
+            }
+          } catch (error) {
+            console.warn(`[SlidesStore] Failed to preload template ${templateId}:`, error)
+          }
+        })
+        
+        await Promise.all(promises)
+        
+        // 批次间稍微延迟，避免服务器压力
+        if (i + concurrentLimit < popularTemplateIds.length) {
+          await new Promise(resolve => setTimeout(resolve, 500))
+        }
+      }
+      
+      console.log('[SlidesStore] Popular templates preloading completed')
     },
   
     addSlide(slide: Slide | Slide[], projectId?: string) {

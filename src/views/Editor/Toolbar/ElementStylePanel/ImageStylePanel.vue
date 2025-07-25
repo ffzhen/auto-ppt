@@ -361,7 +361,7 @@ const regenerateImage = async () => {
   
   try {
     // 从元素中获取workflow_id，如果不存在则使用默认值
-    const api_token = 'pat_OTQuTZOP7Zgz1pvMDWKAbC2X7Syge9foi0173r6Im8yjsRgHcHKUzihsasF24Dos'
+    const api_token = 'pat_deu1y1IB5IDig8WCqVHQWoVvhu6doYlMMEfS0yc2UZwzu7OMNZ5ZNLWWw6ljH7am'
     
     const result = await api.generateVolcengineImage({
       prompt: regeneratePrompt.value.trim(),

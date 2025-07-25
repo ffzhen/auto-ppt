@@ -31,6 +31,11 @@ const routes = [
     path: '/image-test',
     name: 'image-test',
     component: ImageGeneratorTest
+  },
+  {
+    path: '/markdown',
+    name: 'markdown-editor',
+    component: () => import('@/views/MarkdownEditor/index.vue')
   }
 ]
 

@@ -74,19 +74,26 @@ onMounted(async () => {
     //   console.log('[App] Using existing slides data')
     // }
     
-    // 加载模板
-    console.log('[App] Loading templates')
+    // 加载模板（使用缓存优化）
+    console.log('[App] Loading templates with cache optimization')
     initStage.value = 'templates'
     
-    // Skip template loading for now to fix the blocking issue
-    console.log('[App] Skipping template loading to avoid blocking')
+    try {
+      // 使用智能缓存加载，快速完成初始化
+      await slidesStore.loadTemplatesWithCache()
+      console.log('[App] Templates loaded successfully')
+    } catch (error) {
+      console.error('[App] Template loading failed, but continuing:', error)
+      // 即使模板加载失败，也继续初始化，不阻塞用户使用
+    }
+    
     isInitializing.value = false
     console.log('[App] Initialization completed')
     
-    // Load templates in the background (don't await)
-    slidesStore.loadTemplatesFromServer()
-      .then(() => console.log('[App] Templates loaded in background'))
-      .catch(err => console.error('[App] Background template loading failed:', err))
+    // 在后台预加载热门模板内容（不阻塞界面）
+    slidesStore.preloadPopularTemplates()
+      .then(() => console.log('[App] Popular templates preloaded'))
+      .catch(err => console.error('[App] Popular templates preloading failed:', err))
       
     /*
     // This code is temporarily disabled to fix the blocking issue
