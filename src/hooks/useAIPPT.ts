@@ -835,7 +835,7 @@ export default () => {
           const res = await api.generateVolcengineImage({
             prompt: generatePrompt,
             workflow_id: workflow_id,
-            api_token: 'pat_deu1y1IB5IDig8WCqVHQWoVvhu6doYlMMEfS0yc2UZwzu7OMNZ5ZNLWWw6ljH7am'
+            api_token: 'pat_Y2RrMy58Z5hubePn8ysTupLw7VjB6tJK5st1Ut9uXmm0t6pchAmE7Q37CAxTc5Jv'
           })
           
           console.log('AI图像生成完成:', res)
