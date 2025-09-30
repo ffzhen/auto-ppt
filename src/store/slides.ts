@@ -399,6 +399,54 @@ export const useSlidesStore = defineStore('slides', {
             }))
             this.setTemplates(templates)
             this.setTemplateMetas(cachedMetas)
+
+            // 在后台对比服务端模板，如有变化则自动刷新缓存与UI（避免手动清缓存）
+            ;(async () => {
+              try {
+                const latest = await api.getMockData('templates')
+                if (Array.isArray(latest)) {
+                  const cachedIds = new Set(cachedMetas.map(m => m.id))
+                  const latestIds = new Set(latest.map((t: any) => t.id))
+
+                  const idsChanged = cachedIds.size !== latestIds.size ||
+                    [...latestIds].some(id => !cachedIds.has(id))
+
+                  // 也可简单对比内容摘要（如名称、封面变更）
+                  let metaChanged = false
+                  if (!idsChanged) {
+                    const cachedMap = new Map(cachedMetas.map(m => [m.id, m]))
+                    for (const t of latest) {
+                      const cm = cachedMap.get(t.id)
+                      if (!cm || cm.name !== t.name || cm.cover !== t.cover) {
+                        metaChanged = true
+                        break
+                      }
+                    }
+                  }
+
+                  if (idsChanged || metaChanged) {
+                    const now = Date.now()
+                    const templateMetas = latest.map((t: any) => ({
+                      id: t.id,
+                      name: t.name,
+                      description: undefined,
+                      cover: t.cover,
+                      version: '1.0.0',
+                      size: 0,
+                      lastUpdated: now
+                    }))
+
+                    await this.cacheTemplateMetas(templateMetas)
+                    this.setTemplates(latest)
+                    this.setTemplateMetas(templateMetas)
+                    console.log('[SlidesStore] Template list updated from server (cache refreshed)')
+                  }
+                }
+              } catch (e) {
+                console.warn('[SlidesStore] Background template refresh failed:', e)
+              }
+            })()
+
             return templates
           }
           

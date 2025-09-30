@@ -86,4 +86,4 @@ export function getTemplate007Prompt({ isStream }: TemplatePrompt): string {
   - ${formatPlaceholder}
   - 使用专业的词汇和术语，保持资料的权威性和准确性
   - 避免过于口语化的表达，保持正式文档风格`
-  }
+}
