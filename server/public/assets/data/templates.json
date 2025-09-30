@@ -39,5 +39,10 @@
     "name": "模版010", 
     "id": "template010",
     "description": "金融风格模板"
+  },
+  {
+    "name": "模版011",
+    "id": "template011",
+    "description": "金融风格模板（副本）"
   }
 ]

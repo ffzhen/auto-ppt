@@ -726,6 +726,8 @@ export function getTemplatePrompt(templateId: string, isStream: boolean = false)
       return getTemplate009Prompt({ isStream })
     case 'template010':
       return getTemplate010Prompt({ isStream })
+    case 'template011':
+      return getTemplate010Prompt({ isStream })
     default:
       return getTemplate001Prompt({ isStream }) // 默认使用文档模板
   }
