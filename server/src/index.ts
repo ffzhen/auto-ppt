@@ -51,9 +51,9 @@ app.use('/assets', express.static(path.join(publicDir, 'assets'), {
 app.get('/assets/data/:name', (req, res, next) => {
   const filePath = path.join(publicDir, 'assets', 'data', req.params.name)
   
-  // 只对模板文件加缓存（template_*.json, slides.json, AIPPT.json 等）
-  // 排除 custom_template.json 等非标准模板文件
-  const isTemplateFile = req.params.name.match(/^(template_\d+\.json|template_custom\.json|slides\.json|AIPPT\.json)$/)
+  // 只对模板文件加缓存（包含 template003.json / template_3.json 等命名形式）
+  const templateFilePattern = /^(template\d+\.json|template_\d+\.json|template_custom\.json|custom_template\.json|slides\.json|AIPPT\.json|templates\.json)$/i
+  const isTemplateFile = templateFilePattern.test(req.params.name)
   console.log(`文件 ${req.params.name} 是否为模板文件: ${!!isTemplateFile}`)
   if (!isTemplateFile) {
     // 非模板文件不缓存
@@ -88,7 +88,7 @@ app.get('/assets/data/:name', (req, res, next) => {
       // 忽略ETag计算错误，继续回退静态处理
     }
 
-    // 设置缓存策略：可缓存但必须每次与服务器验证（配合ETag/Last-Modified）
+    // 为模板数据开启协商缓存，客户端可携带 ETag/Last-Modified 进行验证
     res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate')
     next()
   })

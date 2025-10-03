@@ -30,6 +30,117 @@ export const ASSET_URL = (import.meta.env.MODE === 'development')
 // 允许通过环境变量覆盖资源URL
 export const LOCAL_ASSET_URL = import.meta.env.VITE_LOCAL_ASSET_URL || ASSET_URL
 
+type TemplateCacheEntry = {
+  data: any
+  etag?: string
+  lastModified?: string
+  timestamp: number
+}
+
+const TEMPLATE_CACHE_PREFIX = 'auto-ppt:template:'
+const inMemoryTemplateCache = new Map<string, TemplateCacheEntry>()
+
+const hasBrowserStorage = (() => {
+  if (typeof window === 'undefined') return false
+  try {
+    const key = '__template_cache_check__'
+    window.localStorage.setItem(key, key)
+    window.localStorage.removeItem(key)
+    return true
+  } catch (_) {
+    return false
+  }
+})()
+
+function getTemplateCacheKey(filename: string): string {
+  return `${TEMPLATE_CACHE_PREFIX}${filename}`
+}
+
+function readTemplateCache(filename: string): TemplateCacheEntry | undefined {
+  if (inMemoryTemplateCache.has(filename)) {
+    return inMemoryTemplateCache.get(filename)
+  }
+
+  if (!hasBrowserStorage) return undefined
+
+  try {
+    const raw = window.localStorage.getItem(getTemplateCacheKey(filename))
+    if (!raw) return undefined
+    const parsed: TemplateCacheEntry = JSON.parse(raw)
+    inMemoryTemplateCache.set(filename, parsed)
+    return parsed
+  } catch (_) {
+    return undefined
+  }
+}
+
+function writeTemplateCache(filename: string, entry: TemplateCacheEntry): void {
+  inMemoryTemplateCache.set(filename, entry)
+
+  if (!hasBrowserStorage) return
+
+  try {
+    window.localStorage.setItem(getTemplateCacheKey(filename), JSON.stringify(entry))
+  } catch (_) {
+    // 忽略缓存写入失败（例如存储空间不足）
+  }
+}
+
+async function fetchTemplateWithNegotiation(
+  filename: string,
+  cached?: TemplateCacheEntry,
+): Promise<TemplateCacheEntry> {
+  const url = `${ASSET_URL}/data/${filename}.json`
+
+  if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
+    // 非浏览器环境下退回到 axios
+    const data = await axios.get(url)
+    const entry: TemplateCacheEntry = {
+      data,
+      timestamp: Date.now(),
+    }
+    writeTemplateCache(filename, entry)
+    return entry
+  }
+
+  const headers = new Headers()
+  if (cached?.etag) {
+    headers.set('If-None-Match', cached.etag)
+  } else if (cached?.lastModified) {
+    headers.set('If-Modified-Since', cached.lastModified)
+  }
+
+  try {
+    const response = await fetch(url, {
+      headers,
+      cache: 'no-cache',
+    })
+
+    if (response.status === 304 && cached) {
+      return cached
+    }
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch template ${filename}: ${response.status}`)
+    }
+
+    const data = await response.json()
+    const entry: TemplateCacheEntry = {
+      data,
+      etag: response.headers.get('ETag') || undefined,
+      lastModified: response.headers.get('Last-Modified') || undefined,
+      timestamp: Date.now(),
+    }
+    writeTemplateCache(filename, entry)
+    return entry
+  } catch (error) {
+    if (cached) {
+      return cached
+    }
+    throw error
+  }
+}
+
 // 导出统一的API服务
 export default {
   /**
@@ -42,8 +153,38 @@ export default {
   /**
    * 获取文件数据
    */
-  getFileData(filename: string): Promise<any> {
-    return axios.get(`${ASSET_URL}/data/${filename}.json`)
+  async getFileData(filename: string): Promise<any> {
+    const cached = readTemplateCache(filename)
+    if (cached) {
+      const revalidationPromise = fetchTemplateWithNegotiation(filename, cached)
+      const guardedRevalidation = revalidationPromise.catch(() => cached)
+
+      const entry = await Promise.race([
+        guardedRevalidation,
+        new Promise<TemplateCacheEntry>(resolve => {
+          setTimeout(() => resolve(cached), 200)
+        }),
+      ])
+
+      if (entry === cached) {
+        void revalidationPromise
+          .then(updated => {
+            if (updated !== cached && typeof window !== 'undefined') {
+              window.dispatchEvent(
+                new CustomEvent('template-cache-updated', {
+                  detail: { filename, data: updated.data },
+                })
+              )
+            }
+          })
+          .catch(() => undefined)
+      }
+
+      return entry.data
+    }
+
+    const freshEntry = await fetchTemplateWithNegotiation(filename)
+    return freshEntry.data
   },
 
   /**

@@ -536,7 +536,9 @@ export const useSlidesStore = defineStore('slides', {
       // 2. 从服务器加载并缓存
       try {
         console.log(`[SlidesStore] Loading template data from server: ${templateId}`)
-        const data = await api.getMockData(`template_${templateId}`)
+        // 如果templateId已经包含template前缀，则直接使用；否则添加template_前缀
+        const filename = templateId.startsWith('template') ? templateId : `template_${templateId}`
+        const data = await api.getMockData(filename)
         
         if (data) {
           // 异步缓存，不阻塞返回
